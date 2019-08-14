@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.mapper.SystemMapper">
+	<resultMap type="com.neuedu.po.UserPO" id="usermap">
+		<id property="ID" column="ID"/>
+		<result property="UserName" column="UserName"/>
+		<result property="Password" column="Password"/>
+		<result property="RealName" column="RealName"/>
+		<result property="UserType" column="UserType"/>
+		<result property="IsScheduling" column="IsScheduling"/>
+		<result property="DelMark" column="DelMark"/>
+		<association property="DocTitle" javaType="com.neuedu.po.ConstantitemPO">
+			<id property="ID" column="ID"/>
+			<result property="ConstantTypeID" column="ConstantTypeID"/>
+			<result property="ConstantCode" column="ConstantCode"/>
+			<result property="ConstantName" column="ConstantName"/>
+			<result property="DelMark" column="DelMark"/>
+		</association>
+		<association property="Dept" javaType="com.neuedu.po.DepartmentPO">
+			<id property="ID" column="ID"/>
+			<result property="DeptCode" column="DeptCode"/>
+			<result property="DeptName" column="DeptName"/>
+			<result property="DeptCategoryID" column="DeptCategoryID"/>
+			<result property="DeptType" column="DeptType"/>
+			<result property="DelMark" column="DelMark"/>
+		</association>
+		<association property="RegistLevel" javaType="com.neuedu.po.RegistLevelPO">
+			<id property="ID" column="ID"/>
+			<result property="RegistCode" column="RegistCode"/>
+			<result property="RegistName" column="RegistName"/>
+			<result property="SequenceNo" column="SequenceNo"/>
+			<result property="RegistFee" column="RegistFee"/>
+			<result property="RegistQuota" column="RegistQuota"/>
+			<result property="DelMark" column="DelMark"/>
+		</association>
+	</resultMap>
+	<select id="doLogin" parameterType="com.neuedu.vo.LoginVO" resultMap="usermap">
+	select 
+		ID,
+        UserName,
+        Password,
+        RealName,
+        UserType,
+        DocTitleID,
+        IsScheduling,
+        DeptID,
+        RegistLeID,
+        DelMark
+	FROM USER 
+	WHERE 
+		UserName = #{UserName}
+		AND Password = #{Password}
+		AND DelMark = 1;
+	</select>
+	<select id="selectDept" parameterType="String" resultType="com.neuedu.po.DepartmentPO">
+		SELECT 
+			d.ID,
+			d.DeptCode,
+			d.DeptName,
+			c.ConstantName,
+			d.DeptType 
+		FROM department d JOIN constantitem c ON (d.DeptCategoryID = c.ID)
+		WHERE 
+			DeptCategoryID = 
+				(SELECT id FROM constantitem WHERE ConstantName = #{constantName});
+	</select>
+	<select id="selectAllDept" resultType="com.neuedu.po.DepartmentPO">
+	SELECT 
+		d.ID,
+		d.DeptCode,
+		d.DeptName,
+		c.ConstantName,
+		d.DeptType,
+        d.DelMark
+	FROM 
+		department d JOIN constantitem c ON (d.DeptCategoryID = c.ID)
+	WHERE 
+		 d.DelMark = 1;
+	</select>
+	<!--  
+	<resultMap type="com.neuedu.po.EmployeePO" id="emp_map">
+		<id property="empid" column="empid"/>
+		<result property="ename" column="ename"/>
+		<result property="loginname" column="loginname"/>
+		<result property="loginpass" column="loginpass"/>
+		<result property="sex" column="sex"/>
+		<result property="birthday" column="birthday"/>
+		<result property="hiredate" column="hiredate"/>
+		<result property="salary" column="salary"/>
+		<result property="uflag" column="uflag"/>
+		<result property="power" column="power"/>
+		<association property="dept" javaType="com.neuedu.po.DepartmentPO">
+			<id property="deptid" column="deptid"/>
+			<result property="dname" column="dname"/>
+			<result property="cdate" column="cdate"/>
+			<result property="pnum" column="enums"/>
+			<result property="dflag" column="dflag"/>
+			<association property="manager" javaType="com.neuedu.po.EmployeePO">
+				<id property="empid" column="empid"/>
+				<result property="ename" column="mname"/>
+			</association>
+		</association>
+		<association property="job" javaType="com.neuedu.po.JobPO">
+			<id property="jobid" column="jobid"/>
+			<result property="jname" column="jname"/>
+			<result property="jlevel" column="jlevel"/>
+			<result property="jflag" column="jflag"/>
+		</association>
+	</resultMap>
+	<sql id="emp_select">
+		e.empid,e.ename,e.sex,e.salary,d.dname,m.ename as mname,j.jname,j.jlevel
+	</sql>
+	<select id="getEmpInfoList" resultMap="emp_map">
+		select <include refid="emp_select"></include>
+			from employees e 
+				left join departments d on(e.deptid = d.deptid)
+				left join jobs j on(e.jobid = j.jobid)
+				left join employees m on(d.managerid = m.empid)
+	</select>
+	
+	<select id="getEmpInfoList2" resultType="com.neuedu.po.MyEmpPO">
+		select <include refid="emp_select"></include>
+			from employees e 
+				left join departments d on(e.deptid = d.deptid)
+				left join jobs j on(e.jobid = j.jobid)
+				left join employees m on(d.managerid = m.empid)
+	</select>
+	<select id="getEmpListBySearch" resultMap="emp_map" parameterType="com.neuedu.vo.SearchVO">
+		select * from employees 
+		<where>
+			<if test="ename != null and ename != ''">
+				and ename like '%${ename}%'
+			</if>
+			<if test="sdate != null">
+				and hiredate >= #{sdate}
+			</if>
+			<if test="edate != null">
+				and hiredate &lt;= #{edate}
+			</if>
+		</where>
+	</select>
+	-->
+</mapper>

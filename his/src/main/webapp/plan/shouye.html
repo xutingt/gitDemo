@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>HIS医院管理系统</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <script src="../layui/jquery-3.3.1.js"></script>
+    <script src="../layui/layui.js"></script>
+    <script src="../conmmon/common.js"></script>
+</head>
+
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header" id="header">
+            <!-- _header头部区域 start -->
+            <!-- _header头部区域 stop -->
+        </div>
+
+
+        <div class="layui-side layui-bg-black">
+
+            <div class="layui-side-scroll" id="lefter">
+                <!-- _lefter 左侧导航区域start -->
+                <!-- _lefter 左侧导航区域stop -->
+            </div>
+
+        </div>
+
+        <div class="layui-body">
+            <!--内容主体区域-->
+            <div class="layui-tab" lay-filter="demo" lay-allowclose="true">
+                <br>
+                <ul class="layui-tab-title">
+                    <li class="layui-this" lay-id="11" style="width: 100px;margin-left: 10px;">医生排班管理</li>
+                </ul>
+                <br>
+
+                <div class="layui-inline">
+                    开始时间:<input type="date" id="mydate1" value="" /><span style="color: red;">*</span>
+                    结束时间:<input type="date" id="mydate" value="" /><span style="color: red;">*</span>
+                </div>
+
+            </div>
+            <div style="margin-top: -56px;margin-left: 420px;">
+                <!--<button class="layui-btn layui-btn-normal" style="height: 33px; border-radius: 5px; ">查询医生排班</button>-->
+                <!--<button class="layui-btn layui-btn-normal" style="height: 33px; border-radius: 5px; ">新增排班规则</button>-->
+                <!--<button class="layui-btn layui-btn-normal" style="height: 33px; border-radius: 5px; ">查询排班规则(生成排班计划)</button>-->
+                <div class="site-demo-button" id="layerDemo" style="position: relative;margin-left: 50px;margin-top: 26px;">
+                    <button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal"
+                        id="select">查询排班</button>
+                    <button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal AAA">排版规则</button>
+                    <button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal BBB ">生成计划</button>
+                </div>
+
+            </div>
+            <div>
+                <table class="layui-table" lay-even="" lay-skin="nob" id="jiancha">
+                    <colgroup>
+                        <col width="14%">
+                        <col width="14%">
+                        <col width="14%">
+                        <col width="14%">
+                        <col width="14%">
+                        <col width="14%">
+                        <col width="14%">
+
+
+                    </colgroup>
+                    <thead>
+
+                        <th>日期</th>
+                        <th>科室</th>
+                        <th>医生</th>
+                        <th>午别</th>
+                        <th>挂号级别</th>
+                        <th>挂号限额</th>
+                        <th>ID</th>
+                    </thead>
+
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('.layui-nav-item').eq(7).addClass("layui-nav-itemed");//eq按自己页面顺序排，从2开始
+        }
+        );
+
+        // _header头部区域
+        $("#header").load("../conmmon/_header.html");
+        //_lefter 左侧导航区域
+        $("#lefter").load("../conmmon/_lefter.html");
+        //_footer 底部区域
+        //$("#footer").load("/conmmon/_footer.html");
+
+        //JavaScript代码区域
+        layui.use('element', function () {
+            var element = layui.element;
+        });
+
+    </script>
+
+    <script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+    <script>
+        layui.use('layer', function () { //独立版的layer无需执行这一句
+            var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+            //触发事件
+            var active = {
+                offset: function (othis) {
+                    var type = othis.data('type')
+                        , text = 'aaaaaaa';
+
+                    layer.open({
+                        type: 1
+                        , offset: type //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
+                        , id: 'layerDemo' + type //防止重复弹出
+                        , content: '<iframe src="rule.html" style="width: 1250px;height:700px;"></iframe>'
+                        , btn: '关闭全部'
+                        , btnAlign: 'c' //按钮居中
+                        , shade: 0 //不显示遮罩
+                        , area: ['1200px', '700px']
+                        , yes: function () {
+                            layer.closeAll();
+                        }
+                    });
+                }
+            };
+
+            $('#layerDemo .AAA').on('click', function () {
+                var othis = $(this), method = othis.data('method');
+                active[method] ? active[method].call(this, othis) : '';
+            });
+
+        });
+        layui.use('layer', function () { //独立版的layer无需执行这一句
+            var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+            //触发事件
+            var active = {
+                offset: function (othis) {
+                    var type = othis.data('type')
+                        , text = 'aaaaaaa';
+
+                    layer.open({
+                        type: 1
+                        , offset: type //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
+                        , id: 'layerDemo' + type //防止重复弹出
+                        , content: '<iframe src="schelduling.html" style="width: 1250px;height:700px;"></iframe>'
+                        , btn: '关闭全部'
+                        , btnAlign: 'c' //按钮居中
+                        , shade: 0 //不显示遮罩
+                        , area: ['1200px', '700px']
+                        , yes: function () {
+                            layer.closeAll();
+                        }
+                    });
+                }
+            };
+
+            $('#layerDemo .BBB').on('click', function () {
+                var othis = $(this), method = othis.data('method');
+                active[method] ? active[method].call(this, othis) : '';
+            });
+
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#select').click(function () {
+                var jieshu = document.getElementById("mydate").value;
+                var kaishi = document.getElementById("mydate1").value;
+				$.ajax({
+					type: "post",
+					url: "/his/plan/scheduelingcontroller/selectSchedul.do",
+					data: {"KaiShi": $("#mydate1").val(),"JieShu":$("#mydate").val()},
+					dataType: "json",
+					error : function (XMLHttpRequest, textStatus, errorThrown){
+						alert("获取排班信息出错")
+					},
+					success: function (data) {
+						$('#jiancha tbody').html("");
+						for(var i=0;i < data.length; i++){
+							$('#jiancha').append(
+									' <tbody id="ttt"><tr><td>'+data[i].schedDate+'</td><td>'
+									+data[i].deptName+'</td><td>'+data[i].realName+'</td><td>'
+									+data[i].noon+'</td><td>'+data[i].registName+'</td><td>'
+									+data[i].registQuota+'</td><td>'+data[i].id+'</td></tr></tbody>')
+						}
+					}
+				});
+/*			$.post(basePath+"plan/scheduelingcontroller/get",{SchedDate:kaishi,SchedDate1:jieshu},function(data){
+				var yisheng=JSON.parse(data);
+				$('#jiancha tbody').html("");
+				$.each(yisheng,function(i,e){
+					$('#jiancha').append(' <tbody id="ttt"><tr><td>'+e.SchedDate+'</td><td>'+e.keshimingcheng+'</td><td>'+e.RealName+'</td><td>'+data[i].noon+'</td><td>'+e.registId+'</td><td>'+e.RegistQuota+'</td><td>'+e.Id+'</td></tr></tbody>')
+				})
+			})
+*/			
+			});
+        });
+    </script>
+</body>
+
+</html>

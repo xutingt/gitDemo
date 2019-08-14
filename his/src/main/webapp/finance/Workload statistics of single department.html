@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>HIS医院管理系统</title>
+		<link rel="stylesheet" href="../layui/css/layui.css">
+	</head>
+	<style>
+		#shijiankongjian{
+		margin-top: 30px;
+	}
+/* 	#ta{
+		border: 2px solid #000000;
+	} */
+	#button1{
+		position: relative;
+		margin-left: 500px;
+		margin-top: -60px;
+	}
+	.layui-form{
+		margin-top: 50px;
+		margin-left: 40px;
+	}
+</style>
+	<body class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header" id="header">
+				<!-- _header头部区域 start -->
+				<!-- _header头部区域 stop -->
+			</div>
+
+			<div class="layui-side layui-bg-black">
+
+				<div class="layui-side-scroll" id="lefter">
+					<!-- _lefter 左侧导航区域start -->
+					<!-- _lefter 左侧导航区域stop -->
+				</div>
+
+			</div>
+
+			<div class="layui-body">
+				<!-- 内容主体区域 -->
+				<div style="padding: 15px;" id="ta">
+					<div class="layui-inline" id="shijiankongjian">
+						<label class="layui-form-label">统计时间：</label>
+
+						<div class="layui-input-inline">
+							<input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+						</div>
+
+						<div>
+							<button class="layui-btn layui-btn-normal" id="button1">查询</button>
+						</div>
+					</div>
+				</div>
+				<!--<div class="layui-footer" id="footer">-->
+				<!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+				<!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+				<!--</div>-->
+				<div class="layui-form">
+					<h2>执行科室工作量</h2>
+					<table class="layui-table" style="width: 90%;">
+						<thead>
+							<tr>
+								<th>科室名称</th>
+								<th>看诊人数</th>
+								<th>挂号费</th>
+								<th>药品费</th>
+								<th>医技费</th>
+								<th>治疗费</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+			<script src="../layui/jquery-3.3.1.js"></script>
+			<script src="../layui/layui.js"></script>
+			<script>
+				$(document).ready(function() {
+					$('.layui-nav-item').eq(2).addClass("layui-nav-itemed"); //eq按自己页面顺序排，从2开始
+				});
+
+				// _header头部区域
+				$("#header").load("../conmmon/_header.html");
+				//_lefter 左侧导航区域
+				$("#lefter").load("../conmmon/_lefter.html");
+				//_footer 底部区域
+				//$("#footer").load("/conmmon/_footer.html");
+
+				//JavaScript代码区域
+				layui.use('element', function() {
+					var element = layui.element;
+				});
+
+				layui.use(['form', 'layedit', 'laydate'], function() {
+					var form = layui.form,
+						layer = layui.layer,
+						layedit = layui.layedit,
+						laydate = layui.laydate;
+
+					//日期
+					laydate.render({
+						elem: '#date',
+						none: function(value, data){
+							lay("#date").html(value);
+						}
+					});
+				});
+				$("#button1").click(function(){
+					console.log($("#date").val());
+					$.post("http://localhost:8080/ZhiXingKeShiGongZuoLiang/select.do",{visitDate:$("#date").val()},function(data){
+						var s = JSON.parse(data);
+						console.log(s);
+						$.each(s,function(i,e){
+							var yiliaofei = Number(e.guahaofei) + Number(e.yaopinfei) + Number(e.yijifei)
+							console.log(yiliaofei);
+							$("tbody").append("<tr>"
+							+"<td>"+e.keshimingcheng+"</td>"
+							+"<td>"+e.zenduanrenshu+"</td>"
+							+"<td>"+e.guahaofei+"</td>"
+							+"<td>"+e.yaopinfei+"</td>"
+							+"<td>"+e.yijifei+"</td>"
+							+"<td>"+yiliaofei+"</td></tr>"
+							)
+						})
+					});
+				});
+			</script>
+	</body>
+</html>

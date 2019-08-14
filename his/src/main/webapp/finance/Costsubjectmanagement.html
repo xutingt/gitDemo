@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>HIS医院管理系统</title>
+		<link rel="stylesheet" href="../layui/css/layui.css">
+		
+	</head>
+	<style>
+		#zuobianju1{
+		margin-left: 50px;
+	}
+	#demo3{
+		margin-left: 64px;
+	}
+</style>
+	<body class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header" id="header">
+				<!-- _header头部区域 start -->
+				<!-- _header头部区域 stop -->
+			</div>
+
+			<div class="layui-side layui-bg-black">
+
+				<div class="layui-side-scroll" id="lefter">
+					<!-- _lefter 左侧导航区域start -->
+					<!-- _lefter 左侧导航区域stop -->
+				</div>
+
+			</div>
+
+			<div class="layui-body">
+				<!-- 内容主体区域 -->
+				<div id="zuobianju1" style="padding: 15px;">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input type="text" id="chaxunkuang" name="username" lay-verify="required" placeholder="请输入科目编码" autocomplete="off"
+							 class="layui-input">
+						</div>
+						<div style="margin-top: 30px" ;>
+							<button class="layui-btn layui-btn-normal" style="margin-left: 30px;" id="chaxunfeiyongkemu">查询费用科目</button>
+							<button class="layui-btn layui-btn-normal" onclick="xinjia()">新增费用科目</button>
+						</div>
+					</div>
+
+					<table class="layui-table" lay-even="" lay-skin="nob">
+						<colgroup>
+							<col width="150">
+							<col width="150">
+							<col width="200">
+							<col>
+						</colgroup>
+						<tbody>
+							<tr>
+								<td>序号</td>
+								<td>科目编码</td>
+								<td>科目名称</td>
+								<td>操作</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+			<!--<div class="layui-footer" id="footer">-->
+			<!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+			<!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+			<!--</div>-->
+
+		</div>
+		<script src="../layui/jquery-3.3.1.js"></script>
+		<script src="../layui/layui.js"></script>
+		<script src="../conmmon/common.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('.layui-nav-item').eq(6).addClass("layui-nav-itemed"); //eq按自己页面顺序排，从2开始
+				$.post(basePath+"select.do", {}, function(data) {
+					var s = JSON.parse(data);
+					console.log(s);
+					$.each(s, function(i, e) {
+						$("tbody").append("<tr><td>" + e.id + "</td><td  id = \"a" + e.tid + "\">" + e.tid + "</td><td>" + e.subject +
+							"</td><td><button class=\"layui-btn layui-btn-normal\"  onclick = \"bianji()\">编辑</button><button class=\"layui-btn layui-btn-danger\" name = 'btnDel' data-id ='" +
+							e.tid + "'>删除</button></td></tr>");
+					})
+					$("button[name = 'btnDel']").click(function() {
+						var ip = $(this).attr("data-id");
+						console.log(ip);
+						$.post(basePath+"delete.do", {
+							tid: ip
+						}, function(data) {
+							if (date = 1) {
+								alert("成功删除");
+							} else {
+								alert("删除失败");
+							}
+						})
+					})
+				})
+				$("#chaxunfeiyongkemu").click(function() {
+					$.post(basePath+"list.do", {tid: $("#chaxunkuang").val()}, function(data) {
+						var s = JSON.parse(data);
+						console.log($("#chaxunkuang").val());
+						console.log(s);
+						$("tbody").html("");
+						$.each(s,function(i,e){
+							$("tbody").append("<tr>"
+							+"<td>" + e.id + "</td>"
+							+"<td  id = \"a" +e.tid + "\">" + e.tid + "</td>"
+							+"<td>" + e.subject +"</td>"
+							+"<td><button class=\"layui-btn layui-btn-normal\"  onclick = \"bianji()\">编辑</button>"
+							+"<button class=\"layui-btn layui-btn-danger\" name = 'btnDel' data-id ='" +e.tid + "'>删除</button>"
+							+"</td>"
+							+"</tr>");
+						$("button[name = 'btnDel']").click(function() {
+							var ip = $(this).attr("data-id");
+							console.log(ip);
+							$.post(basePath+"delete.do", {
+								tid: ip
+							}, function(data) {
+								if (date = 1) {
+									alert("成功删除");
+								} else {
+									alert("删除失败");
+								}
+							})
+						})
+					})
+					})
+				})
+
+
+			});
+
+			// _header头部区域
+			$("#header").load("../conmmon/_header.html");
+			//_lefter 左侧导航区域
+			$("#lefter").load("../conmmon/_lefter.html");
+			//_footer 底部区域
+			//$("#footer").load("/conmmon/_footer.html");
+
+			//JavaScript代码区域
+			layui.use('element', function() {
+				var element = layui.element;
+			});
+			layui.use(['laypage', 'layer'], function() {
+				var laypage = layui.laypage,
+					layer = layui.layer;
+
+
+			});
+			$("#chaxunkuang").click(function() {
+
+				$.post(basePath+"list.do", {
+					tid: $("#chaxunkuang").val()
+				}, function(date) {
+
+
+				})
+
+			})
+
+			function xinjia() {
+				layer.open({
+					title: '新增费用科目',
+					content: '&nbsp&nbsp&nbsp&nbsp科目编码：<input id="sd" type=text><br/>&nbsp&nbsp&nbsp&nbsp科目名称：<input id="sd2" type=text > ',
+					type: 1,
+					area: ['450px', '230px'],
+					btn: ['确定', '取消'],
+					btn1: function() {
+						var kemubianma = $("#sd").val();
+						var kemumingcheng = $("#sd2").val();
+						$.post(basePath+"save.do", {
+							tid: kemubianma,
+							subject: kemumingcheng
+						}, function(date) {
+							if (date = 1) {
+								alert("成功添加");
+							} else {
+								alert("添加失败")
+							}
+						})
+						layer.closeAll();
+					},
+					btn2: function() {
+						layer.closeAll();
+					}
+				});
+			}
+
+			function bianji() {
+				layer.open({
+					title: '编辑',
+					content: '&nbsp&nbsp&nbsp&nbsp科目序号：<input id="bj" type=text><br/>&nbsp&nbsp&nbsp&nbsp科目编码：<input id="bj1" type=text><br/>&nbsp&nbsp&nbsp&nbsp科目名称：<input id="bj2" type=text > ',
+					area: ['450px', '330px'],
+					btn: ['确定', '取消'],
+					btn1: function() {
+						var xuhao = $("#bj").val();
+						var xiugaikemuxuhao = $("#bj1").val();
+						var xiugaikemu = $("#bj2").val();
+						$.post("", {
+							id: xuhao,
+							tid: xiugaikemuxuhao,
+							subject: xiugaikemu
+						}, function(date) {
+							if (date = 1) {
+								alert("成功修改");
+							} else {
+								alert("修改失败")
+							}
+						})
+						layer.closeAll();
+					},
+					btn2: function() {
+						layer.closeAll();
+					}
+				})
+			};
+		</script>
+		<style>
+			#sd {
+				height: 30px;
+				margin-top: 10px;
+				margin-left: 30px;
+			}
+
+			#sd2 {
+
+				height: 30px;
+				margin-top: 30px;
+				margin-left: 30px;
+			}
+
+			#bj {
+				height: 30px;
+				margin-top: 10px;
+				margin-left: 30px;
+			}
+
+			#bj1 {
+				height: 30px;
+				margin-top: 30px;
+				margin-left: 30px;
+			}
+
+			#bj2 {
+				height: 30px;
+				margin-top: 30px;
+				margin-left: 30px;
+			}
+		</style>
+	</body>
+</html>

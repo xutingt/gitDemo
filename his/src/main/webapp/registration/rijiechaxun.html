@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>HIS医院管理系统</title>
+		<link rel="stylesheet" href="../layui/css/layui.css">
+	</head>
+	<body class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header" id="header">
+				<!-- _header头部区域 start -->
+				<!-- _header头部区域 stop -->
+			</div>
+			<div class="layui-side layui-bg-black">
+				<div class="layui-side-scroll" id="lefter">
+					<!-- _lefter 左侧导航区域start -->
+					<!-- _lefter 左侧导航区域stop -->
+				</div>
+			</div>
+
+			<!-- 内容主体区域 -->
+
+			<div class="layui-body">
+				<div class="layui-tab layui-tab-card" lay-allowclose="true">
+					<ul class="layui-tab-title">
+						<li class="layui-this">日结查询</li>
+					</ul>
+					<div class="layui-tab-content" style="height: 150px;">
+						<div class="layui-tab-item layui-show">
+							<div class="layui-form-item">
+								<div class="layui-input-block" style="display: flex;">
+									<div class="layui-form">
+										<div class="layui-form-item">
+											<div class="layui-inline">
+												<label class="layui-form-label" style=" margin-top:7px;margin-left:-122px;">统计时间从</label>
+												<div class="layui-input-inline">
+													<input type="text" class="layui-input" id="startDate" placeholder="选择日期" style="width:93%;margin-left:-11px; margin-top:9px; font-size:15px ">
+												</div>
+											</div>
+											<div class="layui-inline">
+												<label class="layui-form-label" style=" margin-top:15px;margin-left:-96px;">到：</label>
+												<div class="layui-input-inline">
+													<input type="text" class="layui-input" id="endDate" placeholder="选择日期" style="width:93%;margin-left:-4px; margin-top:13px; font-size:15px ">
+												</div>
+											</div>
+										</div>
+									</div>
+									<button class="layui-btn  layui-btn-normal" style="margin-top:14px;margin-left:-9px; height:35px;" id="rijie"><i class="layui-icon ">&#xe615;</i>查询</button>
+									<div style="margin-left:-809px; margin-top:96px; font-size:15px ">患者信息确认</div>
+									<div style="margin-left:-79px; margin-top:128px; font-size:15px ">姓名:</div>
+									<input type="text" name="title" style="width:10%;height:35px;margin-left:7px;margin-top:120px;" lay-verify="title" autocomplete="off"
+									 placeholder="姓名" class="layui-input" id="binliehao">
+									<div style="margin-left:49px; margin-top:129px; font-size:15px ">身份证号:</div>
+									<input type="text" name="title" style="width:19%;height:35px;margin-left:4px;margin-top:121px;" lay-verify="title" autocomplete="off"
+									 placeholder="身份证号" class="layui-input" id="binliehao">
+									<div style="margin-left:39px; margin-top:128px; font-size:15px ">家庭住址:</div>
+									<input type="text" name="title" style="width:25%;height:35px;margin-left:6px;margin-top:121px;" lay-verify="title" autocomplete="off"
+									 placeholder="家庭住址" class="layui-input" id="binliehao">
+								</div>
+							</div>
+							<div style="margin-left:15px; margin-top:8px; font-size:15px ">患者消费信息</div>
+							<table class="layui-hide" id="test"></table>
+							<div style="margin-left:12px; margin-top:8px; font-size:16px ">总笔数：</div>
+							<div style="margin-left:126px; margin-top:-19px; font-size:16px ">总金额：</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<!--<div class="layui-footer" id="footer">-->
+			<!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+			<!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+			<!--</div>-->
+
+
+		</div>
+		<script src="../layui/jquery-3.3.1.js"></script>
+		<script src="../layui/layui.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('.layui-nav-item').eq(2).addClass("layui-nav-itemed"); //eq按自己页面顺序排，从2开始
+
+			});
+			$("#header").load("../conmmon/_header.html");
+			//_lefter 左侧导航区域
+			$("#lefter").load("../conmmon/_lefter.html");
+			layui.use('element', function() {
+				var element = layui.element;
+			});
+		</script>
+		<script>
+			layui.use('laydate', function() {
+				var laydate = layui.laydate;
+				//日期时间选择器
+				laydate.render({
+					elem: '#startDate',
+					type: 'datetime'
+				});
+				//日期时间选择器
+				laydate.render({
+					elem: '#endDate',
+					type: 'datetime'
+				});
+			});
+		</script>
+		<script>
+			layui.use('table', function() {
+				var table = layui.table;
+				table.render({
+					elem: '#test',
+					url: '/demo/table/user/',
+					cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+						,
+					cols: [
+						[{
+								field: 'username',
+								width: 260,
+								title: '病历号'
+							}, {
+								field: 'sign',
+								title: '姓名',
+								width: 137,
+							} 
+							, {
+								field: 'experience',
+								title: '消费名称',
+								width: 137,
+							}, {
+								field: 'score',
+								title: '单价',
+								width: 137,
+							}, {
+								field: 'classify',
+								title: '数量',
+								width: 137,
+							}, {
+								field: 'wealth',
+								width: 137,
+								title: '日期',
+								
+							}
+						]
+					]
+				});
+			});
+		</script>
+		<script>
+			$(document).ready(function() {
+				$("#rijie").click(function() {
+					showPage($("#shouky").val(),$("#startDate").val(), $("#endDate").val());
+				});
+		
+				function showPage(shouky, startDate,endDate) {
+					table.reload('disease', {
+						url: 'http://localhost:8081/disease/list?Id=&DiseaseICD=&DiseaseName=' + diseseName + '&DiseaseCode=' +
+							diseseCode + '&DicaId=',
+						where: {} //设定异步数据接口的额外参数
+						//,height: 300
+					});
+				}
+			})
+		</script>
+	</body>
+</html>

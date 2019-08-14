@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>HIS医院管理系统</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin" >
+    <div class="layui-header" id="header" ></div> <!-- _header头部区域 -->
+    <div class="layui-side layui-bg-black"><!--左侧导航区容器-->
+        <div class="layui-side-scroll" id="lefter" ></div><!-- _lefter 左侧导航区域start -->
+    </div><!--左侧导航区结束位置-->
+
+    <div class="layui-body" >
+        <!--************************ 内容主体区域在这里写******************************** -->
+        <div class=" container_12 " id="show-window"><!-- 自定义容器--> 
+            <div class="grid_1 alpha" id="pagelabel"><!--导航容器-->
+                <div class="grid_1 alpha" id="pagelabel_1" ><span>&nbsp;<br/>发药</span></div>
+                <!-- <div class="grid_1 alpha" id="pagelabel_2"><span>&nbsp;<br/>退药</span></div> -->
+                <div class="grid_1 alpha" id="pagelabel_3"><span>药品管理</span></div>
+            </div><!--导航容器结尾-->
+            <div class=" page  grid_12"  id="page_1" style="background-color:whitesmoke"><!--pag_1开始位置-->
+                <div class="grid_3" style="height: 100%"><!--发药侧边栏位开始-->
+                    <div class="grid_3 alpha" style="background-color:whitesmoke;height: 30%"><!--搜索框-->
+                        <div class="grid_3" id="refresh">
+                            <span id="refreshbutton">刷新</span>
+                        </div>
+                        <fieldset  id="searchborder">
+                            <legend>检索信息</legend>
+                            <div><label for="case_number">病历号:</label ><input type="text" id="case_number"></div>
+                            <!-- <div><label for="case_data">收费日期:</label ><input type="date" id="case_data"></div> -->
+                            <div><input type="radio" value="退费" name="op" id="op1"><label for="op1">已退:</label></input><input type="radio" value="交费" name="op" id="op2"><label for="op2">未发:</label></input><input type="radio" value="取药" name="op" id="op3"><label for="op3">已发:</label></input></div>
+                        </fieldset>
+                    </div>
+                    <div class="grid_3 alpha" style="height: 70%" id="registerList"></div>
+                    
+                </div><!--发药侧边栏位结束-->
+                <div class="grid_8" style="background-color: whitesmoke" id="sendingdetile"><!--发药明细-->
+                    <div class="grid_8 alpha" style="background-color:aliceblue"><span>发药明细信息</span><span id="senddrugs" class="action" >发药</span><span id="revertdrugs" class="action" value="交费">退药</span><span id="print">打印</span></div>
+                    <div class="grid_7" id="detilebody">
+                        <div class="grid_7" id="titleborder"><span>门诊发药单</span></div>
+                        <div><label>病历号</label><input type="text" id="caseNumber"/><label>患者姓名</label><input type="text" id="registerName"/><label>性别</label><input type="text" id="gender"/></div>
+                        <div><label>年龄</label><input type="text" id="age"/><label>就诊科室</label><input type="text" id="deptname"/><label>处方状态</label><input type="text" id="chargeState"/></div>
+                        <hr/>
+                        <div id="hisDrugs"><table>
+                            <thead>
+                                <tr>
+                                    <td>开单医生</td>
+                                    <td>药品名称</td>
+                                    <td>规格</td>
+                                    <td>单位</td>
+                                    <td>单价</td>
+                                    <td>总金额</td>
+                                    <td>厂家</td>
+                                    <td>付数</td>
+                                    <td>发药状态</td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+           
+                </div>
+                
+            </div><!--pag_1结束位置-->
+            <div class=" page grid_12"  id="page_2"></div>
+            <div class=" page  grid_12 "  id="page_3"></div>
+        </div>
+
+        
+         
+
+
+        
+        <!--************************ 内容主体区域在这里写*********************************-->
+    </div>
+    <!--<div class="layui-footer" id="footer">-->
+        <!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+        <!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+    <!--</div>-->
+
+</div>
+<script src="../layui/jquery-3.3.1.js"></script>
+<script src="../layui/layui.js"></script>
+<script>
+    $(document).ready(function(){
+            $('.layui-nav-item').eq(5).addClass("layui-nav-itemed");//eq按自己页面顺序排，从2开始
+        }
+    );
+
+    // _header头部区域
+    $("#header").load("../conmmon/_header.html");
+    //_lefter 左侧导航区域
+    $("#lefter").load("../conmmon/_lefter.html");
+    //_footer 底部区域
+    //$("#footer").load("/conmmon/_footer.html");
+
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+</script>
+<script type="text/javascript" rel="stylesheet" src="js/jQuery.print.min.js"></script>
+<link type="text/css" rel="stylesheet" href="css/960css/960.css">
+<link type="text/css" rel="stylesheet" href="css/960css/text.css">
+<link type="text/css" rel="stylesheet" href="css/960css/reset.css">
+<link type="text/css" rel="stylesheet" href="css/dispensing.css">
+<link type="text/css" rel="stylesheet" href="css/pharmacy.css">
+<script type="text/javascript" rel="shtylesheet" src="js/tablegenerator3.js"></script>
+<script type="text/javascript" src="js/pharmacy.js"></script>
+</body>
+</html>

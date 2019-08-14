@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>HIS医院管理系统</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="css/registration_regist_deny.css" />
+</head>
+
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header" id="header">
+            <!-- _header头部区域 start -->
+            <!-- _header头部区域 stop -->
+        </div>
+
+        <div class="layui-side layui-bg-black">
+
+            <div class="layui-side-scroll" id="lefter">
+                <!-- _lefter 左侧导航区域start -->
+                <!-- _lefter 左侧导航区域stop -->
+            </div>
+
+        </div>
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            <!-- 标题 -->
+            <div id="regist-top">
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li><a href="registration.html">挂号</a></li>
+                        <li><a href="registration_charge.html">收费</a></li>
+                        <li class="layui-this"><a href="#">退号</a></li>
+                        <li>退费</li>
+                        <li>日结</li>
+                        <li>日结查询</li>
+                        <li>患者费用查询</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 头部 -->
+            <div id="regist-header">
+                <div class="layui-input-inline">
+                    <input name="case_number_input" id="case_number_input" class="layui-input" placeholder="请输入病历号"
+                        type="text" autocomplete="off" lay-verify="required|phone">
+                </div>
+                <div class="regist-button-style">
+                    <button class="layui-btn layui-btn-normal" id="caseSearch">病例搜索</button>
+                </div>
+                <div class="regist-button-style">
+                    <button class="layui-btn layui-btn-normal" id="identifierScan">身份搜索</button>
+                </div>
+                <div class="regist-button-style">
+                    <button class="layui-btn layui-btn-normal"
+                        id="clearRegistration">清&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;空</button>
+                </div>
+            </div>
+            <!-- 详情 -->
+            <div id="regist-details">
+                <form class="layui-form" action="">
+                    <div class="layui-inline">
+                        <div class="my-label-style layui-inline">病例编号</div>
+                        <div class="layui-input-block layui-inline my-input-style">
+                            <input type="text" name="caseNumber" id="patientCaseNumber" required lay-verify="required"
+                                placeholder="病历号" autocomplete="off" class="layui-input" readonly>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="my-label-style layui-inline">姓名</div>
+                        <div class="layui-input-block layui-inline my-input-style">
+                            <input type="text" name="patientName" id="patientName" required lay-verify="required"
+                                placeholder="请输入标题" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="my-label-style layui-inline">性别</div>
+                        <div class="layui-input-block layui-inline my-input-style">
+                            <input type="text" name="patientGender" id="patientGender" required lay-verify="required"
+                                placeholder="请输入标题" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <div class="my-label-style layui-inline">年龄</div>
+                        <div class="layui-input-block layui-inline my-input-style">
+                            <input type="text" name="patientAge" id="patientAge" required lay-verify="required"
+                                placeholder="请输入标题" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="my-label-style layui-inline">出生年月</div>
+                        <div class="layui-input-block layui-inline my-input-style">
+                            <input type="text" name="patientBirthDate" id="patientBrithDate" required
+                                lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="my-label-style layui-inline">身份证号</div>
+                        <div class="layui-input-block layui-inline my-input-style">
+                            <input type="text" name="patientIdNumber" id="patientIdNumber" required
+                                lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="my-label-style layui-inline">家庭住址</div>
+                        <div class="layui-input-block layui-inline my-input-style">
+                            <input type="text" name="patientAddress" id="patientAddress" required lay-verify="required"
+                                placeholder="请输入标题" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="my-label-style layui-inline">看诊日期</div>
+                        <div class="layui-input-block layui-inline my-input-style">
+                            <input type="text" name="diagnoseDate" id="diagnoseDate" required lay-verify="required"
+                                placeholder="请输入标题" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline clear-select">
+                        <div class="my-label-style layui-inline">科室类别</div>
+                        <div class="layui-input-block layui-inline my-input-style">
+                            <input type="text" name="deptName" id="deptName" required lay-verify="required"
+                                placeholder="请输入标题" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline clear-select">
+                        <div class="my-label-style layui-inline">挂号类别</div>
+                        <div class="layui-input-block layui-inline my-input-style">
+                            <input type="text" name="registType" id="registType" required lay-verify="required"
+                                placeholder="请输入标题" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline clear-select">
+                        <div class="my-label-style layui-inline">看诊医生</div>
+                        <div class="layui-input-block layui-inline my-input-style">
+                            <input type="text" name="diagnoseDoctor" id="diagnoseDoctor" required lay-verify="required"
+                                placeholder="请输入标题" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="regist-list">
+                <div>费用明细</div>
+                <div>
+                    <div class="regist-button-style"><button class="layui-btn" id="regist-search">查询</button></div>
+                    <div class="regist-button-style"><button class="layui-btn" id="regist-deny">退号</button></div>
+                </div>
+                <div>
+                    <table class="layui-table" lay-even lay-skin="nob">
+                        <colgroup>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>名称</th>
+                                <th>类型</th>
+                                <th>费用</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody id="regist-deny-details">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- 列表 -->
+            <!-- <div id="regist-list">
+                <div id="regist-list-head">收费项目清单</div>
+                <div>
+                    <div class="regist-button-style"><button class="layui-btn" id="medical-deal">医技处置</button></div>
+                    <div class="regist-button-style"><button class="layui-btn" id="medicine-deal">药品清单</button></div>
+                </div>
+                <div id="regist-list-meidical">
+                    <table class="layui-table" lay-even lay-skin="nob">
+                        <colgroup>
+                            <col width="150">
+                            <col width="200">
+                            <col>
+                        </colgroup>
+                        <thead>
+                            <tr id="regist-table-head">
+                            </tr>
+                        </thead>
+                        <tbody id="medical-tbody">
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <div hidden><input type="hidden" id="submit-flag" value="" /></div>
+                    <div class="regist-button-style charge-sum" id="charge-sum">总计:</div>
+                    <div class="regist-button-style charge-submit" id="charge-submit"><button
+                            class="layui-btn">结算</button></div>
+                </div>
+                <div id="regist-list-meidicine">
+                    <table class="layui-hide" id="regist-list-medicine-details"></table>
+                </div>
+                <div id="medicine-sum"></div>
+                <div id="total-sum"></div>
+                <div></div>
+            </div>-->
+
+            <!--<div class="layui-footer" id="footer">-->
+            <!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+            <!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+            <!--</div>-->
+
+        </div>
+        <script src="../layui/jquery-3.3.1.js"></script>
+        <script src="../layui/layui.js"></script>
+        <script src="js/registration_regist_deny.js"></script>
+        <script src="../conmmon/common.js"></script>
+        <script src="../conmmon/login_operate.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('.layui-nav-item').eq(2).addClass("layui-nav-itemed");//eq按自己页面顺序排，从2开始
+            }
+            );
+
+            // _header头部区域
+            $("#header").load("../conmmon/_header.html");
+            //_lefter 左侧导航区域
+            $("#lefter").load("../conmmon/_lefter.html");
+            //_footer 底部区域
+            //$("#footer").load("/conmmon/_footer.html");
+
+            //JavaScript代码区域
+            layui.use('element', function () {
+                var element = layui.element;
+            });
+
+        </script>
+</body>
+
+</html>

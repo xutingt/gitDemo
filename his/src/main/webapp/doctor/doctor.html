@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>HIS医院管理系统</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+	<style>
+		.disnone{
+			display: none;
+		}
+	</style>
+
+</head>
+	<body class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin">
+			<!-- _header头部区域 start -->
+				<div class="layui-header" id="header"></div>
+			<!-- _header头部区域 stop -->
+			<!-- _lefter 左侧导航区域start -->
+				<div class="layui-side layui-bg-black">
+					<div class="layui-side-scroll" id="lefter">	</div>		
+				</div>
+			<!-- _lefter 左侧导航区域stop -->	
+				<!-- 内容主体区域 -->
+				<div class="layui-body" style="display: flex;">
+					<!-- 左侧区域 -->
+					<div style="width: 30%;height: 200px;margin-top: 28px;" id="huanzhe">
+						<!-- 搜索栏 -->
+						<div class="layui-form-item">
+							<label class="layui-form-label" style="font-size: 16px;font-weight: 300;">病历号:</label>
+							<div class="layui-input-block" style="display: flex;">
+								<input type="text" name="title" id="ssk" style="width: 60%;;" lay-verify="title" autocomplete="off" placeholder="请输入病历号"
+								 class="layui-input">
+								<button class="layui-btn  layui-btn-normal" style="margin-left: 3px;" id="ss">搜索/刷新</button>
+							</div>
+			
+						</div>
+						<!-- 患者列表 -->
+						<div class="layui-tab layui-tab-card" style="margin-left: 10px;height: 555px;">
+							<ul class="layui-tab-title">
+								<li class="layui-this">本人</li>
+								<li>科室</li>
+							</ul>
+							<div class="layui-tab-content" style="height: 100px;">
+								<!-- 本人患者 -->
+								<div class="layui-tab-item layui-show">
+									<div>
+										<button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal">未诊患者</button>
+										<div>
+											<table class="layui-hide" id="brwzhz" lay-filter="test"></table>
+										</div>
+									</div>
+									<div>
+										<button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal">已诊患者</button>
+										<div>
+											<div>
+												<table class="layui-hide" id="bryzhz" lay-filter="test"></table>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- 科室患者 -->
+								<div class="layui-tab-item">
+									<div>
+										<button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal">未诊患者</button>
+										<div>
+											<table class="layui-hide" id="kswzhz" lay-filter="test"></table>
+										</div>
+									</div>
+									<div>
+										<button class="layui-btn layui-btn-sm layui-btn-radius layui-btn-normal">已诊患者</button>
+										<div>
+											<div>
+												<table class="layui-hide" id="ksyzhz" lay-filter="test"></table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 右侧区域 -->
+					<div style="width: 70%;margin-right:10px;" id="caozuo">
+						<!-- 显示隐藏按键 -->
+						<button class="layui-btn  layui-btn-normal" style="margin-left: 10px;margin-top: 28px;" id="show">隐藏患者栏</button>
+						<button class="layui-btn  layui-btn-disabled" style="margin-left: 10px;margin-top: 28px;cursor: default" id="huanzhexinxi">请选择患者</button>
+						<!-- 选项卡 -->
+						<div style="padding: 0px;">
+							<div class="layui-tab layui-tab-card" style="margin-left: 10px;margin-top: 15px;">
+								<ul class="layui-tab-title">
+									<li class="layui-this">门诊病历</li>
+									<li>检查申请</li>
+									<li>检验申请</li>
+									<li>门诊确诊</li>
+									<li>处置单</li>
+									<li class="cfxxk">药品处方</li>
+									<li>患者账单</li>
+								</ul>
+								<div class="layui-tab-content">
+									<!-- 门诊病历 -->
+									<div class="layui-tab-item layui-show">
+										<div style="width: 99%;height: 30px;background: #F5F7FA;display: flex;padding-top:3px;padding-left: 10px;border-radius: 4px;" id="mzhzjc">
+											<div>
+												<button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 2px">门诊患者检查</button>
+											</div>
+											<div style="display: flex;">
+												<div class="zc" style="margin-left: 100px" id="zc">
+													<i class="layui-icon layui-icon-form" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">暂存</span>
+												</div>
+												<div class=" " style="margin-left: 100px" id="tj">
+													<i class="layui-icon layui-icon-ok" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">提交</span>
+												</div>
+												<div class="qk" style="margin-left: 100px" id="qk">
+													<i class="layui-icon layui-icon-delete" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">清空</span>
+												</div>
+											</div>
+										</div>
+										<div>
+											<div>
+												<button class="layui-btn layui-btn-disabled" style="cursor: default;border-radius: 2px;margin-top: 5px;">病史内容</button>
+											</div>
+											<!-- 主诉 -->
+											<div class="layui-form-item layui-form-text" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">主诉</label>
+												<div class="layui-input-block">
+													<textarea name="desc" placeholder="请输入内容" class="layui-textarea" style="min-height: 30px;" id="Readme"></textarea>
+												</div>
+											</div>
+											<!--  现病史  -->
+											<div class="layui-form-item layui-form-text" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">现病史</label>
+												<div class="layui-input-block">
+													<textarea name="desc" placeholder="请输入内容" class="layui-textarea" style="min-height: 30px;" id="Present"></textarea>
+												</div>
+											</div>
+											<div class="layui-form-item layui-form-text" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">既往史</label>
+												<div class="layui-input-block">
+													<textarea name="desc" placeholder="请输入内容" class="layui-textarea" style="min-height: 30px;" id="History"></textarea>
+												</div>
+											</div>
+											<!--  过敏史  -->
+											<div class="layui-form-item layui-form-text" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">过敏史</label>
+												<div class="layui-input-block">
+													<textarea name="desc" placeholder="请输入内容" class="layui-textarea" style="min-height: 30px;" id="Allergy"></textarea>
+												</div>
+											</div>
+											<!--  检查结果  -->
+											<div>
+												<button class="layui-btn layui-btn-disabled" style="border-radius: 2px;margin-top: 5px;cursor: default">检查结果</button>
+											</div>
+											<!--  体格检查  -->
+											<div class="layui-form-item layui-form-text" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">体格检查</label>
+												<div class="layui-input-block">
+													<textarea name="desc" placeholder="请输入内容" class="layui-textarea" style="min-height: 30px;" id="Physique"></textarea>
+												</div>
+											</div>
+											<!--  辅助检查  -->
+											<div class="layui-form-item layui-form-text" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">辅助检查</label>
+												<div class="layui-input-block">
+													<textarea name="desc" placeholder="请输入内容" class="layui-textarea" style="min-height: 30px;" id="Auxiliary"></textarea>
+												</div>
+											</div>
+											<div>
+												<button class="layui-btn layui-btn-disabled" style="border-radius: 2px;margin-top: 5px;cursor: default">评估/诊断</button>
+											</div>
+											<!--  评估/诊断  西医诊断 -->
+											<div>
+												<div style="width: 99%;height: 30px;background: #F5F7FA;display: flex;padding-top:3px;padding-left: 10px;border-radius: 4px;">
+													<div>
+														<button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 2px">西医诊断</button>
+													</div>
+													<div style="display: flex;">
+														<div class="xzxm" style="margin-left: 70px;margin-top: -3px;">													
+															<button data-method="offset" data-type="auto" data-href="JiBing.html?kind=Western" class="layui-btn layui-btn-sm tanchu" style="background: #F5F7FA ;">
+																<i class="layui-icon layui-icon-add-1" style="font-size: 20px; color: blue;"></i>
+																<span style="font-size: 12px;color: darkgray;">增加</span>
+															</button>
+														</div>
+														<div class="tj" style="margin-left: 100px" id="wsc">
+															<i class="layui-icon layui-icon-delete" style="font-size: 20px; color: blue;"></i>
+															<span style="font-size: 12px;color: darkgray;cursor: pointer;">删除</span>
+														</div>														
+													</div>
+												</div>  
+												 
+												<table class="layui-table" lay-even="" lay-skin="nob" id="Western">
+												  <colgroup>
+													<col width="50">
+													<col width="150">
+													<col width="200">
+													<col width="150">
+													<col>
+												  </colgroup>
+												  <thead>
+													
+													  <th></th>
+													  <th>ICD编码</th>
+													  <th>名称</th>
+													  <th>发病日期</th>
+													
+												  </thead>
+												  <tbody>
+													
+												  </tbody>
+												</table> 
+											</div> 
+											<!--  评估/诊断  中医诊断 -->
+											<div>
+												<div style="width: 99%;height: 30px;background: #F5F7FA;display: flex;padding-top:3px;padding-left: 10px;border-radius: 4px;">
+													<div>
+														<button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 2px">中医诊断</button>
+													</div>
+													<div style="display: flex;">
+														<div class="xzxm" style="margin-left: 70px;margin-top: -3px;">													
+															<button data-method="offset" data-type="auto" data-href="JiBing.html?kind=Chinese" class="layui-btn layui-btn-sm tanchu" style="background: #F5F7FA ;">
+																<i class="layui-icon layui-icon-add-1" style="font-size: 20px; color: blue;"></i>
+																<span style="font-size: 12px;color: darkgray;">增加</span>
+															</button>
+														</div>
+														<div class="tj" style="margin-left: 100px" id="csc">
+															<i class="layui-icon layui-icon-delete" style="font-size: 20px; color: blue;"></i>
+															<span style="font-size: 12px;color: darkgray;cursor: pointer;">删除</span>
+														</div>														
+													</div>
+												</div>  
+												 
+												<table class="layui-table" lay-even="" lay-skin="nob" id="Chinese">
+												  <colgroup>
+													<col width="50">
+													<col width="150">
+													<col width="200">
+													<col width="150">
+													<col>
+												  </colgroup>
+												  <thead>
+													
+													  <th></th>
+													  <th>ICD编码</th>
+													  <th>名称</th>
+													  <th>发病日期</th>
+													 
+												  </thead>
+												  <tbody>
+				
+												  </tbody>
+												</table> 
+											</div>
+											
+											<div>
+												<button class="layui-btn layui-btn-disabled" style="border-radius: 2px;margin-top: 5px;cursor: default">处理意见</button>
+											</div>
+											<div class="layui-form-item layui-form-text" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">检查建议</label>
+												<div class="layui-input-block">
+													<textarea name="desc" placeholder="请输入内容" class="layui-textarea" style="min-height: 30px;" id="Proposal"></textarea>
+												</div>
+											</div>
+											<div class="layui-form-item layui-form-text" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">注意事项</label>
+												<div class="layui-input-block">
+													<textarea name="desc" placeholder="请输入内容" class="layui-textarea" style="min-height: 30px;" id="Careful"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 检查申请 -->
+									<div class="layui-tab-item">
+										<div style="width: 99%;height: 30px;background: #F5F7FA;display: flex;padding-top:3px;padding-left: 10px;border-radius: 4px;">
+											<div>
+												<button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 2px">金额合计：</button>&nbsp;&nbsp;<span id="total">0</span>元
+											</div>
+											<div style="display: flex;">
+												<div class="xzxm" style="margin-left: 70px;margin-top: -3px;" >													
+													<button data-method="offset" data-type="auto" data-href="JianCha.html?kind=jiancha" class="layui-btn layui-btn-sm tanchu" style="background: #F5F7FA ;">
+														<i class="layui-icon layui-icon-add-1" style="font-size: 20px; color: blue;"></i>
+														<span style="font-size: 12px;color: darkgray;">新增项目</span>
+													</button>
+												</div>
+												<!-- <div class="zcxm" style="margin-left: 70px" id="jczc">
+													<i class="layui-icon layui-icon-form" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">暂存项目</span>
+												</div> -->
+												<div class="klxm" style="margin-left: 70px" id="jckl">
+													<i class="layui-icon layui-icon-ok" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">开立项目</span>
+												</div>
+												<div class="scxm" style="margin-left: 70px" id="jksc">
+													<i class="layui-icon layui-icon-delete" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;" id="jcsc">删除项目</span>
+												</div>
+												<div class="zfxm" style="margin-left: 70px" id="jczf">
+													<i class="layui-icon layui-icon-close" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">作废项目</span>
+												</div>
+											</div>
+										</div>
+										<div>																	 
+											<table class="layui-table" lay-even="" style="table-layout:fixed" lay-skin="nob" id="jiancha">
+											  <colgroup>
+												<col width="50">
+												<col width="120">
+												<col width="180">
+												<col width="150">
+												<col width="150">
+												<col width="80">
+												<col width="100">
+												
+											  </colgroup>
+											  <thead>
+												
+												  <th><input type="checkbox"/></th>
+												  <th>项目编码</th>
+												  <th>项目名称</th>
+												  <th>执行科室</th>
+												  <th>执行状态</th>
+												  <th>单价</th>
+												  <th>检查结果</th>
+												
+											  </thead>
+											  <tbody>
+												
+											  </tbody>
+											</table> 
+										</div> 
+									</div>
+									<!-- 检验申请 -->
+									<div class="layui-tab-item">
+										<div style="width: 99%;height: 30px;background: #F5F7FA;display: flex;padding-top:3px;padding-left: 10px;border-radius: 4px;">
+											<div>
+												<button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 2px">金额合计：</button>&nbsp;&nbsp;<span id="total2">0</span>元
+											</div>
+											<div style="display: flex;">
+												<div class="xzxm" style="margin-left: 70px;margin-top: -3px;">													
+													<button data-method="offset" data-type="auto" data-href="JianYan.html?kind=jianyan" class="layui-btn layui-btn-sm tanchu" style="background: #F5F7FA ;">
+														<i class="layui-icon layui-icon-add-1" style="font-size: 20px; color: blue;"></i>
+														<span style="font-size: 12px;color: darkgray;cursor: pointer;">新增项目</span>
+													</button>
+												</div>
+												<!-- <div class="zcxm" style="margin-left: 70px" id="jyzc">
+													<i class="layui-icon layui-icon-form" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">暂存项目</span>
+												</div> -->
+												<div class="klxm" style="margin-left: 70px" id="jykl">
+													<i class="layui-icon layui-icon-ok" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">开立项目</span>
+												</div>
+												<div class="scxm" style="margin-left: 70px" id="jysc">
+													<i class="layui-icon layui-icon-delete" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">删除项目</span>
+												</div>
+												<div class="zfxm" style="margin-left: 70px" id="jyzf">
+													<i class="layui-icon layui-icon-close" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">作废项目</span>
+												</div>
+											</div>
+										</div>
+										<div>																	 
+											<table class="layui-table" lay-even="" lay-skin="nob" id="jianyan">
+											  <colgroup>
+												<col width="50">
+												<col width="150">
+												<col width="200">
+												<col width="150">
+												<col>
+											  </colgroup>
+											  <thead>
+												
+												  <th><input type="checkbox"/></th>
+												  <th>项目编码</th>
+												  <th>项目名称</th>
+												  <th>执行科室</th>
+												  <th>加急</th>
+												  <th>执行状态</th>
+												  <th>单价</th>
+												  <th>检查结果</th>
+												
+											  </thead>
+											  <tbody>
+												
+											  </tbody>
+											</table> 
+										</div> 
+									</div>
+									<!-- 门诊确诊 -->
+									<div class="layui-tab-item">
+										<div style="width: 99%;height: 30px;background: #F5F7FA;display: flex;padding-top:3px;padding-left: 10px;border-radius: 4px;">
+											<div>
+												<button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 2px">患者病历填写</button>
+											</div>
+											<div style="display: flex;">
+												<div class="bc" style="margin-left: 400px" id="mzbc">
+													<i class="layui-icon layui-icon-ok" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">保存</span>
+												</div>
+												<!-- <div class="zf" style="margin-left: 100px" id="mzzf">
+													<i class="layui-icon layui-icon-close" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">作废</span>
+												</div> -->
+											</div>
+										</div>
+										<div>
+											<div class="layui-form-item" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">病历号</label>
+												<div class="layui-input-block">
+													<input type="text" name="title" id="mzblh" lay-verify="title" disabled="disabled" autocomplete="off" placeholder="" class="layui-input">
+												</div>
+											</div>
+											<div class="layui-form-item" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">患者姓名</label>
+												<div class="layui-input-block">
+													<input type="text" name="title" id="mzxm" lay-verify="title" disabled="disabled"  autocomplete="off" placeholder="" class="layui-input">
+												</div>
+											</div>
+											<div class="layui-form-item" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">性别</label>
+												<div class="layui-input-block">
+													<input type="text" name="title" id="mzxb" lay-verify="title" disabled="disabled"  autocomplete="off" placeholder="" class="layui-input">
+												</div>
+											</div>
+											<div class="layui-form-item" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">年龄</label>
+												<div class="layui-input-block">
+													<input type="text" name="title" id="mznl" lay-verify="title"  disabled="disabled" autocomplete="off" placeholder="" class="layui-input">
+												</div>
+											</div>
+											<div class="layui-form-item layui-form-text" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">检查</label>
+												<div class="layui-input-block">
+													<textarea name="desc" placeholder="请输入内容" id="mzjc" class="layui-textarea" style="min-height: 100px;"></textarea>
+												</div>
+											</div>
+											<div class="layui-form-item layui-form-text" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">诊断</label>
+												<div class="layui-input-block">
+													<textarea name="desc" placeholder="请输入内容" id="mzzd" class="layui-textarea" style="min-height: 100px;"></textarea>
+												</div>
+											</div>
+											<div class="layui-form-item layui-form-text" style="margin-top: 5px;">
+												<label class="layui-form-label" style="width: 70px;font-size: 16px;font-weight: 200;">处理意见</label>
+												<div class="layui-input-block">
+													<textarea name="desc" placeholder="请输入内容" id="mzyj" class="layui-textarea" style="min-height: 60px;"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 处置单 -->
+									<div class="layui-tab-item">
+										<div style="width: 99%;height: 30px;background: #F5F7FA;display: flex;padding-top:3px;padding-left: 10px;border-radius: 4px;">
+											<div>
+												<button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 2px">金额合计：</button>&nbsp;&nbsp;<span id="total3">0</span>元
+											</div>
+											<div style="display: flex;">
+												<div class="xzxm" style="margin-left: 70px;margin-top: -3px;">													
+													<button data-method="offset" data-type="auto" data-href="ChuZhi.html?kind=chuzhi" class="layui-btn layui-btn-sm tanchu" style="background: #F5F7FA ;">
+														<i class="layui-icon layui-icon-add-1" style="font-size: 20px; color: blue;"></i>
+														<span style="font-size: 12px;color: darkgray;">新增项目</span>
+													</button>
+												</div>
+												<!-- <div class="zcxm" style="margin-left: 70px" id="czzc">
+													<i class="layui-icon layui-icon-form" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">暂存项目</span>
+												</div> -->
+												<div class="klxm" style="margin-left: 70px" id="czkl">
+													<i class="layui-icon layui-icon-ok" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">开立项目</span>
+												</div>
+												<div class="scxm" style="margin-left: 70px" id="czsc">
+													<i class="layui-icon layui-icon-delete" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">删除项目</span>
+												</div>
+												<div class="zfxm" style="margin-left: 70px" id="czzf">
+													<i class="layui-icon layui-icon-close" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">作废项目</span>
+												</div>
+											</div>
+										</div>
+										<div>
+											<table class="layui-table" lay-even="" lay-skin="nob" id="chuzhi">
+											  <colgroup>
+												<col width="50">
+												<col width="150">
+												<col width="200">
+												<col width="150">
+												<col>
+											  </colgroup>
+											  <thead>
+												
+												  <th><input type="checkbox"/></th>
+												  <th>项目编码</th>
+												  <th>项目名称</th>
+												  <th>执行科室</th>
+												  <th>加急</th>
+												  <th>执行状态</th>
+												  <th>单价</th>
+												  <th>检查结果</th>
+												
+											  </thead>
+											  <tbody>
+												
+											  </tbody>
+											</table>
+										</div>
+									</div>
+									<!-- 药品处方 -->
+									<div class="layui-tab-item">
+										<div style="padding-left: 10px;margin-bottom: 3px;">
+											<button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 2px">门诊诊断</button>
+										</div>
+										<div style="width: 99%;height: 30px;background: #F5F7FA;display: flex;padding-top:3px;padding-left: 10px;border-radius: 4px;">
+											<div>
+												<button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 2px">门诊处方</button>
+											</div>
+											<div style="display: flex;">
+												
+												<div class="chyxzcf" style="margin-left: 70px;cursor: pointer;" id="xzcf">																									
+													<i class="layui-icon layui-icon-add-1" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;">新增处方</span>													
+												</div>
+												<!-- <div class="chyzcbc" style="margin-left: 70px">
+													<i class="layui-icon layui-icon-form" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">保存处方</span>
+												</div> -->
+												<div class="chyfscf" style="margin-left: 70px" id="fscf">
+													<i class="layui-icon layui-icon-ok" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">发送处方</span>
+												</div>
+												<div class="chysccf" style="margin-left: 70px">
+													<i class="layui-icon layui-icon-delete" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">删除处方</span>
+												</div>
+												<!-- <div class="chyzfcf" style="margin-left: 70px">
+													<i class="layui-icon layui-icon-close" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">作废处方</span>
+												</div> -->
+												<div style="display: none;" id="zysy">
+												<div class="" style="margin-left: 70px;margin-top: -3px;" id="zengyao" >													
+													<button data-method="offset" data-type="auto" data-href="YaoPin.html" class="layui-btn layui-btn-sm tanchu" style="background: #F5F7FA ;">
+														<i class="layui-icon layui-icon-add-1" style="font-size: 20px; color: blue;"></i>
+														<span style="font-size: 12px;color: darkgray;">增药</span>
+													</button>
+												</div>
+												<div class="chyzfcf" style="margin-left: 70px">
+													<i class="layui-icon layui-icon-delete" style="font-size: 20px; color: blue;"></i>
+													<span style="font-size: 12px;color: darkgray;cursor: pointer;">删药</span>
+												</div>
+												</div>
+											</div>
+										</div>
+										<div style="display: flex;">
+											
+											<div style="padding: 15px;">
+												<div>
+													处方
+												</div>
+												<div>
+													<table class="layui-table" lay-even="" lay-filter="test1" lay-skin="nob" id="ypcf">
+													  <colgroup>
+														  <col width="50px" />
+														  <col width="150px" />
+														  <col width="100px" />
+													  </colgroup>
+													  <thead>
+														  <th></th>
+														  <th>处方名称</th>	  
+														  <th>状态</th>														  
+													  </thead>
+													  <tbody>
+
+													  </tbody>
+													</table>
+												</div>
+											</div>
+											<div style="padding: 15px;">
+												<div>
+													处方金额：&nbsp;&nbsp;<span id="total4">0</span>元  &nbsp;&nbsp;&nbsp;&nbsp;
+													处方名称：&nbsp;&nbsp;<span id="cfmc" data-id=''></span> 
+												</div>
+												<table class="layui-table" lay-even="" lay-skin="nob" id="yaopin">
+												  <colgroup>
+												  </colgroup>
+												  <thead>
+													  <th></th>
+													  <th>药品名称</th>
+													  <th>规格</th>
+													  <th>单价</th>
+													  <th>用法用量</th>
+													  <th>频次</th>
+													  <th>天数</th>
+													  <th>数量</th>
+													  <th>用药嘱托</th>
+													  <th>结果查看</th>
+												  </thead>
+												  <tbody>
+												  </tbody>
+												</table>
+											</div>
+										</div>
+										
+										
+										
+										<div>
+											
+										</div>
+									</div>
+									<!-- 患者账单 -->
+									<div class="layui-tab-item">
+										<div style="width: 99%;height: 30px;background: #F5F7FA;display: flex;padding-top:3px;padding-left: 10px;border-radius: 4px;">
+											<div>
+												<button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 2px">门诊处方</button>
+											</div>
+										</div>
+										<div>
+											此处应该有表格
+										</div>
+										<div style="width: 99%;height: 30px;background: #F5F7FA;display: flex;padding-top:3px;padding-left: 10px;border-radius: 4px;">
+											<div>
+												<button class="layui-btn layui-btn-xs layui-btn-normal" style="margin-top: 2px">金额合计</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+		</div>
+			<!--<div class="layui-footer" id="footer">-->
+				<!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+				<!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+			<!--</div>-->
+<script src="../layui/jquery-3.3.1.js"></script>
+<script src="../layui/layui.js"></script>
+<script src="../conmmon/common.js"></script>
+<script src="doctor.js"></script>
+
+	
+	
+	
+	</body>
+</html>

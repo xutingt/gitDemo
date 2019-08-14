@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>HIS医院管理系统</title>
+		<link rel="stylesheet" href="../layui/css/layui.css">
+	</head>
+	<body class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header" id="header">
+				<!-- _header头部区域 start -->
+				<!-- _header头部区域 stop -->
+			</div>
+
+			<div class="layui-side layui-bg-black">
+
+				<div class="layui-side-scroll" id="lefter">
+					<!-- _lefter 左侧导航区域start -->
+					<!-- _lefter 左侧导航区域stop -->
+				</div>
+
+			</div>
+			<!-- 内容主体区域 -->
+			<div class="layui-body">
+				<div class="layui-tab layui-tab-card" lay-allowclose="true">
+					<ul class="layui-tab-title">
+						<li class="layui-this">疾病管理</li>
+					</ul>
+					<div class="layui-tab-content" style="height: 150px;">
+						<div class="layui-tab-item layui-show">
+							<div class="layui-form-item">
+								<div class="layui-input-block" style="display: flex;">
+									<input type="text" name="title" style="width:16%;height:35px;margin-left:-109px;" lay-verify="title"
+									 autocomplete="off" placeholder="请输入疾病编码" class="layui-input" id="diseseCode">
+									<input type="text" name="title" style="width:16%;height:35px;margin-left:8px;" lay-verify="title" autocomplete="off"
+									 placeholder="请输入疾病名称" class="layui-input" id="diseseName">
+									<button class="layui-btn  layui-btn-normal" style="margin-left:24px; height:35px;" id="btnDis">查询疾病</button>
+									<div class="site-demo-button" id="layerDemo" style="margin-bottom: 0;">
+										<button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal" style="margin-left:35px; height:35px;">新增疾病</button>
+									</div>
+								</div>
+							</div>
+							<table class="layui-hide" id="test" lay-filter="test"></table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../layui/jquery-3.3.1.js"></script>
+		<script src="../layui/layui.js"></script>
+		<script type="text/html" id="toolbarDemo">
+			<div class="layui-btn-container">
+		      <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+		      <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+		      <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+		   </div>
+		</script>
+         <script src="../conmmon/common.js" ></script>
+		<script type="text/html" id="barDemo">
+			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+		    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+		</script>
+		//弹出层
+		<script>
+			$(document).ready(function() {
+				$('.layui-nav-item').eq(7).addClass("layui-nav-itemed"); //eq按自己页面顺序排，从2开始
+			});
+
+			// _header头部区域
+			$("#header").load("../conmmon/_header.html");
+			//_lefter 左侧导航区域
+			$("#lefter").load("../conmmon/_lefter.html");
+			//_footer 底部区域
+			//$("#footer").load("/conmmon/_footer.html");
+
+			//JavaScript代码区域
+			layui.use('element', function() {
+				var element = layui.element;
+			});
+
+
+			layui.use('layer', function() { //独立版的layer无需执行这一句
+				var $ = layui.jquery,
+					layer = layui.layer; //独立版的layer无需执行这一句
+
+				//触发事件
+				var active = {
+
+					offset: function(othis) {
+						var type = othis.data('type'),
+							text = othis.text();
+
+						layer.open({
+							type: 1,
+							offset: type //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
+								,
+							id: 'layerDemo' + type //防止重复弹出
+								,
+							content: '<div style="padding: 30px 100px;"><form class="form-horizontal"><div style="margin-left:-73px; margin-top:-24px; font-size:15px " >疾病编码</div>  <input type="text" name="title" style="width:46%;height:30px;margin-left:-4px; margin-top:-24px;required lay-verify="required" placeholder="疾病编码" autocomplete="off" class="layui-input" id="DiseaseCode"> <div style="margin-left:171px; margin-top:-27px; font-size:15px " >疾病名称</div>  <input type="text" name="title"  id="DiseaseName"style="width:48%;height:30px;margin-left:244px; margin-top:-24px; "  required lay-verify="required" placeholder="疾病名称" autocomplete="off" class="layui-input"> <div style="margin-left:-92px; margin-top:19px; font-size:15px " >国际ICD编码</div>  <input type="text" id="DiseaseICD" name="title" style="width:46%;height:30px;margin-left:-4px; margin-top:-24px; "  required lay-verify="required" placeholder="国际ICD编码" autocomplete="off" class="layui-input">  <div style="margin-left:155px; margin-top:-26px; font-size:15px " >疾病所属分类</div>  <input type="text" id="DicaId" name="title" style="width:47%;height:30px;margin-left:247px; margin-top:-24px; "  required lay-verify="required" placeholder="疾病所属分类" autocomplete="off" class="layui-input"></form></div>',
+
+							btn: ['确定', '取消'],
+							btn1: function() {
+
+								$.post(basePath+"disease/save", {
+
+									DiseaseCode: $("#DiseaseCode").val(),
+									DiseaseName: $("#DiseaseName").val(),
+									DiseaseICD: $("#DiseaseICD").val(),
+									DicaId: $("#DicaId").val()
+								}, function(data) {
+									if (data == 1) {
+										layer.msg('添加成功', {
+											icon: 1,
+											time: 3000 //2秒关闭（如果不配置，默认是3秒）
+										});
+									} else {
+										layer.msg('添加失败', {
+											icon: 1,
+											time: 3000 //2秒关闭（如果不配置，默认是3秒）
+										});
+									}
+
+								});
+							},
+							btn2: function() {
+								layer.closeAll();
+
+							},
+							btnAlign: 'c' //按钮居中
+								,
+							shade: 0.5 //不显示遮罩
+								,
+							title: ['新增疾病', 'font-size:16px;'],
+
+							area: ['533px', '250px'],
+
+						});
+					},
+
+				};
+
+				$('#layerDemo .layui-btn').on('click', function() {
+					var othis = $(this),
+						method = othis.data('method');
+					active[method] ? active[method].call(this, othis) : '';
+				});
+
+			});
+		</script>
+
+		<script>
+			var table;
+			layui.use('table', function() {
+				table = layui.table;
+
+				table.render({
+					size: 'sm',
+					id: 'disease',
+					elem: '#test',
+
+					url: basePath+'disease/list',
+
+					//toolbar: '#toolbarDemo',
+					title: '用户数据表',
+					cols: [
+						[{
+							field: 'Id',
+							title: 'Id',
+							width: 20,
+							fixed: 'left',
+							hide: 'false',
+						}, {
+							field: 'DiseaseCode',
+							title: '疾病编码',
+							width: 180,
+							fixed: 'left',
+						}, {
+							field: 'DiseaseName',
+							title: '疾病名称',
+							width: 180,
+							fixed: 'left',
+						}, {
+							field: 'DiseaseICD',
+							title: '国际ICD编码',
+							width: 160,
+							fixed: 'left',
+
+						}, {
+							field: 'DicaId',
+							title: '疾病所属分类',
+							width: 176,
+
+						}, {
+							fixed: 'left',
+							fixed: 'right',
+							title: '操作',
+							toolbar: '#barDemo',
+							width: 516
+						}]
+					],
+					page: true
+				});
+
+				//头工具栏事件
+				table.on('toolbar(test)', function(obj) {
+					var checkStatus = table.checkStatus(obj.config.id);
+					switch (obj.event) {
+						case 'getCheckData':
+							var data = checkStatus.data;
+							layer.alert(JSON.stringify(data));
+							break;
+						case 'getCheckLength':
+							var data = checkStatus.data;
+							layer.msg('选中了：' + data.length + ' 个');
+							break;
+						case 'isAll':
+							layer.msg(checkStatus.isAll ? '全选' : '未全选');
+							break;
+					};
+				});
+
+				//监听行工具事件
+				table.on('tool(test)', function(obj) {
+					// var data = JSON.parse();
+
+					console.log(obj.data)
+					if (obj.event === 'del') {
+						layer.open({
+							type: 1,
+							content: '<div style="padding: 30px 100px;"><form class="form-horizontal"><div style="margin-left:-47px; margin-top:-5px; font-size:15px " >确定要删除这条数据么？</div><input type="hidden" id="Idh" name="title" style="width:34%;height:30px;margin-left:23px; margin-top:-24px; "  required lay-verify="required" placeholder="Id" autocomplete="off" class="layui-input" value="' +
+								obj.data.Id + '" ></form></div>',
+							btnAlign: 'c' //按钮居中
+								,
+							shade: 0.5 //不显示遮罩
+								,
+
+							title: ['删除疾病 ', 'font-size:16px;'],
+							btn: ['确定', '取消'],
+							btn1: function() {
+
+								$.post(basePath+"disease/delete", {
+
+									Id: $("#Idh").val()
+								}, function(data) {
+									if (data == 1) {
+										layer.msg('删除成功', {
+											icon: 1,
+											time: 3000 //2秒关闭（如果不配置，默认是3秒）
+										});
+										layer.closeAll();
+									} else {
+										layer.msg('删除失败', {
+											icon: 1,
+											time: 3000 //2秒关闭（如果不配置，默认是3秒）
+										});
+									}
+
+								});
+							},
+							btn2: function() {
+								layer.closeAll();
+							},
+							area: ['320px', '180px']
+						});
+
+					} else if (obj.event === 'edit') {
+						console.log(obj)
+						layer.open({
+							type: 1,
+							content: '<div style="padding: 30px 100px;">,<form class="form-horizontal"><div style="margin-left:-74px; margin-top:-24px; font-size:15px " >疾病编码</div>  <input type="text" name="title" style="width:43%;height:30px;margin-left:1px; margin-top:-24px; "  required lay-verify="required" placeholder="疾病编码" autocomplete="off" class="layui-input" id="DiseaseCode" value="' +
+								obj.data.DiseaseCode +
+								'"> <div style="margin-left:165px; margin-top:-25px; font-size:15px " >疾病名称</div>  <input type="text" name="title"  id="DiseaseName"style="width:55%;height:30px;margin-left:233px; margin-top:-24px; "  required lay-verify="required" placeholder="疾病名称" autocomplete="off" class="layui-input" value="' +
+								obj.data.DiseaseName +
+								'"> <div style="margin-left:-88px; margin-top:19px; font-size:15px " >国际ICD编码</div>  <input type="text" id="DiseaseICD" name="title" style="width:43%;height:30px;margin-left:2px; margin-top:-24px; "  required lay-verify="required" placeholder="国际ICD编码" autocomplete="off" class="layui-input" value="' +
+								obj.data.DiseaseICD +
+								'">  <div style="margin-left:160px; margin-top:-26px; font-size:15px " >疾病所属分类</div>  <input type="text" id="DicaId" name="title" style="width:46%;height:30px;margin-left:262px; margin-top:-24px; "  required lay-verify="required" placeholder="疾病所属分类" autocomplete="off" class="layui-input" value="' +
+								obj.data.DicaId +
+								'"> <input type="hidden" name="title" style="width:34%;height:30px;margin-left:50px; margin-top:4px; "  required lay-verify="required" placeholder="Id" autocomplete="off" class="layui-input" id="DId" value="' +
+								obj.data.Id + '"> </form></div>',
+							btnAlign: 'c' //按钮居中
+								,
+							shade: 0.5 //不显示遮罩
+								,
+							title: ['修改疾病 ', 'font-size:16px;'],
+							btn: ['确定', '取消'],
+							btn1: function() {
+
+								$.post(basePath+"disease/update", {
+
+									DiseaseCode: $("#DiseaseCode").val(),
+									DiseaseName: $("#DiseaseName").val(),
+									DiseaseICD: $("#DiseaseICD").val(),
+									DicaId: $("#DicaId").val(),
+									Id: $("#DId").val()
+								}, function(data) {
+									if (data == 1) {
+										layer.msg('修改成功', {
+											icon: 1,
+											time: 3000 //2秒关闭（如果不配置，默认是3秒）
+										});
+									} else {
+										layer.msg('修改失败', {
+											icon: 1,
+											time: 3000 //2秒关闭（如果不配置，默认是3秒）
+										});
+									}
+
+								});
+							},
+							btn2: function() {
+								layer.closeAll();
+
+							},
+							area: ['533px', '250px']
+						});
+					}
+				});
+			});
+		</script>
+
+		<script>
+			$(document).ready(function() {
+				$("#btnDis").click(function() {
+					showPage($("#diseseCode").val(), $("#diseseName").val());
+				});
+
+				function showPage(diseseCode, diseseName) {
+					table.reload('disease', {
+
+						url: basePath+'disease/list?Id=&DiseaseICD=&DiseaseName=' + diseseName + '&DiseaseCode=' +
+							diseseCode + '&DicaId=',
+						where: {} //设定异步数据接口的额外参数
+						//,height: 300
+					});
+				}
+			})
+		</script>
+	</body>
+</html>

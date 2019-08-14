@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.mapper.KeShiMapper">
+	<select id="checkedUser" parameterType="int" resultType="int">
+		SELECT COUNT(*) 
+		FROM 
+			department d  
+			JOIN USER u ON(d.ID = u.DeptID)  
+		WHERE u.DeptID = #{deptid} 
+	</select>
+	<select id="checkedRegister" parameterType="int" resultType="int">
+		SELECT COUNT(*) 
+		FROM 
+			department d 
+			JOIN register r ON (d.ID = r.DeptID)
+		WHERE r.deptid = #{deptid}
+	</select>
+	<update id="deleteDept" parameterType="int">
+		UPDATE department 
+		SET delmark = 2 
+		WHERE id = #{id}
+	</update>
+	<insert id="insertDept" parameterType="com.neuedu.vo.DepartmentVO" >
+		INSERT INTO department
+            (DeptCode,
+             DeptName,
+             DeptCategoryID,
+             DeptType,
+             DelMark)
+		VALUES (
+			#{DeptCode},
+	        #{DeptName},
+	        #{DeptCategoryID},
+	        #{DeptType},
+	        1);
+	</insert>
+	<update id="updateDept" parameterType="com.neuedu.vo.DepartmentVO">
+		UPDATE department
+		SET 
+		  DeptCode = #{DeptCode},
+		  DeptName = #{DeptName},
+		  DeptCategoryID = #{DeptCategoryID},
+		  DeptType = #{DeptType}
+		WHERE ID = #{ID};
+	</update>
+	<select id="getSomeDept" parameterType="com.neuedu.vo.DepartmentVO" resultType="com.neuedu.po.DepartmentPO">
+		SELECT 
+			id,
+			DeptCode,
+            DeptName,
+			DeptCategoryID,
+			DeptType,
+			DelMark
+		FROM department
+		<where>
+			DelMark = 1
+			<if test="DeptCode != null and DeptCode != '' ">
+			and DeptCode like '%${DeptCode}%'
+			</if>
+			<if test="DeptName != null and DeptName != '' ">
+			and DeptName like '%${DeptName}%'
+			</if>
+			<if test="DeptCategoryID != null and DeptCategoryID != '' ">
+			and DeptCategoryID = #{DeptCategoryID}
+			</if>
+			<if test="DeptType != null and DeptType != '' ">
+			and DeptType = #{DeptType}
+			</if>
+		</where>
+	</select>
+	<select id="getMaxDeptID" resultType="int">
+		SELECT MAX(ID) FROM department
+	</select>
+	
+	
+	
+	
+</mapper>

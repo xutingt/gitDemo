@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>HIS医院管理系统</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="../layui/medical.css">
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header" id="header">
+        <!-- _header头部区域 start -->
+        <!-- _header头部区域 stop -->
+    </div>
+
+    <div class="layui-side layui-bg-black">
+
+        <div class="layui-side-scroll" id="lefter">
+            <!-- _lefter 左侧导航区域start -->
+            <!-- _lefter 左侧导航区域stop -->
+        </div>
+
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div class="layui-container" style="padding: 15px;width: auto">
+            <div class="layui-row">
+                <div class="layui-col-md3">
+                    <div class="layui-form-item">
+                        <div class="layui-input-block" style="margin-left:0px">
+                            <input id="selectText" type="text" name="select" placeholder="请输入项目内容" autocomplete="off"
+                                   class="layui-input"
+                                   style="width: 250px">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md2">
+                    <button class="layui-btn" id="select">查询医技项目</button>
+                </div>
+                <div class="layui-col-md2">
+                    <button class="layui-btn" id="insert">新增医技项目</button>
+                </div>
+                <div class="layui-col-md2">
+                    <button class="layui-btn" id="upload">导入医技项目</button>
+                </div>
+                <div class="layui-col-md2">
+                    <div class="layui-progress hide" lay-showpercent="true" lay-filter="demo" style="top: 15px">
+                        <div class="layui-progress-bar layui-bg-red" lay-percent="0%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md12">
+                    <table class="layui-hide" id="table" lay-filter="test"></table>
+                </div>
+            </div>
+        </div>
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="deleteAll">删除选中项</button>
+            </div>
+        </script>
+
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-xs" lay-event="edit" id="edit">编辑</a>
+        </script>
+    </div>
+    <!--<div class="layui-footer" id="footer">-->
+    <!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+    <!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+    <!--</div>-->
+
+</div>
+<script src="../layui/jquery-3.3.1.js"></script>
+<script src="../layui/layui.js"></script>
+<script src="../conmmon/common.js"></script>
+<script>
+    $(document).ready(function () {
+            $('.layui-nav-item').eq(4).addClass("layui-nav-itemed");//eq按自己页面顺序排，从2开始
+        }
+    );
+    // _header头部区域
+    $("#header").load("../conmmon/_header.html");
+    //_lefter 左侧导航区域
+    $("#lefter").load("../conmmon/_lefter.html");
+    //_footer 底部区域
+    //$("#footer").load("../conmmon/_footer.html");
+
+    //JavaScript代码区域
+    layui.use(['element', 'table', 'upload', 'form', 'layer'], function () {
+        var element = layui.element
+            , table = layui.table
+            , upload = layui.upload
+            , form = layui.form
+            , layer = layui.layer;
+        table.render({
+            elem: '#table'
+            , height: 520
+            , url: medicalPath+'findByPage' //数据接口
+            , method: 'post'
+            , toolbar: '#toolbarDemo'//加载工具条
+            , id: 'tableID'//tableID
+            , cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'codes', title: '编码', width: 120, fixed: 'left'}
+                , {field: 'type', title: '项目类型', width: 90, fixed: 'left'}
+                , {field: 'name', title: '项目名称', width: 180}
+                , {field: 'content', title: '项目内容'}
+                // , {field: 'fatherCode', title: '父级编码', width: 90}
+                , {field: 'other', title: '除外内容', width: 140}
+                , {field: 'chargeUnit', title: '计价单位', width: 90}
+                , {field: 'price', title: '价格', width: 90}
+                , {field: 'explains', title: '说明', width: 100}
+                , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 60}
+            ]]
+            , page: true //开启分页
+        });
+
+        //头工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus("tableID");
+            // console.log("checkStatus.data="+JSON.stringify(checkStatus.data));
+            // console.log("checkStatus.data.length="+checkStatus.data.length);
+            // console.log("checkStatus.isAll="+checkStatus.isAll);
+            switch (obj.event) {
+                case 'deleteAll':
+                    var jsonArray = checkStatus.data;
+                    $(jsonArray).each(function (i, e) {
+                        console.log(e);
+                        console.log("e.code=" + e.code);
+                        console.log("------------------");
+                    });
+
+                    $.ajax({
+                        url: medicalPath+"deleteSelected",
+                        data: JSON.stringify(jsonArray),
+                        contentType: "application/json;charset=UTF-8", //发送数据的格式
+                        type: "post",
+                        success: function (data) {
+                            if ("1" == data) {
+                                window.location.reload();
+                                alert("删除成功");
+                            } else {
+                                window.location.reload();
+                                alert("删除失败");
+                            }
+
+                        }
+                    });
+                    break;
+            }
+        });
+        //监听行工具事件
+        table.on('tool(test)', function (obj) {
+            var data = obj.data;
+            // console.log(data)
+            if (obj.event === 'del') {
+            } else if (obj.event === 'edit') {
+
+                //编辑医技，弹出层
+                layer.open({
+                    type: 1 //类型,页面层
+                    ,
+                    title: ['编辑医技项目', 'font-size:18px;'] //标题栏
+                    ,
+                    area: '750px' //'300px'//['500px', '300px'] 设定弹出层宽高
+                    ,
+                    btn: ['确认', '取消']
+                    ,
+                    yes: function (index, layero) {
+                        //按钮【按钮一】的回调
+                        update(data);
+                        layer.closeAll();                }
+                    ,
+                    btn2: function (index, layero) {
+                        //按钮【按钮二】的回调
+                        //return false 开启该代码可禁止点击该按钮关闭
+                        layer.closeAll();
+                    }
+                    ,
+                    closeBtn: 1
+                    ,
+                    shade: 0.8
+                    ,
+                    shadeClose: true
+                    ,
+                    id: 'layer' //设定一个id，防止重复弹出
+                    ,
+                    anim: 0
+                    ,
+                    isOutAnim: true
+                    ,
+                    resize: false
+                    ,
+                    success: function () {
+                        form.render()
+                        edit(data);
+                    },
+                    content: '<form class="layui-form" action="">\n' +
+                        '        <div class="layui-container" style="padding: 15px;width: auto">\n' +
+                        '            <div class="layui-row">\n' +
+                        '                <div class="layui-col-md6">\n' +
+                        '                    <div class="layui-form-item">\n' +
+                        '                        <label class="layui-form-label">项目编码</label>\n' +
+                        '                        <div class="layui-input-block">\n' +
+                        '                            <input disabled="disabled" type="text" name="codes" lay-verify="required" placeholder="请输入项目编码"\n' +
+                        '                                   class="layui-input" style="width:250px">\n' +
+                        '                        </div>\n' +
+                        '                    </div>\n' +
+                        '                </div>\n' +
+                        '                <div class="layui-col-md6">\n' +
+                        '                    <div class="layui-form-item">\n' +
+                        '                        <label class="layui-form-label">项目名称</label>\n' +
+                        '                        <div class="layui-input-block">\n' +
+                        '                            <input type="text" name="name" lay-verify="required" placeholder="请输入项目名称"\n' +
+                        '                                   class="layui-input" style="width:250px">\n' +
+                        '                        </div>\n' +
+                        '                    </div>\n' +
+                        '                </div>\n' +
+                        '            </div>\n' +
+                        '            <div class="layui-row">\n' +
+                        '                <div class="layui-col-md12">\n' +
+                        '                    <div class="layui-form-item">\n' +
+                        '                        <label class="layui-form-label">项目类型</label>\n' +
+                        '                        <div class="layui-input-block">\n' +
+                        '                            <input type="radio" name="type" value="处置" title="处置" checked>\n' +
+                        '                            <input type="radio" name="type" value="检查" title="检查">\n' +
+                        '                            <input type="radio" name="type" value="检验" title="检验">\n' +
+                        '                        </div>\n' +
+                        '                    </div>\n' +
+                        '                </div>\n' +
+                        '            </div>\n' +
+                        '            <div class="layui-row">\n' +
+                        '                <div class="layui-col-md12">\n' +
+                        '                    <div class="layui-form-item layui-form-text">\n' +
+                        '                        <label class="layui-form-label">项目内容</label>\n' +
+                        '                        <div class="layui-input-block">\n' +
+                        '                        <textarea name="content" placeholder="请输入项目内容" class="layui-textarea"\n' +
+                        '                                  ></textarea>\n' +
+                        '                        </div>\n' +
+                        '                    </div>\n' +
+                        '                    <div class="layui-form-item layui-form-text">\n' +
+                        '                        <label class="layui-form-label">除外内容</label>\n' +
+                        '                        <div class="layui-input-block">\n' +
+                        '                        <textarea name="other" placeholder="请输入除外内容" class="layui-textarea"\n' +
+                        '                                  ></textarea>\n' +
+                        '                        </div>\n' +
+                        '                    </div>\n' +
+                        '                </div>\n' +
+                        '            </div>\n' +
+                        '            <div class="layui-row">\n' +
+                        '                <div class="layui-col-md6">\n' +
+                        '                    <div class="layui-form-item">\n' +
+                        '                        <label class="layui-form-label">计价单位</label>\n' +
+                        '                        <div class="layui-input-block">\n' +
+                        '                            <input type="text" name="chargeUnit" lay-verify="required" placeholder="请输入计价单位"\n' +
+                        '                                   class="layui-input" style="width:250px">\n' +
+                        '                        </div>\n' +
+                        '                    </div>\n' +
+                        '                </div>\n' +
+                        '                <div class="layui-col-md6">\n' +
+                        '                    <div class="layui-form-item">\n' +
+                        '                        <label class="layui-form-label">单价</label>\n' +
+                        '                        <div class="layui-input-block">\n' +
+                        '                            <input type="text" name="price" lay-verify="required" placeholder="请输入单价"\n' +
+                        '                                   class="layui-input" style="width:250px">\n' +
+                        '                        </div>\n' +
+                        '                    </div>\n' +
+                        '                </div>\n' +
+                        '            </div>\n' +
+                        '            <div class="layui-row">\n' +
+                        '                <div class="layui-col-md12">\n' +
+                        '                    <div class="layui-form-item layui-form-text">\n' +
+                        '                        <label class="layui-form-label">说明</label>\n' +
+                        '                        <div class="layui-input-block">\n' +
+                        '                        <textarea name="explains" placeholder="请输入说明" class="layui-textarea"\n' +
+                        '                                  ></textarea>\n' +
+                        '                        </div>\n' +
+                        '                    </div>\n' +
+                        '                </div>\n' +
+                        '            </div>\n' +
+                        '            <!--<div class="layui-row">-->\n' +
+                        '            <!--<div class="layui-col-md6" style="border: mediumblue solid 1px">-->\n' +
+                        '\n' +
+                        '            <!--</div>-->\n' +
+                        '            <!--<div class="layui-col-md6" style="border: mediumblue solid 1px">-->\n' +
+                        '\n' +
+                        '            <!--</div>-->\n' +
+                        '            <!--</div>-->\n' +
+                        '        </div>\n' +
+                        '    </form>'
+                });
+            }
+        });
+
+        //创建监听函数
+        var xhrOnProgress = function (fun) {
+            xhrOnProgress.onprogress = fun; //绑定监听
+            //使用闭包实现监听绑
+            return function () {
+                //通过$.ajaxSettings.xhr();获得XMLHttpRequest对象
+                var xhr = $.ajaxSettings.xhr();
+                //判断监听函数是否为函数
+                if (typeof xhrOnProgress.onprogress !== 'function')
+                    return xhr;
+                //如果有监听函数并且xhr对象支持绑定时就把监听函数绑定上去
+                if (xhrOnProgress.onprogress && xhr.upload) {
+                    xhr.upload.onprogress = xhrOnProgress.onprogress;
+                }
+                return xhr;
+            }
+        };
+
+        var uploadInst = upload.render({
+            elem: '#upload' //绑定元素
+            , url: medicalPath+"readExcel" //上传接口
+            , accept: 'file'//允许上传所有文件
+            , exts: 'xls|xlsx'//上传文件后缀
+            , xhr: xhrOnProgress
+            , progress: function (value) {//上传进度回调 value进度值
+                element.progress('demo', value + '%')//设置页面进度条
+            }
+            , before: function (input) {
+                $(".layui-progress").removeClass("hide");
+                //返回的参数item，即为当前的input DOM对象
+                console.log('文件上传中');
+                layer.load(2); //上传loading
+            }
+            , done: function (res) {
+                if ("1" == res.code) {
+                    $(".layui-progress").addClass("hide");
+                    //上传成功
+                    layer.closeAll('loading'); //关闭loading
+                    console.log(res)
+                    window.location.reload();
+                    layer.msg("上传成功");
+                    alert("上传成功");
+                }
+            }
+            , error: function () {
+                //请求异常回调
+                $(".layui-progress").addClass("hide");
+                alert("上传出错");
+            }
+        });
+
+        $("#select").click(function () {
+            var str = $("#selectText").val();
+            console.log("str=" + str);
+            table.reload('tableID', {
+                url: medicalPath+'findByText'
+                , where: {
+                    str: str
+                } //设定异步数据接口的额外参数
+                //,height: 300
+            });
+
+        });
+
+        $("#insert").click(function () {
+            //新增医技，弹出层
+            layer.open({
+                type: 1 //类型,页面层
+                ,
+                title: ['新增医技项目', 'font-size:18px;'] //标题栏
+                ,
+                area: '750px' //'300px'//['500px', '300px'] 设定弹出层宽高
+                ,
+                btn: ['确认', '取消']
+                ,
+                yes: function (index, layero) {
+                    //按钮【按钮一】的回调
+                    add();
+                    layer.closeAll();                }
+                ,
+                btn2: function (index, layero) {
+                    //按钮【按钮二】的回调
+                    //return false 开启该代码可禁止点击该按钮关闭
+                    layer.closeAll();
+                }
+                ,
+                closeBtn: 1
+                ,
+                shade: 0.8
+                ,
+                shadeClose: true
+                ,
+                id: 'layer' //设定一个id，防止重复弹出
+                ,
+                anim: 0
+                ,
+                isOutAnim: true
+                ,
+                resize: false
+                ,
+                success: function () {
+                    form.render()
+                },
+                content: '<form class="layui-form" action="">\n' +
+                    '        <div class="layui-container" style="padding: 15px;width: auto">\n' +
+                    '            <div class="layui-row">\n' +
+                    '                <div class="layui-col-md6">\n' +
+                    '                    <div class="layui-form-item">\n' +
+                    '                        <label class="layui-form-label">项目编码</label>\n' +
+                    '                        <div class="layui-input-block">\n' +
+                    '                            <input type="text" name="codes" lay-verify="required" placeholder="请输入项目编码"\n' +
+                    '                                   class="layui-input" style="width:250px">\n' +
+                    '                        </div>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '                <div class="layui-col-md6">\n' +
+                    '                    <div class="layui-form-item">\n' +
+                    '                        <label class="layui-form-label">项目名称</label>\n' +
+                    '                        <div class="layui-input-block">\n' +
+                    '                            <input type="text" name="name" lay-verify="required" placeholder="请输入项目名称"\n' +
+                    '                                   class="layui-input" style="width:250px">\n' +
+                    '                        </div>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '            <div class="layui-row">\n' +
+                    '                <div class="layui-col-md12">\n' +
+                    '                    <div class="layui-form-item">\n' +
+                    '                        <label class="layui-form-label">项目类型</label>\n' +
+                    '                        <div class="layui-input-block">\n' +
+                    '                            <input type="radio" name="type" value="处置" title="处置" checked>\n' +
+                    '                            <input type="radio" name="type" value="检查" title="检查">\n' +
+                    '                            <input type="radio" name="type" value="检验" title="检验">\n' +
+                    '                        </div>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '            <div class="layui-row">\n' +
+                    '                <div class="layui-col-md12">\n' +
+                    '                    <div class="layui-form-item layui-form-text">\n' +
+                    '                        <label class="layui-form-label">项目内容</label>\n' +
+                    '                        <div class="layui-input-block">\n' +
+                    '                        <textarea name="content" placeholder="请输入项目内容" class="layui-textarea"\n' +
+                    '                                  ></textarea>\n' +
+                    '                        </div>\n' +
+                    '                    </div>\n' +
+                    '                    <div class="layui-form-item layui-form-text">\n' +
+                    '                        <label class="layui-form-label">除外内容</label>\n' +
+                    '                        <div class="layui-input-block">\n' +
+                    '                        <textarea name="other" placeholder="请输入除外内容" class="layui-textarea"\n' +
+                    '                                  ></textarea>\n' +
+                    '                        </div>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '            <div class="layui-row">\n' +
+                    '                <div class="layui-col-md6">\n' +
+                    '                    <div class="layui-form-item">\n' +
+                    '                        <label class="layui-form-label">计价单位</label>\n' +
+                    '                        <div class="layui-input-block">\n' +
+                    '                            <input type="text" name="chargeUnit" lay-verify="required" placeholder="请输入计价单位"\n' +
+                    '                                   class="layui-input" style="width:250px">\n' +
+                    '                        </div>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '                <div class="layui-col-md6">\n' +
+                    '                    <div class="layui-form-item">\n' +
+                    '                        <label class="layui-form-label">单价</label>\n' +
+                    '                        <div class="layui-input-block">\n' +
+                    '                            <input type="text" name="price" lay-verify="required" placeholder="请输入单价"\n' +
+                    '                                   class="layui-input" style="width:250px">\n' +
+                    '                        </div>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '            <div class="layui-row">\n' +
+                    '                <div class="layui-col-md12">\n' +
+                    '                    <div class="layui-form-item layui-form-text">\n' +
+                    '                        <label class="layui-form-label">说明</label>\n' +
+                    '                        <div class="layui-input-block">\n' +
+                    '                        <textarea name="explains" placeholder="请输入说明" class="layui-textarea"\n' +
+                    '                                  ></textarea>\n' +
+                    '                        </div>\n' +
+                    '                    </div>\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '            <!--<div class="layui-row">-->\n' +
+                    '            <!--<div class="layui-col-md6" style="border: mediumblue solid 1px">-->\n' +
+                    '\n' +
+                    '            <!--</div>-->\n' +
+                    '            <!--<div class="layui-col-md6" style="border: mediumblue solid 1px">-->\n' +
+                    '\n' +
+                    '            <!--</div>-->\n' +
+                    '            <!--</div>-->\n' +
+                    '        </div>\n' +
+                    '    </form>'
+            });
+        });
+
+        function add() {
+            // var jsonArray = [];
+            // var row = {};
+            var codes = $("input[name='codes']").val();
+            var type = $(":radio[name='type']:checked").val();
+            var name = $("input[name='name']").val();
+            var content = $("textarea[name='content']").val();
+            var other = $("textarea[name='other']").val();
+            var chargeUnit = $("input[name='chargeUnit']").val();
+            var price = $("input[name='price']").val();
+            var explains = $("textarea[name='explains']").val();
+            if (codes == "") {
+                layer.msg("需要填写项目编码");
+            } else if (type == "") {
+                layer.msg("需要选择项目类型");
+            } else if (name == "") {
+                layer.msg("需要填写项目名称");
+            } else if (chargeUnit == "") {
+                layer.msg("需要填写计费单价");
+            } else if (price == "") {
+                layer.msg("需要填写单价");
+            } else {
+                // row.codes=codes;
+                // row.type=type;
+                // row.name=name;
+                // row.content=content;
+                // row.other=other;
+                // row.chargeUnit=chargeUnit;
+                // row.price=price;
+                // row.explains=explains;
+                // jsonArray.push(row);
+                // console.log(jsonArray);
+                var json=JSON.stringify({codes: codes
+                    , type: type
+                    , name: name
+                    , content: content
+                    , other: other
+                    , chargeUnit: chargeUnit
+                    , price: price
+                    , explains: explains});
+                // console.log(json);
+                $.ajax({
+                    url: medicalPath+"save",
+                    data: json,
+                    contentType: "application/json;charset=UTF-8", //发送数据的格式
+                    type: "post",
+                    success: function (data) {
+                        if ("1" == data) {
+                            window.location.reload();
+                            layer.msg("添加成功");
+                        } else {
+                            window.location.reload();
+                            layer.msg("添加失败");
+                        }
+                    }
+                });
+            }
+        }
+
+        function edit(data) {
+            $("input[name='codes']").val(data.codes);
+            $(":radio[name='type']:checked").val(data.type);
+            $("input[name='name']").val(data.name);
+            $("textarea[name='content']").val(data.content);
+            $("textarea[name='other']").val(data.other);
+            $("input[name='chargeUnit']").val(data.chargeUnit);
+            $("input[name='price']").val(data.price);
+            $("textarea[name='explains']").val(data.explains);
+        }
+        function update(data) {
+            // var jsonArray = [];
+            // var row = {};
+            var codes = $("input[name='codes']").val();
+            var type = $(":radio[name='type']:checked").val();
+            var name = $("input[name='name']").val();
+            var content = $("textarea[name='content']").val();
+            var other = $("textarea[name='other']").val();
+            var chargeUnit = $("input[name='chargeUnit']").val();
+            var price = $("input[name='price']").val();
+            var explains = $("textarea[name='explains']").val();
+            if (codes == "") {
+                layer.msg("需要填写项目编码");
+            } else if (type == "") {
+                layer.msg("需要选择项目类型");
+            } else if (name == "") {
+                layer.msg("需要填写项目名称");
+            } else if (chargeUnit == "") {
+                layer.msg("需要填写计费单价");
+            } else if (price == "") {
+                layer.msg("需要填写单价");
+            } else {
+                var json=JSON.stringify({codes: codes
+                    , type: type
+                    , name: name
+                    , content: content
+                    , other: other
+                    , chargeUnit: chargeUnit
+                    , price: price
+                    , explains: explains});
+                // console.log(json);
+                $.ajax({
+                    url: medicalPath+"update",
+                    data: json,
+                    contentType: "application/json;charset=UTF-8", //发送数据的格式
+                    type: "post",
+                    success: function (data) {
+                        if ("1" == data) {
+                            window.location.reload();
+                            layer.msg("添加成功");
+                        } else {
+                            window.location.reload();
+                            layer.msg("添加失败");
+                        }
+                    }
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>

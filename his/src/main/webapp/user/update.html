@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>HIS医院管理系统</title>
+		<link rel="stylesheet" href="../layui/css/layui.css">
+	</head>
+	<body class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header" id="header">
+				<!-- _header头部区域 start -->
+				<!-- _header头部区域 stop -->
+			</div>
+
+			<div class="layui-side layui-bg-black">
+
+				<div class="layui-side-scroll" id="lefter">
+					<!-- _lefter 左侧导航区域start -->
+					<!-- _lefter 左侧导航区域stop -->
+				</div>
+
+			</div>
+
+			<div class="layui-body">
+				<!-- 内容主体区域 -->
+				<div style="padding: 15px;">
+					<div style="padding: 15px;font-size: 20px;">修改用户</div>
+					<form class="layui-form">
+						<div class="layui-form-item">
+							<label class="layui-form-label">登录名:</label>
+							<div class="layui-input-inline">
+								<input type="text" id="username" name="username" lay-verify="required" placeholder="请输入" autocomplete="off"
+								 class="layui-input">
+							</div>
+							<label class="layui-form-label">密码:</label>
+							<div class="layui-input-inline">
+								<input type="text" id="password" name="password" lay-verify="required" placeholder="请输入" autocomplete="off"
+								 class="layui-input">
+							</div>
+						</div>
+
+						<div class="layui-form-item">
+							<label class="layui-form-label">真实姓名:</label>
+							<div class="layui-input-inline">
+								<input type="text" id="realname" name="realname" lay-verify="required" placeholder="请输入" autocomplete="off"
+								 class="layui-input">
+							</div>
+							<label class="layui-form-label">所在科室:</label>
+							<div class="layui-input-inline">
+								<select id="dept" name="dept">
+									<option>请选择</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="layui-form-item">
+							<label class="layui-form-label">用户类别:</label>
+							<div class="layui-input-inline">
+								<select id="usertype" name="usertype">
+									<option>请选择</option>
+								</select>
+							</div>
+							<label class="layui-form-label">医生职称:</label>
+							<div class="layui-input-inline">
+								<select id="doctitle" name="doctitle">
+									<option>请选择</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="layui-form-item">
+							<label class="layui-form-label">挂号级别:</label>
+							<div class="layui-input-inline">
+								<select id="registtype" name="registtype">
+									<option>请选择</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item" pane="">
+							<label class="layui-form-label">是否排班:</label>
+							<div class="layui-input-block">
+								<input type="radio" name="work" value="是" title="是" checked="">
+								<input type="radio" name="work" value="否" title="否">
+							</div>
+						</div>
+					</form>
+					<div style="margin-left: 110px;">
+						<button id="btnAdd" class="layui-btn layui-btn-normal">保存</button>
+						<button id="btnCancel" class="layui-btn layui-btn-normal">取消</button>
+					</div>
+				</div>
+			</div>
+			<!--<div class="layui-footer" id="footer">-->
+			<!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+			<!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+			<!--</div>-->
+
+		</div>
+		<script src="../layui/jquery-3.3.1.js"></script>
+		<script src="../layui/layui.js"></script>
+		<script src="../conmmon/common.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('.layui-nav-item').eq(2).addClass("layui-nav-itemed"); //eq按自己页面顺序排，从2开始
+			});
+
+			// _header头部区域
+			$("#header").load("../conmmon/_header.html");
+			//_lefter 左侧导航区域
+			$("#lefter").load("../conmmon/_lefter.html");
+			//_footer 底部区域
+			//$("#footer").load("/conmmon/_footer.html");
+
+			//JavaScript代码区域
+			layui.use(['laypage', 'layer', 'element', 'form'], function() {
+				var form = layui.form;
+				form.render();
+
+				var element = layui.element,
+					laypage = layui.laypage,
+					layer = layui.layer;
+
+				var id = localStorage.id;
+				// console.log(id);
+				$.post(basePath + "user/get", {
+					id: id
+				}, function(data) {
+					var jsonOb = data;
+					// console.log(jsonOb);
+					$("#username").val(jsonOb.userName);
+					$("#password").val(jsonOb.password);
+					$("#realname").val(jsonOb.realName);
+					
+					$.post(basePath + "user/getDept", {}, function(data) {
+						var jsonObj = data;
+						$.each(jsonObj, function(i, e) {
+							$("#dept").append("<option value=" + e.keshimingcheng + ">" + e.keshimingcheng + "</option>");
+						})
+						// console.log(jsonOb);
+						$("#dept").find("option:contains(" + jsonOb.keshimingcheng + ")").attr("selected", true);
+						form.render('select');
+					})
+					$.post(basePath + "user/getUserType", {}, function(data) {
+						var jsonObj = data;
+						$.each(jsonObj, function(i, e) {
+							$("#usertype").append("<option value=" + e.userType + ">" + e.userType + "</option>");
+						})
+						$("#usertype").find("option:contains(" + jsonOb.userType + ")").attr("selected", true);
+						form.render('select');
+					})
+					$.post(basePath + "user/getDocTitle", {}, function(data) {
+						var jsonObj = data;
+						$.each(jsonObj, function(i, e) {
+							$("#doctitle").append("<option value=" + e.docTitle + ">" + e.docTitle + "</option>");
+						})
+						$("#doctitle").find("option:contains(" + jsonOb.docTitle + ")").attr("selected", true);
+						form.render('select');
+					})
+					$.post(basePath + "user/getRegistType", {}, function(data) {
+						var jsonObj = data;
+						$.each(jsonObj, function(i, e) {
+							$("#registtype").append("<option value=" + e.registType + ">" + e.registType + "</option>");
+						})
+						$("#registtype").find("option:contains(" + jsonOb.registType + ")").attr("selected", true);
+						form.render('select');
+					})
+					
+				});
+				
+				
+				
+				
+				$("#btnCancel").click(function() {
+					window.location.href = "index.html";
+				});
+
+				form.on('select', function(data) {
+// 					console.log(data.elem); 
+// 					console.log(data.value); 
+// 					console.log(data.othis); 
+				});
+
+				$("#btnAdd").click(function() {
+					var dept = $("#dept").val();
+					$.post(basePath + "user/update", {
+							Id: id,
+							userName: $("#username").val(),
+							password: $("#password").val(),
+							realName: $("#realname").val(),
+							keshimingcheng: $("#dept").find("option:selected").text(),
+							userType: $("#usertype").find("option:selected").text(),
+							docTitle: $("#doctitle").find("option:selected").text(),
+							registType: $("#registtype").find("option:selected").text(),
+							scheduling: $('input:radio:checked').val()
+						},
+						function(data) {
+							if (data == 1) {
+								layer.msg('修改成功,2秒后返回', {
+									icon: 1,
+									time: 2000, //2秒关闭（如果不配置，默认是3秒）
+								});
+								window.setTimeout(function() {
+									window.location.href = "index.html";
+								}, 2000);
+							} else {
+								layer.msg('修改失败', {
+									icon: 2,
+									time: 2000 //2秒关闭（如果不配置，默认是3秒）
+								});
+							}
+						})
+				});
+			});
+		</script>
+	</body>
+</html>

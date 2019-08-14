@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>HIS医院管理系统</title>
+		<link rel="stylesheet" href="../layui/css/layui.css">
+	</head>
+	<body class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header" id="header">
+				<!-- _header头部区域 start -->
+				<!-- _header头部区域 stop -->
+			</div>
+			<div class="layui-side layui-bg-black">
+
+				<div class="layui-side-scroll" id="lefter">
+					<!-- _lefter 左侧导航区域start -->
+					<!-- _lefter 左侧导航区域stop -->
+				</div>
+
+			</div>
+
+			<div class="layui-body">
+				<!-- 内容主体区域 -->
+				<div class="layui-tab" lay-allowClose="true">
+					<div style="margin-top: 10px;">
+						<ul class="layui-tab-title">
+							<li class="layui-this">科室管理</li>
+						</ul>
+
+					</div>
+				</div>
+				<div style="display: flex;">
+					<ul class="layui-nav layui-nav-tree layui-inline" lay-filter="demo" style="margin-right: 10px; height: 1000px; background: none;">
+						<li class="layui-nav-item layui-nav-itemed" style="background-color:grey;">
+							<a href="javascript:;">科室分类</a>
+							<dl class="layui-nav-child">
+								<dd><button id="xiala1" style="background-color:dodgerblue; width: 80px; height: 25px;">内科</button></dd>
+								<dd><button id="xiala2" style="background-color: dodgerblue; width: 80px; height: 25px;">外科</button></dd>
+								<dd><button id="xiala3" style="background-color: dodgerblue; width: 80px; height: 25px;">儿科</button></dd>
+								<dd><button id="xiala4" style="background-color: dodgerblue; width: 80px; height: 25px;">传染病科</button></dd>
+								<dd><button id="xiala5" style="background-color: dodgerblue; width: 80px; height: 25px;">妇产科</button></dd>
+								<dd><button id="xiala6" style="background-color: dodgerblue; width: 80px; height: 25px;">男科</button></dd>
+								<dd><button id="xiala7" style="background-color: dodgerblue; width: 80px; height: 25px;">精神心理科</button></dd>
+								<dd><button id="xiala8" style="background-color: dodgerblue; width: 80px; height: 25px;">皮肤性病科</button></dd>
+								<dd><button id="xiala9" style="background-color: dodgerblue; width: 80px; height: 25px;">中医科</button></dd>
+								<dd><button id="xiala10" style="background-color: dodgerblue; width: 80px; height: 25px;">肿瘤科</button></dd>
+								<dd><button id="xiala11" style="background-color: dodgerblue; width: 80px; height: 25px;">骨科</button></dd>
+								<dd><button id="xiala12" style="background-color: dodgerblue; width: 80px; height: 25px;">五官科</button></dd>
+								<dd><button id="xiala13" style="background-color: dodgerblue; width: 80px; height: 25px;">康复医学科</button></dd>
+								<dd><button id="xiala14" style="background-color: dodgerblue; width: 80px; height: 25px;">麻醉医学科</button></dd>
+								<dd><button id="xiala15" style="background-color: dodgerblue; width: 80px; height: 25px;">营养科</button></dd>
+								<dd><button id="xiala16" style="background-color: dodgerblue; width: 80px; height: 25px;">医技科</button></dd>
+								<dd><button id="xiala17" style="background-color: dodgerblue; width: 80px; height: 25px;">医学影像学</button></dd>
+								<dd><button id="xiala18" style="background-color: dodgerblue; width: 80px; height: 25px;">其他科室</button></dd>
+							</dl>
+						</li>
+					</ul>
+
+					<div>
+						<input type="text" id="anniu2" placeholder="请输入科室编码" style="margin-top: 35px; margin-left: 30px; ">
+						<input type="text" id="anniu3" placeholder="请输入科室名称" style="margin-top: 35px; margin-left: 30px; ">
+						<select name="deptType"  id="anniu4"  style="margin-top: 35px; margin-left: 30px; ">
+						</select>
+						<select name="patientGender"  id="anniu5"  style="margin-top: 35px; margin-left: 30px; ">
+							<option value="" selected>请选择科室类别</option>
+							<option value="1">临床科室</option>
+							<option value="2">医技科室</option>
+							<option value="3">财务科室</option>
+							<option value="4">行政科室</option>
+							<option value="5">其他</option>
+						</select>
+						<button type="button" id="anniu1" class="layui-btn layui-btn-normal" style="margin-left: 20px;">查询</button>
+						<div class="site-demo-button" id="layerDemo" style="margin-bottom: 0 ; margin-left: 950px; margin-top: -38px;">
+							<button id="anliu" data-method="offset" data-type="auto" class="layui-btn layui-btn-normal">新增科室</button>
+						</div>
+						<!--表格ui-->
+						<table class="layui-hide" id="test" lay-filter="test"></table>
+					</div>
+				</div>
+			</div>
+
+
+
+
+		</div>
+
+		<script src="../conmmon/common.js"></script>
+		<script src="../layui/jquery-3.3.1.js"></script>
+		<script src="../layui/layui.js"></script>
+		<script>
+
+			$(document).ready(function(){
+            $('.layui-nav-item').eq(7).addClass("layui-nav-itemed");//eq按自己页面顺序排，从2开始
+            /* 科室分类 */
+            $.ajax({
+                type: "post",
+                url: "/his/registration/getDeptType.do",
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    $('#anniu4').append(
+                        '<option value="" selected>请选择科室分类</option>'
+                    );
+                	for(var i = 0; i < data.length; i++){
+        				var h = "<option value='" + data[i].id + "'>" + data[i].constantName + "</option>";
+        				$("#anniu4").append(h);
+        			}
+                    
+        /*            layui.use('form', function () {  //此段代码必不可少
+                        var form = layui.form;
+                        form.render();
+                    });
+         */           
+                }
+            });
+        });
+
+    // _header头部区域
+    $("#header").load("../conmmon/_header.html");
+    //_lefter 左侧导航区域
+    $("#lefter").load("../conmmon/_lefter.html");
+    //_footer 底部区域
+    //$("#footer").load("/conmmon/_footer.html");
+
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+</script>
+		<script>
+			layui.use('layer', function(){ //独立版的layer无需执行这一句
+  var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+  
+  //触发事件
+  var active = {
+      //示范一个公告层
+ 
+      offset: function(obj){
+      var type = obj.data('type')
+      ,text = obj.text();
+      var data = obj.data;
+      var tr = obj.tr;
+      /* 科室分类 */
+      $.ajax({
+          type: "post",
+          url: "/his/registration/getDeptType.do",
+          data: {},
+          dataType: "json",
+          success: function (data) {
+              $('#DeptCategoryID').append(
+                  '<option value="" selected>请选择科室分类</option>'
+              );
+          	for(var i = 0; i < data.length; i++){
+  				var h = "<option value='" + data[i].id + "'>" + data[i].constantName + "</option>";
+  				$("#DeptCategoryID").append(h);
+  			} 
+          }
+      });
+      $.ajax({
+          type: "post",
+          url: "/his/base/KeShiMapper/getMaxDeptID.do",
+          data: {},
+          dataType: "json",
+          success: function (data) {
+ 				$("#ID").val(data + 1);
+          }
+      });
+      
+      layer.open({
+        type: 1,
+		content: 
+			'<div style="padding: 45px 270px; >,' +
+			'<form class="form-horizontal">	' +
+			'<div style="margin-left:-256px; margin-top:-24px; font-size:15px " >ID号码</div>	' +
+			'<input id="ID"type="text" style="width:150px;height:30px;margin-left:-165px; margin-top:-24px; "  required lay-verify="required"  autocomplete="off" class="layui-input" readonly>' +
+			'<div style="margin-left:-256px; margin-top:19px; font-size:15px " >科室编码</div>	' +
+			'<input type="text" id="DeptCode"  name="title" style="width:150px;height:30px;margin-left:-165px; margin-top:-26px; "  required lay-verify="required" placeholder="如TXK" autocomplete="off" class="layui-input" id="DicaCode">' +
+			'<div style="margin-left:-257px; margin-top:30px; font-size:15px " >科室名称</div>	' +
+			'<input type="text" name="title" id="DeptName"  id="DicaName"style="width:150px;height:30px;margin-left:-165px; margin-top:-24px; "  required lay-verify="required" placeholder="如神经内科" autocomplete="off" class="layui-input">' +
+			'<div style="margin-left:-254px; margin-top:19px; font-size:15px " >科室分类</div>	' +
+			'<select name="title"  id="DeptCategoryID" style="width:150px;height:30px;margin-left:-165px; margin-top:-24px; " required lay-verify="required" autocomplete="off" class="layui-select">' +
+			'</select>' +
+			'<div style="margin-left:-254px; margin-top:18px; font-size:15px " >科室类别</div>  ' +
+			'<select name="title"  id="DeptType" style="width:150px;height:30px;margin-left:-165px; margin-top:-24px; " required lay-verify="required" autocomplete="off" class="layui-select">' +
+			'<option value="" selected>请选择科室类别</option>' +
+			'<option value="1">临床科室</option>' +
+			'<option value="2">医技科室</option>' +
+			'<option value="3">财务科室</option>' +
+			'<option value="4">行政科室</option>' +
+			'<option value="5">其他</option>' +
+			'</select>' +
+			'</form>' +
+			'</div>'
+		,btn: ['确定', '取消'],
+		
+		
+				btn1: function() {
+					/*新增科室*/
+						  	$.post('/his/base/KeShiMapper/insertDept.do', {
+						  		ID: $("#ID").val(),
+						  		DeptCode: $("#DeptCode").val(),
+						  		DeptName: $("#DeptName").val(),
+						  		DeptCategoryID: $("#DeptCategoryID").val(),
+						  		DeptType: $("#deptType").val(),
+						  	}, function(data) {
+						  		if (data == 1) {
+						  			layer.msg('新增成功', {
+						  				icon: 1,
+						  				time: 1000 //2秒关闭（如果不配置，默认是3秒）
+						  			});
+						  		} else {
+						  			layer.msg('新增失败', {
+						  				icon: 1,
+						  				time: 1000 //2秒关闭（如果不配置，默认是3秒）
+						  			});
+						  		}
+						  	});
+						  },
+						  btn2: function() {
+						  	layer.closeAll();
+						  
+						  },
+		area: ['555px', '300px']
+		,title:'新增科室'
+        ,btnAlign: 'c' ,//按钮居中
+
+        shade: 0 //不显示遮罩
+        
+         
+      });
+    }
+  };
+  
+  $('#layerDemo .layui-btn').on('click', function(){
+    var othis = $(this), method = othis.data('method');
+    active[method] ? active[method].call(this, othis) : '';
+  });
+  
+});
+</script>
+
+		<script type="text/html" id="toolbarDemo">
+
+</script>
+		<script type="text/html" id="barDemo">
+			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+		<script>
+			var table;
+			layui.use('table', function() {
+				table = layui.table;
+
+				table.render({
+					id: 'disease',
+					elem: '#test',
+					url: '/his/kaishi/selectAllDept.do',
+					toolbar: '#toolbarDemo',
+					title: '用户数据表',
+					cols: [
+						[{
+							field: 'ID',
+							title: 'ID',
+							width: 150,
+
+						}, {
+							field: 'deptCode',
+							title: '科室编码',
+							width: 200,
+
+						}, {
+							field: 'deptName',
+							title: '科室名称',
+							width: 200,
+
+						}, {
+							field: 'constantName',
+							title: '科室分类',
+							width: 200,
+
+						}, {
+							field: 'deptType',
+							title: '科室类别',
+							width: 250,
+
+						}, {
+							fixed: '',
+							title: '操作',
+							toolbar: '#barDemo',
+							width: 200,
+
+						}]
+					],
+					page: true
+				});
+
+				//头工具栏事件
+				table.on('toolbar(test)', function(obj) {
+					var checkStatus = table.checkStatus(obj.config.id);
+					switch (obj.event) {
+						case 'getCheckData':
+							var data = checkStatus.data;
+							layer.alert(JSON.stringify(data));
+							break;
+						case 'getCheckLength':
+							var data = checkStatus.data;
+							layer.msg('选中了：' + data.length + ' 个');
+							break;
+						case 'isAll':
+							layer.msg(checkStatus.isAll ? '全选' : '未全选');
+							break;
+					};
+				});
+
+				//监听行工具事件
+				table.on('tool(test)', function(obj) {
+					var data = obj.data;
+					console.log(data);
+					var tr = obj.tr;
+					if (obj.event === 'del') {
+						layer.open({
+							type: 1,
+							content: '<div style="padding: 45px 270px; >,<form class="form-horizontal"> <div style="margin-left:-100px; margin-top:30px; font-size:15px">确定删除么</div><input id="qe"type="hidden" value="' +
+								obj.data.ID + '"></div>',
+							btn: ['确定', '取消'],
+							btn1: function() {
+								/* 确认删除 */
+								alert( $("#qe").val())
+								$.post("/his/base/KeShiMapper/deleteDept.do", {
+									deptid: $("#qe").val()
+								}, function(data) {
+									if (data == 1) {
+										layer.msg('删除成功', {
+											icon: 1,
+											time: 2000 //2秒关闭（如果不配置，默认是3秒）
+										});
+									} else if(data == -1){
+										layer.msg('删除失败,还有医生属于该科室', {
+											icon: 1,
+											time: 2000 //2秒关闭（如果不配置，默认是3秒）
+										});
+									}else if(data == -2){
+										layer.msg('删除失败,还有病人未看诊结束', {
+											icon: 1,
+											time: 2000 //2秒关闭（如果不配置，默认是3秒）
+										});
+									}
+
+								});
+							},
+							btn2: function() {
+								layer.closeAll();
+
+							},
+							area: ['555px', '300px'],
+							title: '删除科室',
+							btnAlign: 'c' //按钮居中
+								,
+							shade: 0 //不显示遮罩
+								,
+
+						});
+
+					} else if (obj.event === 'edit') {
+						console.log(obj);
+						/* 科室分类 */
+						alert(obj.data.constantName)
+						alert(obj.data.deptType)
+					      $.ajax({
+					          type: "post",
+					          url: "/his/registration/getDeptType.do",
+					          data: {},
+					          dataType: "json",
+					          success: function (data1) {
+					          	for(var i = 0; i < data1.length; i++){
+					  				var h = "<option value='" + data1[i].id + "'>" + data1[i].constantName + "</option>";
+					  				$("#DeptCategoryID1").append(h);
+					  			}
+					            	$("#DeptCategoryID1").find("option:contains(" +obj.data.constantName +")").attr("select",true)
+					            	$("#DeptType1").find("option:contains(" +obj.data.deptType +")").attr("select",true)
+	/*            layui.use('form', function () {  //此段代码必不可少
+					                  var form = layui.form;
+					                  form.render();
+					              });
+	*/           
+					          }
+					      });
+						layer.open({
+							type: 1,
+
+							content: '<div style="padding: 45px 270px; >,' +
+								'<form class="form-horizontal">' +
+								'<input id="ID1"type="hidden" value="' +
+								obj.data.ID +
+								'" display><div style="margin-left:-256px; margin-top:-24px; font-size:15px " >科室编码</div>  <input type="text" id="DeptCode1" value="' +
+								obj.data.deptCode +
+								'" name="title" style="width:150px;height:30px;margin-left:-165px; margin-top:-24px; "  required lay-verify="required" placeholder="如TXK" autocomplete="off" class="layui-input" ><div style="margin-left:-257px; margin-top:16px; font-size:15px " >科室名称</div>  <input type="text" name="title" id="DeptName1" value="' +
+								obj.data.deptName +
+								'" id="DicaName"style="width:150px;height:30px;margin-left:-165px; margin-top:-24px; "  required lay-verify="required" placeholder="如神经内科" autocomplete="off" class="layui-input"> ' +
+								'<div style="margin-left:-254px; margin-top:19px; font-size:15px " >科室分类</div>' +
+								'<select name="title"  id="DeptCategoryID1" style="width:150px;height:30px;margin-left:-165px; margin-top:-24px; " required lay-verify="required" autocomplete="off" class="layui-select">' +
+								'<option value="" >请选择科室分类</option>'+
+								'</select>' +
+								'<div style="margin-left:-254px; margin-top:18px; font-size:15px " >科室类别</div>' +
+								'<select name="title"  id="DeptType1" style="width:150px;height:30px;margin-left:-165px; margin-top:-24px; " required lay-verify="required" autocomplete="off" class="layui-select">' +
+								'<option value="" selected>请选择科室类别</option>' +
+								'<option value="1">临床科室</option>' +
+								'<option value="2">医技科室</option>' +
+								'<option value="3">财务科室</option>' +
+								'<option value="4">行政科室</option>' +
+								'<option value="5">其他</option>' +
+								'</select>' +
+								'</form>' +
+								'</div>'
+
+								,
+							btn: ['确定', '取消'],
+							btn1: function() {
+								$.post("/his/base/KeShiMapper/updateDept.do", {
+									ID: $("#ID1").val(),
+									DeptCode: $("#DeptCode1").val(),
+									DeptName: $("#DeptName1").val(),
+									DeptCategoryID: $("#DeptCategoryID1").val(),
+									DeptType: $("#DeptType1").val(),
+								}, function(data) {
+									if (data == 1) {
+										layer.msg('修改成功', {
+											icon: 1,
+											time: 1000 //2秒关闭（如果不配置，默认是3秒）
+										});
+									} else {
+										layer.msg('修改失败', {
+											icon: 1,
+											time: 1000 //2秒关闭（如果不配置，默认是3秒）
+										});
+									}
+
+								});
+							},
+							btn2: function() {
+								layer.closeAll();
+
+							},
+							area: ['555px', '300px'],
+							title: '修改科室',
+							btnAlign: 'c' //按钮居中
+								,
+							shade: 0 //不显示遮罩
+								,
+
+						});
+					}
+				});
+			});
+		</script>
+		<script>
+			$("#anniu1").click(function() {
+				var DeptCode = $("#anniu2").val();
+				var DeptName = $("#anniu3").val();
+				var DeptCategoryID = $("#anniu4").val();
+				var DeptType = $("#anniu5").val();
+				//console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/base/KeShiMapper/getSomeDept.do',
+					where: {
+						DeptCode: DeptCode,
+						DeptName:DeptName,
+						DeptCategoryID:DeptCategoryID,
+						DeptType:DeptType
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala1").click(function() {
+				alert("xiala1");
+				var str = $("#xiala1").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala2").click(function() {
+				var str = $("#xiala2").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala3").click(function() {
+				var str = $("#xiala3").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url:'/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala4").click(function() {
+				var str = $("#xiala4").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala5").click(function() {
+				var str = $("#xiala5").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala6").click(function() {
+				var str = $("#xiala6").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala7").click(function() {
+				var str = $("#xiala7").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala8").click(function() {
+				var str = $("#xiala8").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala9").click(function() {
+				var str = $("#xiala9").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala10").click(function() {
+				var str = $("#xiala10").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala11").click(function() {
+				var str = $("#xiala11").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala12").click(function() {
+				var str = $("#xiala12").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala13").click(function() {
+				var str = $("#xiala13").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala14").click(function() {
+				var str = $("#xiala14").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala15").click(function() {
+				var str = $("#xiala15").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala16").click(function() {
+				var str = $("#xiala16").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala17").click(function() {
+				var str = $("#xiala17").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+		<script>
+			$("#xiala18").click(function() {
+				var str = $("#xiala18").html();
+				console.log("str=" + str);
+				table.reload('disease', {
+					url: '/his/kaishi/selectDept.do?constantName='+str,
+					where: {
+						 //deptCategoryID: str
+					} //设定异步数据接口的额外参数
+					//,height: 300
+				});
+			});
+		</script>
+	</body>
+</html>

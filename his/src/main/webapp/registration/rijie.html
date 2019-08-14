@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>HIS医院管理系统</title>
+		<link rel="stylesheet" href="../layui/css/layui.css">
+	</head>
+	<body class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header" id="header">
+				<!-- _header头部区域 start -->
+				<!-- _header头部区域 stop -->
+			</div>
+
+			<div class="layui-side layui-bg-black">
+				<div class="layui-side-scroll" id="lefter">
+					<!-- _lefter 左侧导航区域start -->
+					<!-- _lefter 左侧导航区域stop -->
+				</div>
+			</div>
+
+			<!-- 内容主体区域 -->
+
+			<div class="layui-body">
+				<div class="layui-tab layui-tab-card" lay-allowclose="true">
+					<ul class="layui-tab-title">
+						<li class="layui-this">日结</li>
+					</ul>
+					<div class="layui-tab-content" style="height: 150px;">
+						<div class="layui-tab-item layui-show">
+							<div class="layui-form-item">
+								<div class="layui-input-block" style="display: flex;">
+									<div style="margin-left:-90px; margin-top:8px; font-size:15px ">收款员：</div>
+									<input type="text" name="title" style="width:10%;height:35px;margin-left:3px;" lay-verify="title" autocomplete="off"
+									 placeholder="收款员" class="layui-input" id="shouky">
+									<div class="layui-form">
+										<div class="layui-form-item">
+											<div class="layui-inline">
+												<label class="layui-form-label" style=" margin-top:-2px;margin-left:12px;">统计日期</label>
+												<div class="layui-input-inline">
+													<input type="text" class="layui-input" id="submitDateStart" placeholder="开始时间" style="width:93%;margin-left:-4px; margin-top:0px; font-size:15px ">
+												</div>
+											</div>
+											<div class="layui-inline">
+												<label class="layui-form-label" style=" margin-top:-2px;margin-left:-111px;">至</label>
+												<div class="layui-input-inline">
+													<input type="text" class="layui-input" id="submitDateEnd" placeholder="结束时间" style="width:93%;margin-left:-4px; margin-top:0px; font-size:15px ">
+												</div>
+											</div>
+										</div>
+									</div>
+									<button class="layui-btn  layui-btn-normal" style="margin-left:-9px; height:35px; font-size:15px" id="rijie"><i
+										 class="layui-icon style=" font-size: 14px;margin-right: 1px;">&#xe615;</i>日结</button>
+									<button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal" style="margin-left:35px; height:35px;font-size:15px"
+									 id="save">保存</button>
+								</div>
+							</div>
+							<div style="margin-left:1px; margin-top:8px; font-size:16px ">门诊收费日结单</div>
+							<table class="layui-table" lay-even="" lay-skin="nob">
+								<colgroup>
+									<col width="150">
+									<col width="150">
+									<col width="150">
+									<col>
+								</colgroup>
+								<thead>
+									<tr id="registerdaysubmit-table-head">
+                                     <th>制表人</th>
+									 <th>制表时间</th>
+									 <th>收款人</th>
+                                     <th>挂号费</th>
+                                     <th>药费</th>
+                                     <th>其他费用</th>
+									</tr>
+								</thead>
+								<tbody id="registerdaysubmit-table-body">
+								</tbody>
+							</table>
+							<div id="zongjiner" style="margin-left:1px; margin-top:8px; font-size:16px "></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<!--<div class="layui-footer" id="footer">-->
+			<!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+			<!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+			<!--</div>-->
+		</div>
+		<script src="../layui/jquery-3.3.1.js"></script>
+		<script src="../layui/layui.js"></script>
+		<script src="../conmmon/common.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('.layui-nav-item').eq(2).addClass("layui-nav-itemed"); //eq按自己页面顺序排，从2开始
+			});
+			$("#header").load("../conmmon/_header.html");
+			//_lefter 左侧导航区域
+			$("#lefter").load("../conmmon/_lefter.html");
+			layui.use('element', function() {
+				var element = layui.element;
+			});
+		</script>
+		<script>
+			layui.use('laydate', function() {
+				var laydate = layui.laydate;
+				//日期时间选择器
+				laydate.render({
+					elem: '#submitDateStart',
+					type: 'date'
+				});
+				//日期时间选择器
+				laydate.render({
+					elem: '#submitDateEnd',
+					type: 'date'
+				});
+			});
+		</script>
+
+		<script>
+			$(document).ready(function() {
+				$("#rijie").click(function() {
+					showPage($("#submitDateStart").val(), $("#submitDateEnd").val());
+				});
+				var a;
+				var b;
+				var c;
+				var d;
+              $("#save").click(function() {
+                
+
+				  $.post(basePath+"RegisterDaySubmit/save", {
+
+				  	submitDateStart:$("#submitDateStart").val(),
+				  	submitDateEnd:$("#submitDateEnd").val(),
+				  	registCost:a,
+				  	medicalCost:b,
+				  	drugCost:c,
+					registOperator:d
+				  }, function(data) {
+				  	if (data == 1) {
+				  		alert("保存成功");
+				  	} else {
+				  		alert("保存失败");
+				  	}
+				  
+				  });
+                      
+              });
+				function showPage(submitDateStart, submitDateEnd) {
+					var Sum = 0;
+					$.ajax({
+						type: "post",
+
+						url: basePath+'RegisterDaySubmit/fundByDate',
+
+						data: {
+							'submitDateStart': submitDateStart,
+							'submitDateEnd': submitDateEnd,
+						},
+						dataType: "json",
+						success: function(response) {
+							$('#registerdaysubmit-table-body').html("");
+							$('#registerdaysubmit-table-body').append(
+								"<tr>" +
+								"<td>" +'张三' + "</td>" +
+								"<td>" + + "</td>" +
+								"<td>" + + "</td>" +
+								"<td>" + response.registCost + "</td>" +
+								"<td>" + response.medicalCost + "</td>" +
+								"<td>" + response.drugCost + "</td>" +
+								"</tr>"
+							);
+							 a =response.registCost;
+							 b =response.medicalCost;
+							 c =response.drugCost ;
+							 d="张三";
+							console.log(a,b,c,d);
+							Sum = Number(response.registCost) + Number(response.medicalCost) + Number(response.drugCost);
+
+							$('#zongjiner').html("金额总计:" + Sum+"元");
+						}
+					});
+				}
+			})
+		</script>
+
+
+	</body>
+</html>

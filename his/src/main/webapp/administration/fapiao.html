@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>HIS医院管理系统</title>
+		<link rel="stylesheet" href="../layui/css/layui.css">
+
+	</head>
+	<body class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header" id="header">
+				<!-- _header头部区域 start -->
+				<!-- _header头部区域 stop -->
+			</div>
+
+
+
+			<div class="layui-side layui-bg-black">
+
+				<div class="layui-side-scroll" id="lefter">
+					<!-- _lefter 左侧导航区域start -->
+					<!-- _lefter 左侧导航区域stop -->
+				</div>
+			</div>
+			<div class="layui-body">
+				<!-- 内容主体区域 -->
+				<div class="layui-tab" lay-allowClose="true">
+					<div style="margin-top: 10px;">
+						<ul class="layui-tab-title">
+							<li class="layui-this">发票补打</li>
+						</ul>
+
+					</div>
+				</div>
+				<div style="margin-left: 10px;">患者信息查询</div>
+				<div style="margin-top: 15px; margin-left: 10px;">病历号：<input id="chaxun1" type="text" placeholder="病历号">
+					<button type="button" id="chaxun" class="layui-btn layui-btn-normal" style="margin-left: 70px;">搜索</button>
+				</div>
+				<div style="margin-left: 10px;">患者发票信息</div>
+
+				<table class="layui-hide" id="test" lay-filter="test"></table>
+				<script src="../layui/jquery-3.3.1.js"></script>
+				<script src="../layui/layui.js"></script>
+				<script src="../conmmon/common.js"></script>
+				<script>
+
+					$(document).ready(function(){
+				            $('.layui-nav-item').eq(2).addClass("layui-nav-itemed");//eq按自己页面顺序排，从2开始
+				        }
+				    );
+				
+				    // _header头部区域
+				    $("#header").load("../conmmon/_header.html");
+				    //_lefter 左侧导航区域
+				    $("#lefter").load("../conmmon/_lefter.html");
+				    //_footer 底部区域
+				    //$("#footer").load("/conmmon/_footer.html");
+				
+				    //JavaScript代码区域
+				    layui.use('element', function(){
+				        var element = layui.element;
+				    });
+				</script>
+
+				<script>
+					layui.use('layer', function(){ //独立版的layer无需执行这一句
+				  var $ = layui.jquery, layer = layui.layer;}) //独立版的layer无需执行这一句
+
+			            </script>
+				<script type="text/html" id="toolbarDemo">
+					<div class="layui-btn-container">
+	    <div class="layui-btn layui-btn-sm" lay-event="getCheckData">请在上方输入病例号在打印  ↑↑↑</div>
+	    
+	  </div>
+	
+	</script>
+
+				<script type="text/html" id="barDemo">
+					<a href="javascript:window.print()">补打</a>
+			</script>
+				<script>
+					var table;
+					layui.use('table', function() {
+						table = layui.table;
+						table.render({
+							id: 'disease',
+							elem: '#test',
+							url: basePath + 'base/invoiceMapper/list',
+							//where:{limit:9,page:1},
+							toolbar: '#toolbarDemo',
+							title: '用户数据表',
+							cols: [
+								[{
+										field: 'binglihao',
+										title: '病历号',
+										width: 210,
+									},
+
+									{
+										field: 'fapiaohao',
+										title: '发票号',
+										width: 210,
+
+									}, {
+										field: 'xingming',
+										title: '姓名',
+										width: 200,
+
+									}, {
+										field: 'jine',
+										title: '金额',
+										width: 200,
+
+									}, {
+										field: 'fapiaozhuangtai',
+										title: '发票状态',
+										width: 200,
+
+									}, {
+										field: 'kanzhenriqi',
+										title: '看诊日期',
+										width: 300,
+
+									},
+								]
+							],
+							page: true
+						});
+					});
+				</script>
+				<script>
+					$("#chaxun").click(function() {
+						var str = $("#chaxun1").val();
+						//console.log("str=" + str);
+						table.reload('disease', {
+							url: basePath + 'base/invoiceMapper/list?binglihao=' + str,
+							where: {
+
+							} //设定异步数据接口的额外参数
+							//,height: 300
+						});
+					});
+				</script>
+	</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body class="">
+	<!-- 内容主体区域 -->
+	<div style="padding: 15px;">
+		<div>
+			新增药品
+		</div>
+		<div style="padding-top: 15px;">
+			<div style="width: 90%;height: 30px;background: #F5F7FA;display: flex;padding-top:3px;padding-left: 53px;border-radius: 4px;">
+				<div>
+					<div style="font-size: 13px;color: darkgray;margin-top: 5px;margin-right: 20px;margin-left: 10px;">新增项目</div>
+				</div>
+				<div style="display: flex;">
+					<div class="xzxm" style="margin-left: 0px;margin-top: -3px;">													
+						 <input type="text" style="height: 22px;width: 280px;margin-top: 6px;" id="ssk" name="title" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+					</div>
+					<div class="zcxm" style="margin-left: 20px;margin-top: 3px;">
+						<button class="layui-btn layui-btn-xs layui-btn-normal" id="cx">&nbsp;查询&nbsp;</button>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<div style="padding-top: 5px;">
+			<table class="layui-hide" id="test" lay-filter="test" lay-data="{id: 'idTest'}"></table>
+			<div class="layui-inline" style="height: 164px;width:518px;padding-top:3px;padding-left: 2px;">
+				<form class="layui-form layui-form-pane" action="">	
+					<div style="display: flex;">
+					<div class="layui-form-item" style="display: flex;">
+						<label class="layui-form-label" style="width: 88px;">用法用量</label>
+						<div class="layui-input-inline" style="width: 166px;">
+						  <input type="text" name="username" lay-verify="required" placeholder="请输入" id="yfyl" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item" style="display: flex;">
+						<label class="layui-form-label" style="width: 88px;">频次</label>
+						<div class="layui-input-inline" style="width: 166px;" style="width: 166px;">
+						  <input type="text" name="username" lay-verify="required" placeholder="请输入" id="pc" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					</div>
+					<div style="display: flex;">
+					<div class="layui-form-item" style="display: flex;">
+						<label class="layui-form-label" style="width: 88px;">数量</label>
+						<div class="layui-input-inline" style="width: 166px;">
+						  <input type="text" name="username" lay-verify="required" placeholder="请输入" id="sl" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item" style="display: flex;">
+						<label class="layui-form-label" style="width: 88px;">天数</label>
+						<div class="layui-input-inline" style="width: 166px;">
+						  <input type="text" name="username" lay-verify="required" placeholder="请输入" id="ts" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					</div>
+					<div class="layui-form-item" style="display: flex;">
+						<label class="layui-form-label" style="width: 88px;">用药嘱托</label>
+						<div class="layui-input-inline" style="width: 420px;">
+						  <input type="text" name="username" lay-verify="required" placeholder="请输入" id="yyzt" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+				</form>				
+			</div>
+		</div>	
+		<div>
+			<div style="display: flex;">
+				<div style="width: 36%;"></div>
+				<button class="layui-btn layui-btn-primary" id="qx">取消</button>
+				<button class="layui-btn layui-btn-normal" id="tj">确定</button>
+			</div>
+		</div>
+		
+
+<script src="../layui/jquery-3.3.1.js"></script>
+<script src="../layui/layui.js"></script>
+<script src="../conmmon/common.js"></script>
+<script>
+    
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+	
+	layui.use(['form', 'layedit', 'laydate'], function(){
+	  var form = layui.form
+	  ,layer = layui.layer
+	  ,layedit = layui.layedit
+	  ,laydate = layui.laydate; 
+	  //监听指定开关
+	  form.on('switch(switchTest)', function(data){
+	
+	  });
+	
+	});
+	
+
+</script>
+<script type="text/html" id="toolbarDemo">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+  </div>
+</script>
+
+<script>
+layui.use('table', function(){
+  var table = layui.table;
+  
+  table.render({
+    elem: '#test'
+    ,url:basePath+'doc/medicalrecord/Null',
+	height: '240'
+    // ,toolbar: '#toolbarDemo'
+    ,cols: [[
+      {type:'radio'}
+      ,{field:'',  title: '名称'}
+      ,{field:'',  title: '规格'}
+      ,{field:'',  title: '单位'}
+    ]]
+    ,page: true,
+	text: {
+		none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+	}
+  });
+  
+  //头工具栏事件
+  table.on('toolbar(test)', function(obj){
+    var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
+    switch(obj.event){
+      case 'getCheckData':
+        var data = checkStatus.data;  //获取选中行数据
+        layer.alert(JSON.stringify(data));
+      break;
+    };
+  });
+});
+$("#cx").click(function(){
+			var table = layui.table;
+			url=basePath+'doc/drugs/list?mnemonicCode='+$("#ssk").val();
+			var tableIns = table.render({
+			  elem: '#test',
+			  height: '240'
+			  ,cols:[[
+			    {type:'radio'}
+			    ,{field:'drugsName',  title: '名称'}
+			    ,{field:'specifications',  title: '规格'}
+			    ,{field:'drugsUnit',  title: '单位'}
+			    // ,{field:'price',  title: '',width:0}
+			  ]] //设置表头
+			  ,url: url //设置异步接口
+			  ,id: 'idTest',page: true
+			}); 
+			 
+			//这里以搜索为例
+			tableIns.reload({
+			  text: {
+			  	none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+			  }
+			});
+		})
+	$("#qx").click(function(){
+		var index=parent.layer.getFrameIndex(window.name);
+		parent.layer.close(index);
+	});
+	$("#tj").click(function(){
+			var table = layui.table;
+			var checkStatus = table.checkStatus('idTest'); //idTest 即为基础参数 id 对应的值
+			var data = checkStatus.data;
+			// console.log(data) //获取选中行的数据
+			var s = JSON.stringify(data)+"%"+$("#yfyl").val()+"%"+$("#pc").val()+"%"+$("#ts").val()+"%"+$("#sl").val()+"%"+$("#yyzt").val();
+			
+			
+			// console.log(s);
+			localStorage.yaopin = s;
+			localStorage.kind='yaopin';
+			var index=parent.layer.getFrameIndex(window.name);
+			parent.layer.close(index);
+		})
+</script>
+</body>
+</html>
+

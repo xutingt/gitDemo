@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>HIS医院管理系统</title>
+		<link rel="stylesheet" href="../layui/css/layui.css">
+	</head>
+	<body class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header" id="header">
+				<!-- _header头部区域 start -->
+				<!-- _header头部区域 stop -->
+			</div>
+
+			<div class="layui-side layui-bg-black">
+
+				<div class="layui-side-scroll" id="lefter">
+					<!-- _lefter 左侧导航区域start -->
+					<!-- _lefter 左侧导航区域stop -->
+				</div>
+			</div>
+
+			<div class="layui-body">
+				<!-- 内容主体区域 -->
+				<div style="padding: 15px;">
+					<!-- 主体内容 -->
+					<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+						<legend></legend>
+					</fieldset>
+
+					<div class="layui-tab" lay-filter="demo" lay-allowclose="true">
+						<ul class="layui-tab-title">
+							<li class="layui-this" lay-id="11">非药品收费项目管理</li>
+						</ul>
+
+						<div class="layui-tab-content">
+						</div>
+					</div>
+					<div class="site-demo-button" style="margin-bottom: 0;">
+						
+						<input type="text" id="name" name="user" style="margin-left: 7px;margin-top: -35px;width:18%;height: 33px;" placeholder="请输入非药品收费项目名称">
+						
+						<button class="layui-btn layui-btn-normal" data-type="tabDelete" style="margin-left: 17px;margin-top: px;width:13%" id="btnDis">查询非药品收费项目</button>
+						<!-- 弹窗 -->
+						<div class="site-demo-button" id="layerDemo" style="margin-bottom: 0;">
+							<button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal" style="margin-left: 427px;margin-top: -57px;width:13%">新增非药品收费项目</button>
+						</div>
+					</div>
+				</div>
+				<table class="layui-hide" id="test" lay-filter="test"></table>
+			</div>
+			<!--<div class="layui-footer" id="footer">-->
+			<!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+			<!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+			<!--</div>-->
+
+		</div>
+
+
+		
+
+		<script src="../layui/jquery-3.3.1.js"></script>
+		<script src="../layui/layui.js"></script>
+		<script src="../conmmon/common.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('.layui-nav-item').eq(7).addClass("layui-nav-itemed"); //eq按自己页面顺序排，从2开始
+			});
+
+			// _header头部区域
+			$("#header").load("../conmmon/_header.html");
+			//_lefter 左侧导航区域
+			$("#lefter").load("../conmmon/_lefter.html");
+			//_footer 底部区域
+			//$("#footer").load("/conmmon/_footer.html");
+
+			//JavaScript代码区域
+			layui.use('element', function() {
+				var element = layui.element;
+			});
+		</script>
+		<!-- <script type="text/html" id="toolbarDemo">
+			<div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+    <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+    <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+  </div> 
+</script>-->
+
+		<script type="text/html" id="barDemo">
+			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+		<script>
+			var table;
+			layui.use('table', function() {
+				 table = layui.table;
+
+				table.render({
+					id:'idTest',
+					elem: '#test',
+
+					url: basePath+'nonmedical/list',
+
+					url: basePath+'nonmedical/list'
+					,toolbar: '#toolbarDemo',
+
+
+					url: basePath+'nonmedical/list'
+
+					,toolbar: '#toolbarDemo',
+
+					title: '用户数据表',
+					cols: [
+						[ {
+								field: 'id',
+								title: 'ID',
+								width: 80,
+																
+							}, {
+								field: 'bianma',
+								title: '项目编码',
+								width: 150,
+								
+							}, {
+								field: 'name',
+								title: '项目名称',
+								width: 210,
+								
+								
+							}, {
+								field: 'guige',
+								title: '规格',
+								width: 80,
+								
+								
+							}, {
+								field: 'danjia',
+								title: '单价',
+								width: 100
+							}, {
+								field: 'feiyongfenlei',
+								title: '费用分类',
+								width: 100
+							}, {
+								field: 'keshi',
+								title: '执行科室',
+								width: 120,
+								
+							}, 
+								{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+							
+
+						]
+					],
+					page: true
+				});
+
+				//头工具栏事件
+// 				table.on('toolbar(test)', function(obj) {
+// 					var checkStatus = table.checkStatus(obj.config.id);
+// 					switch (obj.event) {
+// 						case 'getCheckData':
+// 							var data = checkStatus.data;
+// 							layer.alert(JSON.stringify(data));
+// 							break;
+// 						case 'getCheckLength':
+// 							var data = checkStatus.data;
+// 							layer.msg('选中了：' + data.length + ' 个');
+// 							break;
+// 						case 'isAll':
+// 							layer.msg(checkStatus.isAll ? '全选' : '未全选');
+// 							break;
+// 					};
+// 				});
+// 
+				//监听行工具事件
+				table.on('tool(test)', function(obj) {
+					var data = obj.data;
+					console.log(data)
+					if (obj.event === 'del') {
+						
+							layer.open({
+								type: 1,				
+								content: '<div style="padding: 20px 192px"><input type="text" id="name" name="title" required lay-verify="required" placeholder="项目名称" autocomplete="off" class="layui-input" style="margin-left: 162px;margin-top: -28px;width:61%"></div>',	
+												
+								btn: [ '取消','确定'],
+								btn2: function() {
+
+									$.post(basePath+"nonmedical/delete", { 
+
+
+										bianma: data.bianma
+									}, function(data) {
+										if (data == 1) {
+											layer.msg('成功', {
+												icon: 1,
+												time: 3000 //2秒关闭（如果不配置，默认是3秒）
+											});
+										} else {
+											layer.msg('失败', {
+												icon: 1,
+												time: 3000 //2秒关闭（如果不配置，默认是3秒）
+											});
+										}
+								
+									});
+								},
+							  btn1: function() {
+							  	layer.closeAll();				  
+							  },
+								btnAlign: 'c' //按钮居中
+									,
+								shade: 0 //不显示遮罩
+									,
+								yes: function() {
+									layer.closeAll();
+								},
+								area: ['625px', '327px']
+							});
+						
+							
+						
+							
+			
+							
+						
+					} else if (obj.event === 'edit') {
+						layer.open({
+							type: 1,																		
+							content: '<div style="padding: 20px 192px"><div id=a1 style="margin-left: -163px;margin-top: 5px">项目编码:</div> <input type="text" id="bianma" name="title" required lay-verify="required" placeholder="项目编码" autocomplete="off" class="layui-input" style="margin-left: -87px;margin-top: -26px;width:61%" value="'+ obj.data.bianma+'"><div id=a2 style="margin-left: 93px;margin-top: -25px;">项目名称:</div> <input type="text" id="name" name="title" required lay-verify="required" placeholder="项目名称" autocomplete="off" class="layui-input" style="margin-left: 162px;margin-top: -28px;width:61%"><div id=a3 style="margin-left: -135px;margin-top:13px" value="'+ obj.data.name+'">规格:</div> <input type="text" id="guige" name="title" required lay-verify="required" placeholder="规格" autocomplete="off" class="layui-input" style="margin-left: -87px;margin-top: -26px;width:61%" value="'+ obj.data.guige+'"><div id=a4 style="margin-left: 112px;margin-top:-30px">单价:</div> <input type="text" id="danjia" name="title" required lay-verify="required" placeholder="单价" autocomplete="off" class="layui-input" style="margin-left: 163px;margin-top: -26px;width:61%" value="'+ obj.data.danjia+'"><div id=a5 style="margin-left: -163px;margin-top: 35px">费用分类：</div><input type="text" id="feiyongfenlei" name="title" required lay-verify="required" placeholder="费用分类" autocomplete="off" class="layui-input" style="margin-left: -87px;margin-top: -26px;width:61%" value="'+ obj.data.feiyongfenlei+'"><div id=a6 style="margin-left: 92px;margin-top: -33px">科室分类：</div><input type="text" id="keshi" name="title" required lay-verify="required" placeholder="科室分类" autocomplete="off" class="layui-input" style="margin-left: 164px;margin-top: -26px;width:61%" value="'+ obj.data.keshi+'"></div>',
+							btn: [ '取消','保存'],
+							btn2: function() {
+
+								$.post(basePath+"nonmedical/update", { 
+
+									bianma: $("#bianma").val(),
+									name: $("#name").val(),
+									guige: $("#guige").val(),
+									danjia: $("#danjia").val(),
+									feiyongfenlei:$("#feiyongfenlei").val(),
+									keshi: $("#keshi").val()
+								}, function(data) {
+									if (data == 1) {
+										layer.msg('修改成功', {
+											icon: 1,
+											time: 3000 //2秒关闭（如果不配置，默认是3秒）
+										});
+									} else {
+										layer.msg('修改失败', {
+											icon: 1,
+											time: 3000 //2秒关闭（如果不配置，默认是3秒）
+										});
+									}
+							
+								});
+							},
+						  btn1: function() {
+						  	layer.closeAll();				  
+						  },
+							btnAlign: 'c' //按钮居中
+								,
+							shade: 0 //不显示遮罩
+								,
+							yes: function() {
+								layer.closeAll();
+							},
+							area: ['625px', '327px']
+						});
+					}
+				});
+			});
+</script>
+	<script> 
+			layui.use('layer', function() { //独立版的layer无需执行这一句
+				var $ = layui.jquery,
+					layer = layui.layer; //独立版的layer无需执行这一句
+
+				//触发事件
+				var active = {
+					offset: function(othis) {
+						var type = othis.data('type'),
+							text = othis.text();
+
+						layer.open({
+							type: 1,
+							offset: type //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
+								,
+							id: 'layerDemo' + type //防止重复弹出
+								,
+							content: '<div style="padding: 20px 192px"><div id=a1 style="margin-left: -163px;margin-top: 5px">项目编码:</div> <input type="text" id="bianma" name="title" required lay-verify="required" placeholder="项目编码" autocomplete="off" class="layui-input" style="margin-left: -87px;margin-top: -26px;width:61%"><div id=a2 style="margin-left: 93px;margin-top: -25px;" value="">项目名称:</div> <input type="text" id="name" name="title" required lay-verify="required" placeholder="项目名称" autocomplete="off" class="layui-input" style="margin-left: 162px;margin-top: -28px;width:61%"><div id=a3 style="margin-left: -135px;margin-top:13px">规格:</div> <input type="text" id="guige" name="title" required lay-verify="required" placeholder="规格" autocomplete="off" class="layui-input" style="margin-left: -87px;margin-top: -26px;width:61%"><div id=a4 style="margin-left: 112px;margin-top:-30px">单价:</div> <input type="text" id="danjia" name="title" required lay-verify="required" placeholder="单价" autocomplete="off" class="layui-input" style="margin-left: 163px;margin-top: -26px;width:61%"><div id=a5 style="margin-left: -163px;margin-top: 35px">费用分类：</div><input type="text" id="feiyongfenlei" name="title" required lay-verify="required" placeholder="费用分类" autocomplete="off" class="layui-input" style="margin-left: -87px;margin-top: -26px;width:61%"><div id=a6 style="margin-left: 92px;margin-top: -33px">科室分类：</div><input type="text" id="keshi" name="title" required lay-verify="required" placeholder="科室分类" autocomplete="off" class="layui-input" style="margin-left: 164px;margin-top: -26px;width:61%"></div>',
+							btn: [ '取消','保存'],
+							btn2: function() {
+
+								$.post(basePath+"nonmedical/save", { 
+
+									bianma: $("#bianma").val(),
+									name: $("#name").val(),
+									guige: $("#guige").val(),
+									danjia: $("#danjia").val(),
+									feiyongfenlei:$("#feiyongfenlei").val(),
+									keshi: $("#keshi").val()
+								}, function(data) {
+									if (data == 1) {
+										layer.msg('添加成功', {
+											icon: 1,
+											time: 3000 //2秒关闭（如果不配置，默认是3秒）
+										});
+									} else {
+										layer.msg('添加失败', {
+											icon: 1,
+											time: 3000 //2秒关闭（如果不配置，默认是3秒）
+										});
+									}
+							
+								});
+							},
+						  btn1: function() {
+						  	layer.closeAll();				  
+						  },
+							btnAlign: 'c' //按钮居中
+								,
+							shade: 0 //不显示遮罩
+								,
+							yes: function() {
+								layer.closeAll();
+							},
+							area: ['625px', '327px']
+						});
+
+					}
+				};
+
+				$('#layerDemo .layui-btn').on('click', function() {
+					var othis = $(this),
+						method = othis.data('method');
+					active[method] ? active[method].call(this, othis) : '';
+				});
+
+			});
+		</script>
+		
+		
+		<script>
+			$(document).ready(function() {
+				$("#btnDis").click(function() {
+					showPage($("#name").val());
+				});
+				function showPage(name) {
+					table.reload('idTest', {
+
+
+						url: basePath+'nonmedical/list',
+
+						where: {
+							where:name
+						} //设定异步数据接口的额外参数
+						//,height: 300
+					});
+				}
+			})
+		</script>
+
+	</body>
+</html>

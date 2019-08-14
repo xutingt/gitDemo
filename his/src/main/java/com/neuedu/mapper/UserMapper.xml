@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.mapper.UserMapper">
+	<resultMap type="com.neuedu.po.UserPO" id="usermap">
+		<id property="ID" column="ID"/>
+		<result property="UserName" column="UserName"/>
+		<result property="Password" column="Password"/>
+		<result property="RealName" column="RealName"/>
+		<result property="UserType" column="UserType"/>
+		<result property="IsScheduling" column="IsScheduling"/>
+		<result property="DelMark" column="DelMark"/>
+		<association property="DocTitle" javaType="com.neuedu.po.ConstantitemPO">
+			<id property="ID" column="ID"/>
+			<result property="ConstantName" column="ConstantName"/>
+		</association>
+		<association property="Dept" javaType="com.neuedu.po.DepartmentPO">
+			<id property="ID" column="ID"/>
+			<result property="DeptName" column="DeptName"/>
+		</association>
+		<association property="RegistLevel" javaType="com.neuedu.po.RegistLevelPO">
+			<id property="ID" column="ID"/>
+			<result property="RegistName" column="RegistName"/>
+		</association>
+	</resultMap>
+	<select id="selectAllUser" resultMap="usermap" >
+	SELECT u.ID,u.UserName,u.RealName,u.UserType,c.ConstantName,d.DeptName,r.RegistName FROM USER u LEFT JOIN constantitem c ON (u.DocTitleID = c.ID)
+	LEFT JOIN department d ON(u.DeptID = d.ID)
+	LEFT JOIN registlevel r ON(u.RegistLeID = r.ID)
+	WHERE u.DelMark = 1
+	</select>
+	<select id="getSomeUser" resultMap="usermap" parameterType="com.neuedu.vo.UserInfoVO">
+	SELECT u.ID,u.UserName,u.RealName,u.UserType,c.ConstantName,d.DeptName,r.RegistName FROM USER u LEFT JOIN constantitem c ON (u.DocTitleID = c.ID)
+	LEFT JOIN department d ON(u.DeptID = d.ID)
+	LEFT JOIN registlevel r ON(u.RegistLeID = r.ID)
+		<where> 
+			u.DelMark = 1
+			<if test="UserName != null and UserName != '' "></if>
+			AND u.UserName LIKE #{%${UserName}%#{
+			<if test="RealName != null and RealName != '' "></if>
+			AND u.RealName LIKE #{%${RealName}%#{
+			<if test="UserType != null and UserType != '' "></if>
+			AND u.UserType = #{UserType}
+			<if test="DocTitleID != null and DocTitleID != '' "></if>
+			AND  u.DocTitleID= #{DocTitleID}
+			<if test="DeptID != null and DeptID != '' "></if>
+			AND u.DeptID = #{DeptID}
+		</where>
+	</select>
+	<insert id="insertUser" parameterType="com.neuedu.vo.UserInfoVO" >
+		INSERT INTO his.user
+            (
+             UserName,
+             PASSWORD,
+             RealName,
+             UserType,
+             DocTitleID,
+             IsScheduling,
+             DeptID,
+             RegistLeID,
+             DelMark)
+		VALUES (
+		        #{UserName},
+		        #{Password},
+		        #{RealName},
+		        #{UserType},
+		        #{DocTitleID},
+		        #{IsScheduling},
+		        #{DeptID},
+		        #{RegistLeID},
+		        1);
+	</insert>
+	<update id="updateUser" parameterType="com.neuedu.vo.UserInfoVO">
+		UPDATE user
+		SET 
+		  UserName = #{UserName},
+		  PASSWORD = Password},
+		  RealName = #{RealName},
+		  UserType = #{UserType},
+		  DocTitleID = #{DocTitleID},
+		  IsScheduling = #{IsScheduling},
+		  DeptID = #{DeptID},
+		  RegistLeID = #{RegistLeID}
+		WHERE ID = #{ID};
+	</update>
+	<update id="delectUser" parameterType="int">
+		UPDATE USER 
+		SET DelMark = 0 
+		WHERE ID = #{ID};
+	</update>
+	<select id="getDocTitle" resultType="com.neuedu.po.ConstantitemPO">
+		SELECT 
+			id,
+			constantName
+		FROM constantitem 
+		WHERE constanttypeid = 8
+	</select>
+</mapper>

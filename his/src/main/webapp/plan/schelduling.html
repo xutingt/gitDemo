@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<link rel="stylesheet" href="../layui/css/layui.css">
+	<script src="../layui/jquery-3.3.1.js"></script>
+	<script src="../layui/layui.js"></script>
+	<script src="../conmmon/common.js"></script>
+</head>
+<body>
+
+	<h1 style="text-align: center;">排班规则列表</h1><br /><br />
+	<span style="position: relative;margin-left: 480px;">科室选择：</span>：
+	<select name="city" lay-verify="" id="city">
+		<option value="">科室</option>
+	</select>
+	<button class="layui-btn layui-btn-normal" id="select">查询</button>
+	<button class="layui-btn layui-btn-normal" id="qingkong">清空</button>
+	<div>
+		<table class="layui-table" lay-even="" lay-skin="nob" id="jiancha">	
+			<colgroup>
+				<col width="10%">
+				<col width="10%">
+				<col width="10%">
+				<col width="10%">
+				<col width="10%">
+
+			</colgroup>
+			<thead>
+				<th><input type="checkbox" /></th>
+				<th>规则名称</th>
+				<th>科室名称</th>
+				<th>医生名称</th>
+				<th>时间</th>
+
+			</thead>
+
+
+		</table>
+	</div>
+
+	开始时间:<input type="date" id="mydate1" value="" /><span style="color: red;">*</span>
+	结束时间:<input type="date" id="mydate" value="" /><span style="color: red;">*</span>
+	<button class="layui-btn layui-btn-normal" id="baocun">确定</button>
+
+	<script>
+		$(document).ready(function() {
+/*				$.post("/his/plan/controller/selectDept.do", {}, function(data) {
+					var keshi = JSON.parse(data);
+					$.each(keshi, function(i, e) {
+						$('#city').append(' <option value="' + e.id + '">' + e.keshimingcheng + '</option>')
+					})
+				})
+				*/				
+				$.ajax({
+					type: "post",
+					url: "/his/plan/controller/selectDept.do",
+					data: {},
+					dataType: "json",
+					success: function (data) {
+				//        $('#city').append(
+				//           "<option value=''>请选择</option>"
+				//        );
+				for(var i = 0; i < data.length; i++){
+					var h = "<option value='" + data[i].id + "'>" + data[i].deptName + "</option>";
+					$("#city").append(h);
+				}
+				//        form.render('select');
+			}
+		});
+
+
+				$('#qingkong').click(function() {
+					$('#jiancha tbody').html("");
+				})
+				$('#select').click(function() {
+					$.ajax({
+						type: "post",
+						url: "/his/plan/rulecontroller/selectRuleList.do",
+						data: {"DeptId": $('#city').val()},
+						dataType: "json",
+						error : function (XMLHttpRequest, textStatus, errorThrown){
+							alert("获取科室信息出错")
+						},
+						success: function (data) {
+							$('#jiancha tbody').html("");
+							for(var i=0;i < data.length; i++){
+								$('#jiancha').append(
+									' <tbody id="ttt"><tr><td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td><input style="border: none;" value="' +
+									data[i].ruleName + '"/></td><td><input style="border: none;" value="' + data[i].deptName +
+									'"/></td><td><input style="border: none;" value="' + data[i].realName +
+									'"/></td><td><input style="border: none;" value="' + data[i].week +
+									'"/></td><td style="display:none;"><input style="border: none;" value="' + data[i].deptID +
+									'"/></td><td style="display: none;"><input style="border: none;" value="' + data[i].userID +
+									'"/></td><td style="display: none;"><input style="border: none;" value="' + data[i].id +
+									'"/></td></tr></tbody>');
+							}
+						}
+					});
+				});
+/*					$.post("/his/plan/rulecontroller/selectRuleList.do", {
+						DeptId: $('#city').val()
+					}, function(data) {
+						$('#jiancha tbody').html("");
+						for(var i=0;i < data.length; i++){
+							alert(data[i].RuleName);
+							alert(data[i.dept.deptName]);
+							$('#jiancha').append(
+								' <tbody id="ttt"><tr><td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td><input style="border: none;" value="' +
+								data[i].RuleName + '"/></td><td><input style="border: none;" value="' + data[i].dept.deptName +
+								'"/></td><td><input style="border: none;" value="' + data[i].user.realName +
+								'"/></td><td><input style="border: none;" value="' + data[i].Week +
+								'"/></td><td style="display:none;"><input style="border: none;" value="' + data[i].dept.id +
+								'"/></td><td style="display: none;"><input style="border: none;" value="' + data[i].user.id +
+								'"/></td><td style="display: none;"><input style="border: none;" value="' + data[i].id +
+								'"/></td></tr></tbody>')
+						}
+					})
+*/					
+				$('#baocun').click(function() {
+					var jieshu = document.getElementById("mydate").value;
+					var kaishi = document.getElementById("mydate1").value;
+					var datekaishi = new Date(kaishi);
+					var datejieshu = new Date(jieshu);
+					var kaishihaomiao = datekaishi.getTime();
+					var jieshuhaomiao = datejieshu.getTime();
+					var shijian = new Date(jieshuhaomiao - kaishihaomiao);
+					var shijiancha = shijian / (60 * 60 * 24 * 1000);
+					
+					var SchedDate, DeptId, UserId, RuleId, RegistQuota,Noon;
+					$('#jiancha tbody tr').each(function() {
+						var st = [];
+						var chil = $(this).children('td');
+						var tdcount = chil.length;
+						var txt;
+						for (var j = 0; j < tdcount; j++) { //循环得到td的四项内容值
+							txt = chil.eq(j).children('input').val();
+							st.push(txt);
+							console.log(st);
+						}
+						var xuanzhong = st[0].toString();
+						
+						if (xuanzhong == "1") {
+							for (var i = 0; i <= shijiancha; i++) {
+								var tianshu = kaishihaomiao + i * (60 * 60 * 24 * 1000);
+								var datetianshu = new Date(tianshu);
+								var week1 = parseInt(datetianshu.getDay());
+								var week = st[4].split("");
+	// 							console.log(st[4]);
+	// 							console.log(week);
+	
+								var month=parseInt(datetianshu.getMonth());
+								var Month=month+1;
+								
+								SchedDate = datetianshu.getFullYear() + "-" + Month + "-" + datetianshu.getDate();
+								
+								 for(var j = 0; j <2; j++){
+									 isWork=week[week1*2+j];
+									 if(isWork != 0){
+										 DeptId = st[5];
+											UserId = st[6];
+							//				RegistQuota = st[8]
+											RuleId = st[7]
+											Noon = ( j == 0 ) ? '上午' : '下午';
+											att = {
+												'SchedDate': SchedDate,
+												'DeptID': DeptId,
+												'UserID': UserId,
+							//					'RegistQuota': RegistQuota,
+												'RuleID': RuleId,
+												'Noon':Noon,
+												'JieShu':jieshu,
+												'KaiShi':kaishi
+											};
+											console.log(att);
+											$.post("/his/plan/scheduelingcontroller/insertWorkday.do", att, function(data) {})
+									 }
+								 }
+							}
+						}
+					})
+					alert("保存成功");
+				})
+			});
+		</script>
+</body>
+</html>
+	

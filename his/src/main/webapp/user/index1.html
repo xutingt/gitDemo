@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>HIS医院管理系统</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header" id="header">
+        <!-- _header头部区域 start -->
+        <!-- _header头部区域 stop -->
+    </div>
+
+    <div class="layui-side layui-bg-black">
+
+        <div class="layui-side-scroll" id="lefter">
+            <!-- _lefter 左侧导航区域start -->
+            <!-- _lefter 左侧导航区域stop -->
+        </div>
+
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;"></div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">请输入:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="name" name="name" lay-verify="required" placeholder="用户名或真实姓名" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <button class="layui-btn layui-btn-normal" id="btnQuery">查询用户</button>
+            <button class="layui-btn layui-btn-normal" id="btnAdd">添加用户</button>
+        </div>
+
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>登录名</th>
+                <th>真实姓名</th>
+                <th>用户类别</th>
+                <th>医生职称</th>
+                <th>所在科室</th>
+                <th>挂号级别</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+<div id="demo2"></div>
+    </div>
+    <!--<div class="layui-footer" id="footer">-->
+    <!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+    <!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+    <!--</div>-->
+
+</div>
+
+<script src="../layui/jquery-3.3.1.js"></script>
+<script src="../layui/layui.js"></script>
+<script src="../conmmon/common.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.layui-nav-item').eq(2).addClass("layui-nav-itemed"); //eq按自己页面顺序排，从2开始
+    });
+    // _header头部区域
+    $("#header").load("../conmmon/_header.html");
+    //_lefter 左侧导航区域
+    $("#lefter").load("../conmmon/_lefter.html");
+    //_footer 底部区域
+    //$("#footer").load("/conmmon/_footer.html");
+
+    //JavaScript代码区域
+    layui.use(['laypage', 'layer', 'element', 'form'], function () {
+        var form = layui.form;
+        form.render();
+
+        var element = layui.element,
+            laypage = layui.laypage,
+            layer = layui.layer;
+			
+        var pageCurrent = 1;
+        var limit = 10;
+        var page = (pageCurrent - 1) * limit;
+
+        showpage("", page, limit);
+
+        $("#btnAdd").click(function () {
+            window.location.href = "add.html";
+        });
+
+        $("#btnQuery").click(function () {
+            showpage($("#name").val(), page, limit);
+        })
+
+        function showpage(name, page, limit) {
+			$.post(basePath + "user/count",{"name":name},function(data){
+				laypage.render({
+				elem: 'demo2'
+				,layout: ['count', 'prev', 'page', 'next']
+				,count: data
+				,theme: '#1E9FFF'
+				,jump: function(obj, first){
+				//obj包含了当前分页的所有参数，比如：
+// 				console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。 
+// 				console.log(obj.limit); //得到每页显示的条数
+		
+				//首次不执行
+				if(!first){
+				  //do something
+				}
+			  }
+				
+				
+				});	
+			})
+            var b = JSON.stringify({
+                "page": page,
+                "limit": limit,
+                "name": name
+            });
+            $.ajax({
+                url: basePath + "user/list",
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                data: b,
+                success: function (data) {
+                    var jsonArry = data;
+                    var tbodyElement = $("tbody");
+                    tbodyElement.html("");
+                    $.each(jsonArry, function (i, e) {
+                        tbodyElement.append("<tr>" +
+                            "<td>" + e.id + "</td>" +
+                            "<td>" + e.userName + "</td>" +
+                            "<td>" + e.realName + "</td>" +
+                            "<td>" + e.userType + "</td>" +
+                            "<td>" + e.docTitle + "</td>" +
+                            "<td>" + e.keshimingcheng + "</td>" +
+                            "<td>" + e.registType + "</td>" +
+                            "<td>" +
+                            "<button class='layui-btn layui-btn-sm layui-btn-normal' name='btnUpdate' data-id='" + e.id + "'>修改</button>" +
+                            "<button class='layui-btn layui-btn-sm layui-btn-normal' name='btnDel' data-id-usertype-realname='" +
+                            e.id + "," + e.userType + "," + e.realName + "'>删除</button>" +
+                            "</td>" +
+                            "</tr>");
+                    })
+
+                    $("button[name='btnDel']").click(function () {
+                        var dur = $(this).attr("data-id-usertype-realname");
+                        var durs = dur.split(",");
+                        layer.open({
+                            type: 1,
+                            content: '"您将要删除的是' + durs[1] + ',' + durs[2] + '.是否确定删除.',
+                            btn: ['确定', '取消'],
+                            btn1: function () {
+                                $.post(basePath + "user/delete", {
+                                    id: durs[0]
+                                }, function (data) {
+                                    if (data == 1) {
+                                        layer.msg('删除成功,2秒后返回', {
+                                            icon: 1,
+                                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                                        });
+                                        window.setTimeout(function () {
+                                            window.location.href="index.html";
+                                        },2000);
+                                    } else {
+                                        layer.msg('删除失败', {
+                                            icon: 2,
+                                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                                        });
+                                    }
+
+                                });
+                                layui.closeAll();
+                            },
+                            btn2: function () {
+                                layer.closeAll();
+
+                            },
+                            title: '删除用户',
+                            btnAlign: 'c',
+                            shade: 0,
+                        });
+
+                    });
+
+                    $("button[name='btnUpdate']").click(function () {
+                        localStorage.id = $(this).attr("data-id");
+                        window.location.href = "update.html";
+                    });
+                }
+            })
+        }
+    });
+</script>
+</body>
+</html>

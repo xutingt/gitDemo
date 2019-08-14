@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>HIS医院管理系统</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header" id="header">
+        <!-- _header头部区域 start -->
+        <!-- _header头部区域 stop -->
+    </div>
+
+    <div class="layui-side layui-bg-black">
+
+        <div class="layui-side-scroll" id="lefter">
+            <!-- _lefter 左侧导航区域start -->
+            <!-- _lefter 左侧导航区域stop -->
+        </div>
+
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <!--内容主体区域-->
+            <div class="layui-container" style="padding: 15px;width: auto">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md3">
+                        <div>待诊患者</div>
+                        <table class="layui-hide" id="table1" lay-filter="test1"></table>
+                    </div>
+                    <div class="layui-col-md9">
+                        <div>检查检验处置明细单</div>
+                        <div class="layui-row ">
+                            <form class="layui-form" action="">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">病历号</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="caseNumber" placeholder="请点击左侧列表选择待诊患者"
+                                                   disabled="disabled" autocomplete="off" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">患者姓名</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="name" placeholder="请点击左侧列表选择待诊患者"
+                                                   disabled="disabled" autocomplete="off" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="layui-row">
+                                <div class="layui-col-md12">
+                                    <table class="layui-hide" id="table2" lay-filter="test2"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!--<div id="out_upload2" style="display:none">-->
+        <!--<div class="layui-upload" style="padding: 15px" >-->
+        <!--<form action="http://localhost/medical/JMWCheckController/upload" enctype="multipart/form-data">-->
+        <!--<input type="file">-->
+        <!--<button type="submit">上传</button>-->
+        <!--</form>-->
+        <!--</div>-->
+        <!--</div>-->
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-xs" lay-event="yes" id="yes">执行</a>
+        </script>
+    </div>
+
+    <!--<div class="layui-footer" id="footer">-->
+    <!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+    <!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+    <!--</div>-->
+
+</div>
+<script src="../layui/jquery-3.3.1.js"></script>
+<script src="../layui/layui.js"></script>
+<script src="../conmmon/common.js"></script>
+<script>
+    $(document).ready(function () {
+            $('.layui-nav-item').eq(4).addClass("layui-nav-itemed");//eq按自己页面顺序排，从2开始
+        }
+    );
+    layui.use(['element', 'table', 'upload', 'form', 'layer'], function () {
+        var element = layui.element
+            , table = layui.table
+            , upload = layui.upload
+            , form = layui.form
+            , layer = layui.layer;
+
+        var caseNumber = "";
+        var medicalWaitId="";
+        var picSrc="";
+        //监听行单击事件（单击事件为：rowDouble）
+        table.on('row(test1)', function (obj) {
+            // layer.msg(JSON.stringify(obj.data));
+            caseNumber = obj.data.caseNumber;
+            medicalWaitId=obj.data.id;
+            $("input[name='caseNumber']").val(caseNumber);
+            $("input[name='name']").val(obj.data.checkUserName);
+            // layer.msg(obj.data.caseNumber);
+            table.reload('table2', {
+                url: medicalPath + 'JMWCheckController/medicalCheck'
+                , where: {caseNumber: obj.data.caseNumber} //设定异步数据接口的额外参数
+                //,height: 300
+            });
+
+            // layer.alert(JSON.stringify(data), {
+            //     title: '当前行数据：'
+            // });
+
+        });
+
+
+        //监听工具条
+        table.on('tool(test2)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+            if (layEvent === 'yes') { //执行
+                //do somehing
+                // console.log("医技项目名" + data.name);
+                // console.log("医技项目id" + data.id);
+                // console.log("checkappid" + data.checkdetailedId);
+                // console.log($("input[name='caseNumber']").val());
+
+
+                // 编辑医技，弹出层
+                layer.open({
+                    type: 1 //类型,页面层
+                    ,
+                    title: ['上传检查结果', 'font-size:18px;'] //标题栏
+                    ,
+                    area: '750px' //'300px'//['500px', '300px'] 设定弹出层宽高
+                    ,
+                    btn: ['确认', '取消']
+                    ,
+                    yes: function (index, layero) {
+                        //按钮【按钮一】的回调
+                        console.log("picSrc="+picSrc);
+                        $.post(medicalPath+"JMWCheckController/updateState"
+                            ,{checkDetailedId:data.checkdetailedId
+                                ,checkProId:data.id
+                                ,caseNumber:$("input[name='caseNumber']").val()
+                                ,medicalWaitId:medicalWaitId
+                                ,picSrc:picSrc
+                            },function (data) {
+                                if("1"==data){
+                                    window.location.reload();
+                                }else{
+                                    alert("执行失败")
+                                }
+
+
+                            });
+                        layer.closeAll();
+                    }
+                    ,
+                    btn2: function (index, layero) {
+                        //按钮【按钮二】的回调
+                        //return false 开启该代码可禁止点击该按钮关闭
+                        layer.closeAll();
+                    }
+                    ,
+                    closeBtn: 1
+                    ,
+                    shade: 0.8
+                    ,
+                    shadeClose: true
+                    ,
+                    id: 'layer' //设定一个id，防止重复弹出
+                    ,
+                    anim: 0
+                    ,
+                    isOutAnim: true
+                    ,
+                    resize: false
+                    ,
+                    success: function () {
+
+                    },
+                    content: $("#out_upload")
+                });
+
+                // layer.open({
+                //     type: 1,
+                //     area: ['500px', '300px'],
+                //     content: $("#out_upload").html()
+                // });
+            }
+        });
+
+        //普通图片上传
+        upload.render({
+            elem: "#uploadButton"
+            , url: medicalPath + 'JMWCheckController/upload'
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    // alert(result);
+                    $('#uploadImg').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (res) {
+                //如果上传失败
+                console.log(res);
+                if ("0"!=res.code) {
+                    picSrc=res.data.src;
+                    console.log(res.data.src);
+                }else{
+                    layer.msg('');
+                }
+                //上传成功
+            }
+            , error: function (res) {
+                //演示失败状态，并实现重传
+                if("0"==res.code) {
+
+                    var demoText = $('#demoText');
+                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                    demoText.find('.demo-reload').on('click', function () {
+                        uploadInst.upload();
+                    });
+                }
+            }
+        });
+
+
+        table.render({
+            elem: '#table1'
+            , height: 520
+            , url: medicalPath + 'medicalWait/findByPage' //数据接口
+            , method: 'post'
+            , id: 'tableID'//tableID
+            , cols: [[ //表头
+                {field: 'id', title: '待诊id', hide: true}
+                , {field: 'caseNumber', title: '病历号'}
+                , {field: 'checkUserName', title: '患者姓名'}
+            ]]
+            , page: true //开启分页
+        });
+
+        table.render({
+            elem: '#table2'
+            , height: 460
+            , url: medicalPath + 'JMWCheckController/medicalCheck' //数据接口
+            // , where: {caseNumber: obj.data.caseNumber}
+            , text: {
+                none: '请点击左侧列表选择待诊患者'
+            }
+            , method: 'post'
+            , id: 'table2'//tableID
+            , cols: [[ //表头
+                {field: 'name', title: '项目名称', width: 150, fixed: 'left'}
+                , {field: 'id', title: '项目名称', hide: true}
+                , {field: 'checkdetailedId', title: '检查申请单id', hide: true}
+                , {field: 'position', title: '检查部位'}
+                , {field: 'amount', title: '数量', width: 100}
+                , {field: 'chargeUnit', title: '单位', width: 100}
+                , {field: 'price', title: '单价', width: 100}
+                , {field: 'totalPrice', title: '总金额', width: 100}
+                , {field: 'status', title: '状态', width: 100}
+                , {title: '操作', toolbar: '#barDemo', width: 150}
+            ]]
+            , page: false //关闭分页
+        });
+
+        $()
+
+    });
+
+
+    // _header头部区域
+    $("#header").load("../conmmon/_header.html");
+    //_lefter 左侧导航区域
+    $("#lefter").load("../conmmon/_lefter.html");
+    //_footer 底部区域
+    //$("#footer").load("/conmmon/_footer.html");
+
+
+</script>
+</body>
+</html>
+<!--弹出层-->
+<div id="out_upload" style="display:none">
+    <div class="layui-upload" style="padding: 15px">
+        <button type="button" class="layui-btn" id="uploadButton">上传图片</button>
+        <div class="layui-upload-list">
+            <img class="layui-upload-img" id="uploadImg" style="height: 400px;width: 400px">
+            <p id="demoText"></p>
+        </div>
+    </div>
+</div>

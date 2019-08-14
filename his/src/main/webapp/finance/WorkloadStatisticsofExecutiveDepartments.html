@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>HIS医院管理系统</title>
+		<link rel="stylesheet" href="../layui/css/layui.css">
+		
+		
+	</head>
+	<body class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header" id="header">
+				<!-- _header头部区域 start -->
+				<!-- _header头部区域 stop -->
+			</div>
+
+			<div class="layui-side layui-bg-black">
+
+				<div class="layui-side-scroll" id="lefter">
+					<!-- _lefter 左侧导航区域start -->
+					<!-- _lefter 左侧导航区域stop -->
+				</div>
+
+			</div>
+
+			<div class="layui-body">
+				<!-- 内容主体区域 -->
+				<div style="padding: 15px;">
+
+					<div id="#sss" style="margin-top: 50px;">
+						<span>收款员<input type="text" id="user1" style="width: 100px; margin-left: 30px;" /></span>
+						<span style="margin-left: 50px;">统计日期
+							<div class="layui-input-inline" style="margin-left: 30px">
+								<input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input tx">
+							</div>
+							<div class="layui-input-inline" style="margin-left: 100px;">
+								<button type="button" id="chaxun" class=" layui-btn layui-btn-normal">查询</button>
+								<button type="button" class=" layui-btn layui-btn-normal" id="dayinanniu">打印</button>
+							</div>
+						</span>
+					</div>
+					<div class="layui-form" style="margin-top: 50px;" id="dayin">
+						<div id="biaoti" style="margin-left: 35%;">
+							<h1>東軟雲醫療HIS</h1>
+						</div>
+						<table class="layui-table" style="width:85%;margin: 0 auto;">
+							<colgroup>
+								<col width="100">
+								<col width="100">
+								<col width="100">
+								<col width="100">
+								<col width="100">
+								<col width="100">
+								<col width="100">
+								<col width="100">
+								<col width="100">
+								<col width="100">
+								<col>
+							</colgroup>
+							<thead>
+								<tr>
+									<th>日结时间&nbsp;&nbsp;&nbsp;&nbsp;</th>
+									<th colspan="10" id="biaotouriqi"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<td>制表人&nbsp;&nbsp;&nbsp;&nbsp;</td>
+								<td colspan="2" id="zhibiaoren" style="width: 30px;"></td>
+								<td>收费员</td>
+								<td colspan="2" id="shoufeiren"></td>
+								<td>制表时间</td>
+								<td colspan="5" id="dangqianshijian"></td>
+								</tr>
+								<tr id="a1">
+									<td>药费</td>
+								</tr>
+								<tr id="a2">
+									<td>共计</td>
+								</tr>
+								<tr id="a3">
+									<td>医疗费用</td>
+								</tr>
+								<tr id="a4">
+									<td>共计</td>
+								</tr>
+								<tr id="a5">
+									<td>其他费用</td>
+								</tr>
+								<tr id="a6">
+									<td>共计</td>
+								</tr>
+								<tr id="a7">
+									<td>总业务收入</td>
+								</tr>
+								<tr>
+									<td>共计</td>
+									<td>(大写)</td>
+									<td colspan="5"></td>
+									<td>(小写)</td>
+									<td colspan="5"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<!--<div class="layui-footer" id="footer">-->
+			<!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+			<!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+			<!--</div>-->
+
+		</div>
+		<script src="../layui/jquery-3.3.1.js"></script>
+		<script src="../layui/layui.js"></script>
+		<script type="text/javascript" src="js/jquery.print.js"></script>
+		<script src="../conmmon/common.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('.layui-nav-item').eq(6).addClass("layui-nav-itemed"); //eq按自己页面顺序排，从2开始
+			});
+
+			// _header头部区域
+			$("#header").load("../conmmon/_header.html");
+			//_lefter 左侧导航区域
+			$("#lefter").load("../conmmon/_lefter.html");
+			//_footer 底部区域
+			//$("#footer").load("/conmmon/_footer.html");
+
+			//JavaScript代码区域
+			layui.use('element', function() {
+				var element = layui.element;
+				var b = 1;
+				for (j = 1; j < 8; j++) {
+					for (i = 1; i < 10; i++) {
+						$("#a" + j + "").append("<td id ='" + b + i + "'></td>");
+					}
+					b = b + 1;
+				}
+				$("#dayinanniu").click(function(){
+					$("#dayin").print({
+						globalStyles: true, //是否包含父文档的样式，默认为true
+						mediaPrint: false, //是否包含media='print'的链接标签。会被globalStyles选项覆盖，默认为false
+						stylesheet: null, //外部样式表的URL地址，默认为null
+						noPrintSelector: ".no-print", //不想打印的元素的jQuery选择器，默认为".no-print"
+						iframe: true, //是否使用一个iframe来替代打印表单的弹出窗口，true为在本页面进行打印，false就是说新开一个页面打印，默认为true
+						append: null, //将内容添加到打印内容的后面
+						prepend: null, //将内容添加到打印内容的前面，可以用来作为要打印内容
+						deferred: $.Deferred() //回调函数
+					});
+				})
+			});
+			layui.use(['form', 'layedit', 'laydate'], function() {
+				var form = layui.form,
+					layer = layui.layer,
+					layedit = layui.layedit,
+					laydate = layui.laydate;
+
+				//日期
+				laydate.render({
+					elem: '#date',
+					done: function(value, data) {
+						lay('#biaotouriqi').html(value);
+						var s = new Date();
+						lay('#dangqianshijian').html(s);
+					}
+				});
+			});
+			$('#user1').blur(function() {
+				$('#zhibiaoren').html($('#user1').val());
+				$('#shoufeiren').html($('#user1').val());
+			});
+			$('#chaxun').click(function() {
+				var a = 0;
+				$.post(basePath+"GuaHaoYe/yiji.do", {
+					visitDate: $("#date").val()
+				}, function(data) {
+					var s = JSON.parse(data);
+					console.log(s);
+					var yiji = 0;
+					$.each(s, function(i, e) {
+						yiji = yiji + Number(e.totalCost)
+					})
+					$("#31").html("医技费");
+					$("#41").html(yiji);
+					a = a + yiji;
+				})
+				$.post(basePath+"GuaHaoYe/list.do", {
+					visitDate: $("#date").val()
+				}, function(data) {
+					var s = JSON.parse(data);
+					console.log(s);
+					var qita = 0;
+					$.each(s, function(i, e) {
+						qita = qita + Number(e.totalCost)
+					})
+					$("#51").html("挂号费");
+					$("#61").html(qita);
+					a = a + qita;
+				})
+				$.post(basePath+"GuaHaoYe/yaopin.do", {
+					visitDate: $("#date").val()
+				}, function(data) {
+					var s = JSON.parse(data);
+					console.log(s);
+					var yaopin = 0;
+					$.each(s, function(i, e) {
+						yaopin = yaopin + Number(e.totalCost)
+					})
+					$("#11").html("药品费");
+					$("#21").html(yaopin);
+					a = a + yaopin;
+					$("#71").html(a);
+				})
+			});
+		</script>
+		<script>
+
+		</script>
+	</body>
+</html>

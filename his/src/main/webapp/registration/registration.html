@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>HIS医院管理系统</title>
+<link rel="stylesheet" href="../layui/css/layui.css">
+<link rel="stylesheet" href="css/registration.css" />
+</head>
+
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div class="layui-header" id="header">
+			<!-- _header头部区域 start -->
+
+			<!-- _header头部区域 stop -->
+		</div>
+
+		<div class="layui-side layui-bg-black">
+
+			<div class="layui-side-scroll" id="lefter">
+				<!-- _lefter 左侧导航区域start -->
+				<!-- _lefter 左侧导航区域stop -->
+			</div>
+
+		</div>
+		<div class="layui-body">
+			<!-- 内容主体区域 -->
+			<!-- 标题 -->
+			<div id="regist-top">
+				<div class="layui-tab">
+					<ul class="layui-tab-title">
+						<li class="layui-this"><a href="#">挂号</a></li>
+						<li><a href="registration_charge.html">收费</a></li>
+						<li>退号</li>
+						<li>退费</li>
+						<li>日结</li>
+						<li>日结查询</li>
+						<li>患者费用查询</li>
+					</ul>
+				</div>
+			</div>
+			<!-- 头部 -->
+			<div id="regist-header">
+				<div class="regist-button-style">
+					<button class="layui-btn layui-btn-normal" id="createCaseRegist">创建挂号</button>
+				</div>
+				<div class="regist-button-style">
+					<button class="layui-btn layui-btn-normal" id="identifierScan">卡片扫描</button>
+				</div>
+				<div class="regist-button-style">
+					<button class="layui-btn layui-btn-normal" id="confirmRegistration">挂号确认</button>
+				</div>
+				<div class="regist-button-style">
+					<button class="layui-btn layui-btn-normal" id="clearRegistration">清&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;空</button>
+				</div>
+			</div>
+			<!-- 详情 -->
+			<div id="regist-details">
+				<form class="layui-form" action="">
+					<div class="layui-inline">
+						<div class="my-label-style layui-inline">病例编号</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<input type="text" name="caseNumber" id="patientCaseNumber"
+								required lay-verify="required" placeholder="病历号"
+								autocomplete="off" class="layui-input" readonly>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<div class="my-label-style layui-inline">患者姓名</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<input type="text" name="patientName" id="patientName" required
+								lay-verify="required" placeholder="姓名" autocomplete="off"
+								class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline clear-select">
+						<div class="my-label-style layui-inline">患者性别</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<select name="patientGender" 
+								id="patientGender">
+								<option value="" selected>请选择</option>
+								<option value="71">男</option>
+								<option value="72">女</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="layui-inline">
+						<div class="my-label-style layui-inline">年龄</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<input type="text" name="patientAge" id="patientAge" required
+								lay-verify="required" placeholder="年龄" autocomplete="off"
+								class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<div class="my-label-style layui-inline">出生年月</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<input name="date" class="layui-input" id="patientBirthDate"
+								type="date" placeholder="出生日期" autocomplete="off"
+								lay-verify="date">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<div class="my-label-style layui-inline">身份证号</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<input type="text" name="patientIdNumber" id="patientIdNumber"
+								required lay-verify="required" placeholder="身份证号"
+								autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<div class="my-label-style layui-inline">家庭住址</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<input type="text" name="patientAddress" id="patientAddress"
+								required lay-verify="required" placeholder="家庭住址"
+								autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<div class="my-label-style layui-inline">看诊日期</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<input name="text" class="layui-input" id="date"
+								type="text" placeholder="看诊日期" autocomplete="off"
+								lay-verify="date" readonly>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<div class="my-label-style layui-inline">午别</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<input type="text" name="Noon" id="Noon"
+								required lay-verify="required" placeholder="看诊午别"
+								autocomplete="off" class="layui-input" readonly>
+						</div>
+					</div>
+					<div class="layui-inline clear-select">
+						<div class="my-label-style layui-inline">科室分类</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<select name="deptType" lay-filter="deptType" id="deptType">
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline clear-select">
+						<div class="my-label-style layui-inline">科室类别</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<select name="deptTypeClass" lay-filter="deptTypeClass"
+								id="deptTypeClass">
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline clear-select">
+						<div class="my-label-style layui-inline">挂号类别</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<select name="registType" lay-filter="registType" id="registType">
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline clear-select">
+						<div class="my-label-style layui-inline">看诊医生</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<select name="diagnoseDoctor" lay-filter="diagnoseDoctor"
+								id="diagnoseDoctor">
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<div class="my-label-style layui-inline">应付金额</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<input type="text" name="registCost" required
+								lay-verify="required" placeholder="应付金额" autocomplete="off"
+								class="layui-input" value="0" id="registCost" readonly>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<div class="my-label-style layui-inline">病例本</div>
+						<div class="layui-input-block  layui-inline my-input-style">
+							<input name="caseBook" title="病历本" type="checkbox"
+								lay-filter="caseBook" id="caseBook">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<div class="my-label-style layui-inline">发票号</div>
+						<div class="layui-input-block layui-inline my-input-style">
+							<input type="text" name="regsitInvoice" required
+								lay-verify="required" placeholder="发票号" autocomplete="off"
+								class="layui-input" value="0" id="registInvoice" readonly>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- 列表 -->
+			<div id="regist-list">
+				<div id="regist-list-head">挂号信息列表</div>
+				<div id="regist-list-body">
+					<table class="layui-hide" id="regist-list-body-details"></table>
+				</div>
+			</div>
+		</div>
+
+		<!--<div class="layui-footer" id="footer">-->
+		<!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+		<!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+		<!--</div>-->
+
+	</div>
+	<script src="../layui/jquery-3.3.1.js"></script>
+	<script src="../layui/layui.js"></script>
+	<script src="js/registration.js"></script>
+	<script src="../conmmon/common.js"></script>
+
+	<script>
+		$(document).ready(function() {
+			$('.layui-nav-item').eq(2).addClass("layui-nav-itemed");//eq按自己页面顺序排，从2开始
+		});
+
+		// _header头部区域
+		$("#header").load("../conmmon/_header.html");
+		//_lefter 左侧导航区域
+		$("#lefter").load("../conmmon/_lefter.html");
+		/*
+		,function(){
+		    var role = window.location.href.split("/")[4];
+		    if(role == window.localStorage.getItem("flag")){
+
+		    }else{
+		        window.localStorage.removeItem("uId");
+		        window.localStorage.removeItem("flag");
+		        alert("无权限，请重新登陆!");
+		        window.location.href="../login/index.html";
+		    }
+		});
+		 */
+		//_footer 底部区域
+		//$("#footer").load("/conmmon/_footer.html");
+		//JavaScript代码区域
+		layui.use('element', function() {
+			var element = layui.element;
+		});
+	</script>
+</body>
+
+</html>

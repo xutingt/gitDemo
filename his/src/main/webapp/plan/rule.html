@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    	<script src="../layui/jquery-3.3.1.js"></script>
+    <script src="../layui/layui.js"></script>
+	<script src="../conmmon/common.js"></script>
+
+</head>
+<body>
+	<h1 style="text-align: center;">新增排班规则</h1><br /><br />
+	<span style="position: relative;margin-left: 480px;">科室选择：</span>：
+	<select name="city"  lay-verify="" id="city">
+  <option value="">科室</option>
+</select>  
+挂号级别：
+	<select name="city" lay-verify="" id="guahao">
+  <option value="">挂号级别</option>
+<!--  <option value="2">专家号</option>
+  <option value="1">普通号</option> 
+   --> 
+</select>  
+
+	<button class="layui-btn layui-btn-normal" id="select">查询</button>
+	<button class="layui-btn layui-btn-normal" id="qingkong">清空</button>
+<div>																	 
+											<table class="layui-table" lay-even=""  lay-skin="nob" id="jiancha">
+											  <colgroup>
+												<col width="10%">
+												<col width="10%">
+												<col width="10%">
+												<col width="10%">
+												<col width="10%">
+												<col width="10%">
+												<col width="10%">
+												<col width="10%">
+												<col width="10%">
+												<col width="10%">
+												
+											  </colgroup>
+											  <thead>
+												
+												  <th>医生ID</th>
+												  <th>医生名称</th>
+												  <th>挂号限额</th>
+												  <th>星期日</th>
+												  <th>星期一</th>
+												  <th>星期二</th>
+												  <th>星期三</th>
+												  <th>星期四</th>
+												  <th>星期五</th>
+												  <th>星期六</th>
+											  </thead>	
+													   
+											</table> 
+										</div> 
+<!-- 									<div style="position: relative;max-resolution: 10px;"> -->
+									<span style="position: relative;margin-left: 577px;">规则名称：</span><input type="text" placeholder="请输入规则名称" id="guize"/><span style="color: red;">*</span>
+									<button class="layui-btn layui-btn-normal" id="baocun">确定</button>
+								<!-- 	</div> -->
+<script>
+	$(document).ready(function(){
+//		$.post("/his/plan/controller/selectDept",{},function(data){
+//			var keshi=JSON.parse(data);
+//			$.each(keshi,function(i,e){
+//				$('#city').append(' <option value="'+e.id+'">'+e.keshimingcheng+'</option>')
+//			})
+//		});
+		/*获取临床科室*/
+		$.ajax({
+            type: "post",
+            url: "/his/plan/controller/selectDept.do",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+//                $('#city').append(
+//                   "<option value=''>请选择</option>"
+//                );
+                for(var i = 0; i < data.length; i++){
+    				var h = "<option value='" + data[i].id + "'>" + data[i].deptName + "</option>";
+    				$("#city").append(h);
+    			}
+//                form.render('select');
+            }
+        });
+		/*获取挂号类别*/
+		$.ajax({
+	        type: "post",
+	        url: "/his/registration/getRegistType.do",
+	        data: {},
+	        dataType: "json",
+	        success: function (data) {
+	            for(var i = 0; i < data.length; i++){
+					var h = "<option value='" + data[i].id + "'>" + data[i].registName + "</option>";
+					$("#guahao").append(h);
+				}
+	        }
+	    });
+
+
+		$('#qingkong').click(function(){
+			$('#jiancha tbody').html("");
+			$('#guize').val("");
+		})
+		$('#select').click(function(){
+//			$.post(basePath+"plan/controller/select",{DeptId:$('#city').val(),RegistId:$('#guahao').val()},function(data){
+//				var yisheng=JSON.parse(data);
+//				$('#jiancha tbody').html("");
+//				$.each(yisheng,function(i,e){
+//					$('#jiancha').append(' <tbody id="ttt"><tr><td><input style="border: none;" value="'+e.Id+'"/></td><td><input style="border: none;" value="'+e.RealName+'"/></td><td><input type="text" id="xiane"/></td><td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td> <td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td> <td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td> <td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td style="display: none;"><input style="border: none;" value="'+e.DeptId+'"/></td></tr></tbody>')
+//				})
+//			})
+			$.ajax({
+		        type: "post",
+		        url: "/his/plan/controller/select.do",
+		        data: {'DeptId':$('#city').val(),'RegistId':$('#guahao').val()},
+		        dataType: "json",
+		        success: function (data) {
+		        	$('#jiancha tbody').html("");
+		            for(var i = 0; i < data.length; i++){
+//						var h = ' <tbody id="ttt"><tr><td><input style="border: none;" value="'+data[i].id+'"/></td><td><input style="border: none;" value="'+data[i].realName+'"/></td><td><input type="text" id="xiane"/></td><td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td> <td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td> <td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td> <td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td style="display: none;"><input style="border: none;" value="'+data[i].deptID+'"/></td></tr></tbody>';
+						var h = '<tbody id="ttt"><tr><td><input style="border: none;" value="'+data[i].id+'"/></td><td><input style="border: none;" value="'+data[i].realName+'"/></td><td><input type="text" id="xiane"/></td><td>上午：<input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/>下午：<input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td>上午：<input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/>下午：<input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td> <td>上午：<input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/>下午：<input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td> <td>上午：<input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/>下午：<input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td>上午：<input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/>下午：<input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td>上午：<input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/>下午：<input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td>上午：<input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/>下午：<input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td><td style="display: none;"><input style="border: none;" value="'+data[i].dept.id+'"/></td></tr></tbody>';
+						$("#jiancha").append(h);
+					}
+		        }
+		    });
+
+		});
+		$('#baocun').click(function(){
+			var UserId,DeptId,Week,DelMark;//定义四个变量，分别是表格中索要获取的分类id、编号、名称、上传图
+			 if (!$('#guize').val()) {
+				alert("请输入规则名称")
+			} else{				
+				var i;
+				var att = {};//创建一个空的json
+			//	var UserId,DeptId,Week,DelMark;//定义四个变量，分别是表格中索要获取的分类id、编号、名称、上传图
+				// var Array = [];//一个空的数组
+				$('#jiancha tbody tr').each(function(){//遍历每一个tr
+					var st = [];//空数组，用于存放每一个tr里td的值
+					var chil = $(this).children('td');
+					var tdcount = chil.length;
+					var txt;
+					//alert(tdcount);
+					for (i=0;i<tdcount;i++){//循环得到td的四项内容值
+						txt = chil.eq(i).children('input').val();
+//						alert(i + "," +txt);
+						st.push(txt);
+							if(i > 2 && i < tdcount-1){
+								txt = chil.eq(i).children('input').next().val();
+								st.push(txt);
+							}
+					}
+					UserId = st[0];
+					DelMark=st[2];
+					Week=st[3]+st[4]+st[5]+st[6]+st[7]+st[8]+st[9]+st[10]+st[11]+st[12]+st[13]+st[14]+st[15]+st[16];
+					DeptId=st[17];				
+					att = {
+					'UserId':UserId,//分类id
+					'DeptId':DeptId,
+					'RuleName':$('#guize').val(),//分类名称
+					'Week':Week,
+					'DelMark':DelMark
+					};//把每一个tr的数据写成一个json数据
+					console.log(att);
+					//contentType: 'application/json;charset=utf-8',
+					$.post("/his/plan/controller/insertRule.do",att,function(data){})
+					 	//Array.push(att);//把json数据写入数组
+					})
+/*					$.ajax({
+//				        type: "post",
+//				        url: "/his/plan/controller/insertRule.do",
+				       // data:json,
+				        data:{
+							//'UserId':UserId,//分类id
+							//'DeptId':DeptId,
+							//'RuleName':$('#guize').val(),//分类名称
+							//'Week':Week,
+							//'DelMark':DelMark
+							},
+				        contentType:"application/json",
+				        dataType: "json",
+				        success: function (data) {
+				        	if(data == 1){
+				        		alert("1")
+				        	}
+				        }
+				    });
+*/				
+					alert("保存成功");
+					// console.log(Array);
+//				});
+			}
+		})
+	});
+</script>
+</body>
+</html>
+<!--  <tbody id="ttt">
+<tr>
+<td><input style="border: none;" value="'+data[i].id+'"/></td>
+<td><input style="border: none;" value="'+data[i].realName+'"/></td>
+<td><input type="text" id="xiane"/></td>
+<td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td>
+<td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td> 
+<td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td> 
+<td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td>
+<td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td>
+<td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td>
+<td><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/><input type="checkbox" value="0" onclick="this.value=(this.value==0)?1:0"/></td>
+<td style="display: none;"><input style="border: none;" value="'+data[i].deptId+'"/></td>
+</tr>
+</tbody>';
+-->

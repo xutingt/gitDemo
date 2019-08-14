@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>大屏</title>
+    <script src="../layui/jquery-3.3.1.js"></script>
+    <script type="text/javascript">
+        function getCurDate() {
+            var d = new Date();
+            var week;
+            switch (d.getDay()) {
+                case 1:
+                    week = "星期一";
+                    break;
+                case 2:
+                    week = "星期二";
+                    break;
+                case 3:
+                    week = "星期三";
+                    break;
+                case 4:
+                    week = "星期四";
+                    break;
+                case 5:
+                    week = "星期五";
+                    break;
+                case 6:
+                    week = "星期六";
+                    break;
+                default:
+                    week = "星期天";
+            }
+            var years = d.getFullYear();
+            var month = add_zero(d.getMonth() + 1);
+            var days = add_zero(d.getDate());
+            var hours = add_zero(d.getHours());
+            var minutes = add_zero(d.getMinutes());
+            var seconds = add_zero(d.getSeconds());
+            var ndate = years + "年" + month + "月" + days + "日  " + week;
+            divT.innerHTML = ndate;
+            divY.innerHTML = hours + ":" + minutes + ":" + seconds;
+        }
+
+
+        function add_zero(temp) {
+            if (temp < 10) return "0" + temp;
+            else return temp;
+        }
+
+        setInterval("getCurDate()", 100);
+
+    </script>
+
+    <style>
+        /* TOP */
+        .div1 {
+            width: 1430px;
+            height: 124px;
+            background-color: white;
+            display: inline-block;
+            vertical-align: top;
+
+
+        }
+
+        /* LOGO */
+        .logo {
+            float: left;
+            width: 450px;
+            height: 124px;
+
+
+        }
+
+        /* 呼吸内科 */
+        .title {
+            float: left;
+            width: 356px;
+            height: 90px;
+            border-radius: 0 0 45px 45px;
+            background-color: aliceblue;
+            text-align: center;
+
+            margin-left: 510px;
+            line-height: 90px;
+            font-size: 50px;
+            font-family: "黑体";
+            font-weight: bold;
+            color: white;
+            background-color: #0571ad;
+
+
+        }
+
+        /* 时间 */
+        .date {
+            float: right;
+            width: 450px;
+            height: 124px;
+
+            text-align: right;
+
+
+        }
+
+        .body {
+            width: 1440px;
+            height: 800px;
+            margin-top: auto;
+            margin: 0;
+        }
+
+        .big {
+            width: 1440px;
+            height: 776px;
+            background-color: #0770B1;
+            /*margin-top: 30px;*/
+            position: absolute;
+
+        }
+
+        .center {
+            width: 1270px;
+            height: 86px;
+            margin-top: 30px;
+
+        }
+
+        .t1, .t2, .t3, .t4, .t5 {
+            /*font-weight:bold;*/
+            float: left;
+            display: inline;
+            font-size: 27px;
+        }
+
+        .t1 {
+            position: relative;
+            width: 100px;
+            height: 80px;
+
+            left: 65px;
+        }
+
+        .t2 {
+            position: relative;
+            width: 100px;
+            height: 80px;
+
+            left: 185px;
+        }
+
+        .t3 {
+            position: relative;
+            width: 120px;
+            height: 80px;
+
+            left: 300px;
+        }
+
+        .t4 {
+            position: relative;
+            width: 120px;
+            height: 80px;
+
+            left: 460px;
+        }
+
+        .t5 {
+            position: relative;
+            width: 100px;
+            height: 80px;
+
+            left: 650px;
+        }
+
+        .block {
+            width: 1270px;
+            height: 80px;
+            background-color: #529DC4;
+            /*border-radius: 55px 55px 0px 0px;*/
+            font-size: 27px;
+            line-height: 80px;
+            margin-top: -32px;
+
+        }
+
+        .p1 {
+            width: 1270px;
+            height: 110px;
+            border-radius: 55px;
+            background-color: aliceblue;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            vertical-align: middle;
+            color: #8B0909;
+            font-size: 60px;
+            margin-top: 30px;
+            line-height: 110px;
+
+
+        }
+
+        .table {
+            width: 1271px;
+            height: 411px;
+            background-color: #529DC5;
+            /*border-radius:40px 40px 0px 0px;*/
+            text-align: center;
+            border: #0C6FAC solid 0px;
+
+        }
+
+        .logo {
+            float: left;
+
+            /*width: ;*/
+            /*height: ;*/
+        }
+
+
+        .blue {
+            background-color: #01487E;
+            color: #F2EF19;
+            font-size: 27px;
+        }
+
+        .color {
+            background-color: #257EB8;
+            color: white;
+            font-size: 25px;
+
+        }
+
+        .bottom {
+            /*vertical-align: middle;*/
+            width: 1272px;
+            height: 76px;
+            /*font-size:30px;*/
+            background-color: #529DC4;
+            text-align: center;
+            line-height: 76px;
+            border: 1px solid #0C6FAC;
+            margin-left: 84px;
+            margin-top: 20px;
+            font-size: 36px;
+
+        }
+
+        .time {
+            font-size: 30px;
+            margin-left: 20px;
+        }
+
+        .two {
+            color: white;
+            font-size: 27px;
+        }
+
+        .three {
+            color: white;
+            font-size: 27px;
+        }
+
+        .five {
+            color: white;
+            font-size: 27px;
+        }
+
+        .number {
+            color: white;
+            font-size: 27px;
+            position: relative;
+
+        }
+
+        .riqi {
+            width: 380PX;
+            height: 45PX;
+            font-family: "黑体";
+            font-size: 36px;
+        }
+    </style>
+
+</head>
+
+<body class="body">
+<div class="div1">
+    <!--<div class="logo"><img src="img/01a42e58b3fe1fa801219c77058980.jpg" width="180px" height="130px"></div>-->
+    <div class="title">检查室</div>
+    <div class="date">
+        <div class="riqi">
+            <div id="divT" style="height:50px;padding-top:5px"></div>
+            <div id="divY" style="height:67px;font-size:48px;padding-right:70px"></div>
+        </div>
+
+
+        <!--<div>2019年3月28日 星期四</div>
+        <div class="time">23:35:55</div>-->
+        <!--可用到-->
+
+    </div>
+</div>
+<div class="big">
+    <div>
+        <h3 align="center" class="p1" id="tips"></h3>
+    </div>
+
+    <div align="center">
+
+        <div class="block">
+            <div class="t1">诊室</div>
+            <div class="t2">医生</div>
+            <div class="t3">正在就诊</div>
+            <div class="t4">等待就诊</div>
+            <div class="t5">排队数</div>
+        </div>
+        <table border="1px #0C6FAC" cellpadding="0" cellspacing="0" class="table">
+
+            <!--<tr>
+                <td colspan="5" class="one">诊室&nbsp;&nbsp;&nbsp; 医生 正在就诊 等待就诊 排队数</td>
+
+                    <tr>
+            -->
+            <tr>
+                <td id="td11" class="two" width="224px" style="height:56px">诊室1</td>
+                <td id="td12" class="three" width="224px" id="doctor">检查医生1</td>
+                <td id="td13" class="blue" width="224px" id="visitor"></td>
+                <td id="td14" class="color" width="350px" id="visitors"></td>
+                <td id="td15" class="number" width="224px" id="count"></td>
+            </tr>
+            <tr>
+                <td class="two" width="224px" height="56px">诊室2</td>
+                <td class="three">华佗</td>
+                <td class="blue">李二</td>
+                <td class="color">孙鹏程&nbsp;&nbsp;常青</td>
+                <td class="number">4人</td>
+            </tr>
+            <tr>
+                <td class="two" width="224px" height="56px">诊室3</td>
+                <td class="three">张仲景</td>
+                <td class="blue">李三</td>
+                <td class="color">李文飞&nbsp;&nbsp;李鑫</td>
+                <td class="number">2人</td>
+            </tr>
+            <tr>
+                <td class="two" width="224px" height="56px">诊室4</td>
+                <td class="three">皇甫谧</td>
+                <td class=" blue">李四</td>
+                <td class="color">张嘉译&nbsp;&nbsp;李伟</td>
+                <td class="number">3人</td>
+            </tr>
+
+
+        </table>
+    </div>
+
+    <div class="bottom">
+        温馨提示：请其他患者在大厅候诊区耐心等候！
+    </div>
+
+</div>
+<div id="bdtts_div_id">
+    <audio id="tts_autio_id" autoplay="autoplay">
+        <source id="tts_source_id"
+                src="http://tts.baidu.com/text2audio?lan=zh&amp;ie=UTF-8&amp;spd=5&amp;per=1&amp;text="
+                type="audio/mpeg">
+        <embed id="tts_embed_id" height="0" width="0" src="">
+    </audio>
+</div>
+</body>
+
+</html>
+<script src="../conmmon/common.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var nameNow="";
+        wait();
+        setInterval(wait,5000);
+        function wait(){
+            $.post(medicalPath+"medicalWait/queue",{},function (data) {
+                jsonArray=JSON.parse(data);
+                var queueName="";
+                console.log("jsonArray.length="+jsonArray.length);
+                for(var i=0;i<jsonArray.length;i++){
+                    switch (i) {
+                        case 0:
+                            $("#td13").html(jsonArray[0].checkUserName);
+                            $("#td14").html();
+                            $("#td15").html("0人");
+                            if(nameNow!=jsonArray[0].checkUserName){
+                                nameNow=jsonArray[0].checkUserName;
+                                $("#tips").html("请"+nameNow+"到诊室1检查");
+                                timeOut(6000);
+                            }
+                            break;
+                        case 1:
+                            queueName=jsonArray[1].checkUserName;
+                            $("#td14").html(queueName);
+                            $("#td15").html("0人");
+                            break;
+                        case 2:
+                            queueName=queueName+","+jsonArray[2].checkUserName;
+                            $("#td14").html(queueName);
+                            $("#td15").html("0人");
+                            break;
+                        default:
+                            $("#td15").html(jsonArray.length-3+"人");
+                            break;
+                    }
+                }
+
+
+            });
+
+
+        }
+
+        function timeOut(data) {
+            doTTS();
+            setTimeout(doTTS,data);
+            setTimeout(doTTS,data*2);
+            setTimeout(doTTS,data*3);
+            setTimeout(doTTS,data*4);
+
+        }
+
+        function doTTS() {
+            var ttsText = "请"+$("#td13").html()+"到诊室1检查";
+            var ttsDiv = document.getElementById('bdtts_div_id');
+            var ttsAudio = document.getElementById('tts_autio_id');
+
+
+            // 文字转语音
+            ttsDiv.removeChild(ttsAudio);
+            var au1 = '<audio id="tts_autio_id" autoplay="autoplay">';
+            var sss = '<source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&per=3&spd=5&text=' + ttsText + '" type="audio/mpeg">';
+            var eee = '<embed id="tts_embed_id" height="0" width="0" src="">';
+            var au2 = '</audio>';
+            ttsDiv.innerHTML = au1 + sss + eee + au2;
+
+            ttsAudio = document.getElementById('tts_autio_id');
+
+            ttsAudio.play();
+        }
+        // 	$.post(basePath+"doc/register/show?userid=1",{},function(msg){
+        // 		console.log(msg);
+        // 		if(msg.indexOf("]")>-1){
+        // 			var a = msg.split("]");
+        // 			var b = a[0]+']';
+        // 			var c = JSON.parse(b);
+        // 			$("#doctor").html(c[0].doctorName);
+        // 			$("#visitor").html(c[0].realname);
+        // 			if(c.length==2){
+        // 				$("#visitors").html(c[1].realname);
+        // 			}else if(c.length==1){
+        // 				$("#visitors").html("");
+        // 			}else{
+        // 				$("#visitors").html(c[1].realname+"&nbsp;&nbsp;"+c[2].realname);
+        // 			}
+        // 			if(a[1]-3<=0){
+        // 				$("#count").html("0人");
+        // 			}else{
+        // 				$("#count").html(a[1]-3+"人");
+        // 			}
+        //
+        // 			console.log(c[0].realname);
+        // 			console.log(a[1]-3);
+        // 			$("#tips").html("请&nbsp;&nbsp;"+c[0].realname+"&nbsp;&nbsp;到 1 号 诊 室 就 诊");
+        //
+        // 			setTimeout(function(){ doTTS($("#tips").html());},5000);
+        // 			doTTS($("#tips").html());
+        // 		}
+        //
+        // 	})
+        // })
+        // var webSocket = null;
+        // var tryTime = 0;
+        // $(function () {
+        // 	initSocket();
+        // 	window.onbeforeunload = function () {
+        // 	//离开页面时的其他操作
+        // 	};
+        // });
+        /**
+         * 初始化websocket，建立连接
+         */
+        // function initSocket() {
+        // 	if (!window.WebSocket) {
+        // 		alert("您的浏览器不支持websocket！");
+        // 		return false;
+        // 	}
+        // 	webSocket = new WebSocket("ws://"+webSocketPath+"/websocket.ws/42/1");
+        //
+        // 	// 收到服务端消息
+        // 	webSocket.onmessage = function (msg) {
+        // 		// var j = JSON.parse(msg.data)
+        //
+        // 		var a = msg.data.split("]");
+        // 		var b = a[0]+']';
+        // 		var c = JSON.parse(b);
+        // 		$("#doctor").html(c[0].doctorName);
+        // 		$("#visitor").html(c[0].realname);
+        // 		if(c.length==2){
+        // 			$("#visitors").html(c[1].realname);
+        // 		}else if(c.length==1){
+        // 			$("#visitors").html("");
+        // 		}else{
+        // 			$("#visitors").html(c[1].realname+"&nbsp;&nbsp;"+c[2].realname);
+        // 		}
+        // 		if(a[1]-3<=0){
+        // 			$("#count").html("0人");
+        // 		}else{
+        // 			$("#count").html(a[1]-3+"人");
+        // 		}
+        // 		$("#tips").html("请&nbsp;&nbsp;"+c[0].realname+"&nbsp;&nbsp;到 1 号 诊 室 就 诊");
+        // 		console.log(c[0].realname);
+        // 		console.log(a[1]-3);
+        // 		setTimeout(function(){ doTTS($("#tips").html());},5000);
+        // 		doTTS($("#tips").html());
+        // 	};
+        //
+        // 	// 异常
+        // 	webSocket.onerror = function (event) {
+        // 		console.log(event);
+        // 	};
+        //
+        // 	// 建立连接
+        // 	webSocket.onopen = function (event) {
+        // 		console.log(event);
+        // 	};
+        // 	// 断线重连
+        // 	webSocket.onclose = function () {
+        // 	// 重试10次，每次之间间隔10秒
+        // 		if (tryTime < 10) {
+        // 		setTimeout(function () {
+        // 			webSocket = null;
+        // 			tryTime++;
+        // 			initSocket();
+        // 		}, 500);
+        // 		} else {
+        // 			tryTime = 0;
+        // 		}
+        // 	};
+        // }
+
+        // function doTTS(text) {
+        //     var ttsDiv = document.getElementById('bdtts_div_id');
+        //     var ttsAudio = document.getElementById('tts_autio_id');
+        //     var ttsText = text;
+        //
+        //     // 文字转语音
+        //     ttsDiv.removeChild(ttsAudio);
+        //     var au1 = '<audio id="tts_autio_id" autoplay="autoplay">';
+        //     var sss = '<source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&per=3&spd=5&text=' + ttsText + '" type="audio/mpeg">';
+        //     var eee = '<embed id="tts_embed_id" height="0" width="0" src="">';
+        //     var au2 = '</audio>';
+        //     ttsDiv.innerHTML = au1 + sss + eee + au2;
+        //
+        //     ttsAudio = document.getElementById('tts_autio_id');
+        //
+        //     ttsAudio.play();
+        // }
+
+
+    })
+
+
+</script>

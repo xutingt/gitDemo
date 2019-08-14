@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.mapper.PlanMapper">
+	<resultMap type="com.neuedu.po.UserPO" id="usermap">
+		<id property="ID" column="ID"/>
+		<result property="UserName" column="UserName"/>
+		<result property="Password" column="Password"/>
+		<result property="RealName" column="RealName"/>
+		<result property="UserType" column="UserType"/>
+		<result property="IsScheduling" column="IsScheduling"/>
+		<result property="DelMark" column="DelMark"/>
+		<association property="DocTitle" javaType="com.neuedu.po.ConstantitemPO">
+			<id property="ID" column="ID"/>
+			<result property="ConstantTypeID" column="ConstantTypeID"/>
+			<result property="ConstantCode" column="ConstantCode"/>
+			<result property="ConstantName" column="ConstantName"/>
+			<result property="DelMark" column="DelMark"/>
+		</association>
+		<association property="Dept" javaType="com.neuedu.po.DepartmentPO">
+			<id property="ID" column="ID"/>
+			<result property="DeptCode" column="DeptCode"/>
+			<result property="DeptName" column="DeptName"/>
+			<result property="DeptCategoryID" column="DeptCategoryID"/>
+			<result property="DeptType" column="DeptType"/>
+			<result property="DelMark" column="DelMark"/>
+		</association>
+		<association property="RegistLevel" javaType="com.neuedu.po.RegistLevelPO">
+			<id property="ID" column="ID"/>
+			<result property="RegistCode" column="RegistCode"/>
+			<result property="RegistName" column="RegistName"/>
+			<result property="SequenceNo" column="SequenceNo"/>
+			<result property="RegistFee" column="RegistFee"/>
+			<result property="RegistQuota" column="RegistQuota"/>
+			<result property="DelMark" column="DelMark"/>
+		</association>
+	</resultMap>
+	<resultMap type="com.neuedu.po.RulePO" id="rulemap">
+		<id property="ID" column="ID"/>
+		<result property="RuleName" column="RuleName"/>
+		<result property="Week" column="Week"/>
+		<result property="DelMark" column="DelMark"/>
+		<association property="Dept" javaType="com.neuedu.po.DepartmentPO">
+			<id property="ID" column="ID"/>
+			<result property="DeptName" column="DeptName"/>
+		</association>
+		<association property="User" javaType="com.neuedu.po.UserPO">
+			<id property="ID" column="ID"/>
+			<result property="RealName" column="RealName"/>
+				<association property="RegistLevel" javaType="com.neuedu.po.RegistLevelPO">
+				<id property="ID" column="ID"/>
+				<result property="RegistCode" column="RegistCode"/>
+				<result property="RegistName" column="RegistName"/>
+				<result property="SequenceNo" column="SequenceNo"/>
+				<result property="RegistFee" column="RegistFee"/>
+				<result property="RegistQuota" column="RegistQuota"/>
+				<result property="DelMark" column="DelMark"/>
+				</association>
+		</association>
+	</resultMap>
+	<resultMap type="com.neuedu.po.SchedulingPO" id="schedulingmap">
+		<id property="ID" column="ID"/>
+		<result property="SchedDate" column="SchedDate"/>
+		<result property="Noon" column="Noon"/>
+		<result property="DelMark" column="DelMark"/>
+		<association property="Dept" javaType="com.neuedu.po.DepartmentPO">
+			<id property="ID" column="ID"/>
+			<result property="DeptName" column="DeptName"/>
+		</association>
+		<association property="User" javaType="com.neuedu.po.UserPO">
+			<id property="ID" column="ID"/>
+			<result property="RealName" column="RealName"/>
+		</association>
+	</resultMap>
+	<select id="selectDept" resultType="com.neuedu.po.DepartmentPO">
+	SELECT 
+		ID,
+        DeptCode,
+        DeptName,
+        DeptCategoryID,
+        DeptType,
+        DelMark
+	FROM 
+		department 
+	WHERE 
+		DeptType = 1
+		AND DelMark = 1;
+	</select>
+	<select id="select" parameterType="com.neuedu.vo.PlanSelectVO" resultMap="usermap">
+	SELECT 
+		id,
+		RealName,
+		DeptID
+	FROM  
+		USER 
+	WHERE 
+		UserType = 3 
+		AND IsScheduling = '是'
+		AND deptid = #{DeptId} 
+		AND registleid = #{RegistId}
+		AND DelMark = 1;
+	</select>
+	<insert id="insertRule" parameterType="com.neuedu.vo.PaibanxinxiVO" >
+	INSERT INTO rule
+        (
+         RuleName,
+         DeptID,
+         UserID,
+         WEEK,
+         DelMark)
+	VALUES (
+        #{RuleName},
+        #{DeptId},
+        #{UserId},
+        #{Week},
+        1);
+	</insert>
+	<select id="selectRuleList" parameterType="int" resultType="com.neuedu.po.RulePO">
+	SELECT 
+		r.RuleName,
+		d.DeptName,
+		u.RealName,
+		r.Week,
+		d.ID DeptID,
+		u.ID UserID,
+		r.ID 
+	FROM 
+		rule r 
+		LEFT JOIN  department d ON(r.DeptID = d.ID ) 
+		LEFT JOIN USER u ON(r.UserID = u.ID) 
+	WHERE 
+		d.ID = #{DeptId}
+		AND r.DelMark = 1;
+	</select>
+	<insert id="insertWorkday" parameterType="com.neuedu.vo.MakeRuleTableVO" >
+		INSERT INTO scheduling
+            (SchedDate,
+             DeptID,
+             UserID,
+             Noon,
+             RuleID,
+             DelMark)
+		VALUES (
+	        #{SchedDate},
+	        #{DeptID},
+	        #{UserID},
+	        #{Noon},
+	        #{RuleID},
+	        1);
+	</insert>
+	<delete id="deleteSched" parameterType="com.neuedu.vo.MakeRuleTableVO">
+		UPDATE scheduling
+		SET 
+		  DelMark = 2
+		WHERE SchedDate BETWEEN '2019-07-01' AND '2019-07-01'
+		AND deptid = 1
+		AND DelMark = 1
+		
+	</delete>
+	<select id="selectSchedul" parameterType="com.neuedu.vo.MakeRuleTableVO" resultType="com.neuedu.po.SchedulingPO">
+		SELECT 
+			s.SchedDate,
+			d.DeptName,
+			u.RealName,
+			s.Noon,
+			r.RegistName,
+			r.RegistQuota,
+			s.ID 
+		FROM 
+			scheduling s 
+			LEFT JOIN department d ON (s.DeptID = d.ID) 
+			LEFT JOIN USER u ON (s.UserID = u.ID) 
+			LEFT JOIN registlevel r ON (u.RegistLeID = r.ID)
+		WHERE 
+			SchedDate BETWEEN #{KaiShi} AND #{JieShu}
+			AND s.DelMark =1
+		ORDER BY 
+			scheddate ,
+			Noon
+	</select>
+	
+</mapper>

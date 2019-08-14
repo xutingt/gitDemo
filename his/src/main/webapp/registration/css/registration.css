@@ -1,0 +1,18 @@
+/* header */
+/* buttons */
+.regist-button-style{
+	display: inline;
+}
+.caseSearch{
+	width: 200px;
+}
+
+/* details */
+.my-label-style{
+	width: 60px;
+	margin-left: 5px;
+}
+.my-input-style{
+	margin-left: 0px;
+	width: 170px;
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>HIS医院管理系统</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header" id="header">
+        <!-- _header头部区域 start -->
+        <!-- _header头部区域 stop -->
+    </div>
+
+    <div class="layui-side layui-bg-black">
+
+        <div class="layui-side-scroll" id="lefter">
+            <!-- _lefter 左侧导航区域start -->
+            <!-- _lefter 左侧导航区域stop -->
+        </div>
+
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">内容主体区域</div>
+    </div>
+    <!--<div class="layui-footer" id="footer">-->
+    <!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+    <!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+    <!--</div>-->
+
+</div>
+<script src="../layui/jquery-3.3.1.js"></script>
+<script src="../layui/layui.js"></script>
+<script>
+
+    function myreload() {
+        window.location.reload();
+    }
+
+    function socailRec() {
+        window.location = '/webdesign/socialrec.do?state=showSocialrec';
+    }
+
+    function homepage() {
+        window.location = '/webdesign/homepage.do?noclear=yes';
+    }
+
+    function myCenter() {
+        window.location = '/webdesign/center.do?state=showMyCenter';
+    }
+
+    function deleteCollectJob(oid) {
+        if (window.confirm('您确认要取消收藏吗？')) {
+            document.myCenterForm.state.value = 'deleteCollectJob';
+            this.myCenterForm.elements['postJobID'].value = oid;
+            document.myCenterForm.submit();
+        }
+    }
+
+    function modifyUserPassword() {
+        if (window.confirm('确认要修改密码吗?')) {
+            document.myCenterForm.state.value = 'saveModifyUserPassword';
+            if (this.myCenterForm.elements['userVO.oldPassword'].value == '' || this.myCenterForm.elements['userVO.password'].value == '' || this.myCenterForm.elements['userVO.passwordConfirm'].value == '') {
+                document.getElementById("modfyPWNullError").style.display = "inline";
+                return;
+            } else if (this.myCenterForm.elements['userVO.password'].value != this.myCenterForm.elements['userVO.passwordConfirm'].value) {
+                document.getElementById("modfyPWContrastError").style.display = "inline";
+                return;
+            } else {
+                var oldPasswd = this.myCenterForm.elements['userVO.oldPassword'].value;
+                var newPasswd = this.myCenterForm.elements['userVO.password'].value;
+                var checkRS = $.ajax({
+                    url: "/webdesign/center.do?state=checkModifyUserPassword&op=" + oldPasswd + "&tempDate=" + new Date(),
+                    async: false
+                }).responseText;
+                if (checkRS == 1) {
+                    $.ajax({
+                        url: "/webdesign/center.do?state=saveModifyUserPassword&np=" + newPasswd + "&tempDate=" + new Date(),
+                        async: false
+                    });
+                    document.getElementById("modfyPWSuccess").style.display = "inline";
+                } else {
+                    document.getElementById("modfyPWError").style.display = "inline";
+                }
+            }
+        }
+    }
+
+    function campaign() {
+        window.location = '/webdesign/hiringactivity.do?state=showHiringActivity';
+    }
+
+    function atNeusoft() {
+        window.location = '/webdesign/socialrec.do?state=atNeusoft';
+    }
+
+    function clearPrompt() {
+        document.getElementById("modfyPWNullError").style.display = "none";
+        document.getElementById("modfyPWSuccess").style.display = "none";
+        document.getElementById("modfyPWError").style.display = "none";
+        document.getElementById("modfyPWContrastError").style.display = "none";
+    }
+
+
+</script>
+</body>
+</html>

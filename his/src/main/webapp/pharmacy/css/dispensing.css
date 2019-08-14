@@ -1,0 +1,66 @@
+#searchborder{
+    display: block;
+    width: 90%;
+    height: 70%;
+    border-style: solid;
+    border-width: 2px;
+    border-color: gray;
+    margin-left: 10px; 
+    color:#009688;
+
+}
+#searchborder legend{
+    position: relative;
+    margin-left: 10px; 
+    color: #009688;   
+}
+#searchborder div{
+    margin-top: 10px;
+
+}
+#searchborder label{
+   
+    width: 70px;
+    float: left;
+    text-align: right
+}
+#searchborder input{
+    width: 120px;
+    height: 30;
+}
+#searchborder div{
+    line-height: 20px;
+}
+#refresh{
+    width: 100%;
+    color: #009688;
+    cursor: pointer;
+    background-color:aliceblue;
+    margin-left: 0px;
+
+}
+#refresh span{
+    margin-left: 180px;
+}
+#hisDrugs table{
+    border-style: solid;
+    border-width: 1px;
+    border-color:black;
+    width: 600px;
+    margin-left: 2px;
+    font-size: 10px;
+}
+#hisDrugs td{
+    border-style: solid;
+    border-width: 1px;
+   
+    text-align: center;
+    color: #009688;
+    border-collapse:black;
+}
+#titleborder , #titleborder input{
+    color: #009688;
+}
+#sendingdetile{
+    color: #009688;
+}

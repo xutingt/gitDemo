@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>HIS医院管理系统</title>
+		<link rel="stylesheet" href="../layui/css/layui.css">
+	</head>
+	<body class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header" id="header">
+				<!-- _header头部区域 start -->
+				<!-- _header头部区域 stop -->
+			</div>
+			<div class="layui-side layui-bg-black">
+				<div class="layui-side-scroll" id="lefter">
+					<!-- _lefter 左侧导航区域start -->
+					<!-- _lefter 左侧导航区域stop -->
+				</div>
+			</div>
+
+			<!-- 内容主体区域 -->
+
+			<div class="layui-body">
+				<div class="layui-tab layui-tab-card" lay-allowclose="true">
+					<ul class="layui-tab-title">
+						<li class="layui-this">患者费用查询</li>
+					</ul>
+					<div class="layui-tab-content" style="height: 150px;">
+						<div class="layui-tab-item layui-show">
+							<div class="layui-form-item">
+								<div class="layui-input-block" style="display: flex;">
+									<div style="margin-left:-90px; margin-top:8px; font-size:15px ">患者信息查询</div>
+									<div style="margin-left:-90px; margin-top:47px; font-size:15px ">病例号:</div>
+									<input type="text" name="title" style="width:12%;height:35px;margin-left:4px;margin-top:39px;" lay-verify="title"
+									 autocomplete="off" placeholder="病例号" class="layui-input" id="caseNumber">
+									<div class="layui-form">
+										<div class="layui-form-item">
+											<div class="layui-inline">
+												<label class="layui-form-label" style=" margin-top:37px;margin-left:12px;">开始时间</label>
+												<div class="layui-input-inline">
+													<input type="text" class="layui-input" id="startDate" placeholder="选择日期" style="width:93%;margin-left:-4px; margin-top:36px; font-size:15px ">
+												</div>
+											</div>
+											<div class="layui-inline">
+												<label class="layui-form-label" style=" margin-top:34px;margin-left:-67px;">结束时间</label>
+												<div class="layui-input-inline">
+													<input type="text" class="layui-input" id="endDate" placeholder="选择日期" style="width:93%;margin-left:-4px; margin-top:34px; font-size:15px ">
+												</div>
+											</div>
+										</div>
+									</div>
+									<button class="layui-btn  layui-btn-normal" style="margin-top:37px;margin-left:-9px; height:35px;" id="huanzhefeiyong"><i
+										 class="layui-icon ">&#xe615;</i>搜索</button>
+									<div style="margin-left:-809px; margin-top:96px; font-size:15px ">患者信息确认</div>
+									<div style="margin-left:-79px; margin-top:128px; font-size:15px ">姓名:</div>
+									<input type="text" name="title" style="width:10%;height:35px;margin-left:7px;margin-top:120px;" lay-verify="title"
+									 autocomplete="off" placeholder="姓名" class="layui-input" id="binliehao">
+									<div style="margin-left:49px; margin-top:129px; font-size:15px ">身份证号:</div>
+									<input type="text" name="title" style="width:19%;height:35px;margin-left:4px;margin-top:121px;" lay-verify="title"
+									 autocomplete="off" placeholder="身份证号" class="layui-input" id="binliehao">
+									<div style="margin-left:39px; margin-top:128px; font-size:15px ">家庭住址:</div>
+									<input type="text" name="title" style="width:25%;height:35px;margin-left:6px;margin-top:121px;" lay-verify="title"
+									 autocomplete="off" placeholder="家庭住址" class="layui-input" id="binliehao">
+								</div>
+							</div>
+							<div style="margin-left:15px; margin-top:8px; font-size:15px ">患者消费信息</div>
+							<table class="layui-table" lay-even="" lay-skin="nob">
+								<colgroup>
+									<col width="150">
+									<col width="150">
+									<col width="150">
+									<col>
+								</colgroup>
+								<thead>
+									<tr id="registerdaysubmit-table-head">
+										
+										<th>消费名称</th>
+										<th>单价</th>
+										<th>数量</th>
+										<th>日期</th>
+									</tr>
+								</thead>
+								<tbody id="registerdaysubmit-table-body">
+								</tbody>
+							</table>
+							<div id="zongjine" style="margin-left:1px; margin-top:8px; font-size:16px "></div>
+							<div id="zongbishu" style="margin-left:87px; margin-top:-19px; font-size:16px "></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<!--<div class="layui-footer" id="footer">-->
+			<!--&lt;!&ndash; _footer 底部区域start &ndash;&gt;-->
+			<!--&lt;!&ndash; _footer 底部区域stop &ndash;&gt;-->
+			<!--</div>-->
+
+
+		</div>
+		<script src="../layui/jquery-3.3.1.js"></script>
+		<script src="../layui/layui.js"></script>
+		<script src="../conmmon/common.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('.layui-nav-item').eq(2).addClass("layui-nav-itemed"); //eq按自己页面顺序排，从2开始
+
+			});
+			$("#header").load("../conmmon/_header.html");
+			//_lefter 左侧导航区域
+			$("#lefter").load("../conmmon/_lefter.html");
+			layui.use('element', function() {
+				var element = layui.element;
+			});
+		</script>
+		<script>
+			layui.use('laydate', function() {
+				var laydate = layui.laydate;
+				//日期时间选择器
+				laydate.render({
+					elem: '#startDate',
+					type: 'datetime'
+				});
+				//日期时间选择器
+				laydate.render({
+					elem: '#endDate',
+					type: 'datetime'
+				});
+			});
+		</script>
+
+		<script>
+			$(document).ready(function() {
+				$("#huanzhefeiyong").click(function() {
+					showPage($("#caseNumber").val());
+				});
+
+				function showPage(caseNumber) {
+					var count = 0;
+					var rSum=0;
+					$.ajax({
+						type: "post",
+						url: basePath+'registration/regist/getChargeItems',
+						data: {
+							'caseNumber': caseNumber
+						},
+						dataType: "json",
+						success: function(response) {
+							console.log(response)
+							$.each(response, function(indexInArray, valueOfElement) {
+								$.each(valueOfElement, function(index, valueOf) {
+									$('#registerdaysubmit-table-body').html("");
+									$('#registerdaysubmit-table-body').append(
+										"<tr>" +
+										"<td>" + valueOf.itemName + "</td>" +
+										"<td>" + valueOf.itemPrice + "</td>" +
+										"<td>" + valueOf.itemNum + "</td>" +
+										"<td>" + valueOf.date + "</td>" +
+										"</tr>"
+									);
+									count =count+1;
+									rSum = parseFloat(valueOf.itemPrice) * parseInt(valueOf.itemNum)
+								});
+							});
+							$('#zongjine').html("总笔数:"+count);
+							$('#zongbishu').html("金额总计:" + rSum + "元");
+
+						}
+					});
+				}
+			})
+		</script>
+	</body>
+</html>
